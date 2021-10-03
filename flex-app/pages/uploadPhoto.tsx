@@ -3,14 +3,12 @@ import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 
-const Home: NextPage = () => {
+const uploadPhoto: NextPage = () => {
   return (
     <div>
-      <h1>Top Page</h1>
-
-      <a href="/uploadPhoto">Upload Photo</a>
+      <h1>uploadPhoto Page</h1>
     </div>
   )
 }
 
-export default Home
+export default uploadPhoto
