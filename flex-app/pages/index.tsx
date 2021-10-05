@@ -1,15 +1,14 @@
 import type { NextPage } from 'next'
-import Head from 'next/head'
-import Image from 'next/image'
-import styles from '../styles/Home.module.css'
+import DefaultLayout from '../components/DefaultLayout'
 
 const Home: NextPage = () => {
   return (
-    <div>
+    <DefaultLayout>
       <h1>Top Page</h1>
-
-      <a href="/uploadPhoto">Upload Photo</a>
-    </div>
+      <div>
+        このページはトップページです.  上部のメニューより移動したいページを選択してください
+      </div>
+    </DefaultLayout>
   )
 }
 
