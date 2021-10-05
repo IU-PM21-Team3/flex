@@ -1,33 +1,49 @@
 import type { NextPage } from 'next'
-import Head from 'next/head'
 import Image from 'next/image'
 import { ChangeEvent, ChangeEventHandler, useState } from 'react'
-import styles from '../styles/Home.module.css'
+import imageNotFound from '../images/ImageNotFound.png'
 
-
+/**
+ * 画像のアップロードを行う
+ * @returns 画像をアップロードするページ
+ */
 const uploadPhoto: NextPage = () => {
-  const [imageUrl, setImage] = useState("");
+  const defaultDate: Date = new Date(0, 0, 0, 0, 0, 0, 0);
+  const [imageUrl, setImageUrl] = useState(imageNotFound.src);
+  const [imageDate, setImageDate] = useState(defaultDate);
+  const [imageHeight, setImgHeight] = useState(300);
+  const [imageWidth, setImgWidth] = useState(300);
 
   //ref : https://zenn.dev/dove/articles/1927889e1c4153
   const onUploadImageChanged: ChangeEventHandler<HTMLInputElement> =
-    (event: ChangeEvent<HTMLInputElement>) =>
-    {
-      if (event.target.files == null)
+    (event: ChangeEvent<HTMLInputElement>) => {
+      if (event.target.files == null || event.target.files[0] == null)
         return;
 
       const imgFile = event.target.files[0];
+      setImageDate(new Date(imgFile.lastModified))
+
       const imageUrl = URL.createObjectURL(imgFile);
-      setImage(imageUrl);
+      setImageUrl(imageUrl);
     }
 
   return (
     <div>
       <h1>uploadPhoto Page</h1>
 
-      <input type="file" accept="image/*" onChange={onUploadImageChanged} />
-      
-      <img src={imageUrl} />
-      <h2>abc</h2>
+      <input
+        type="file"
+        accept="image/*"
+        onChange={onUploadImageChanged}
+        width="300" />
+      <br />
+      <Image
+        src={imageUrl}
+        height={imageHeight}
+        width={imageWidth}
+        objectFit="contain" />
+
+      <div>画像の最終更新日 : {imageDate.toISOString()}</div>
     </div>
   )
 }
