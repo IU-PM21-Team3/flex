@@ -7,6 +7,18 @@
 $ npm run dev
 ```
 
+## ディレクトリについて
+```txt
+|-components  コンポーネント（フォームやボタンなど)
+|-firebase    Firebase関連
+|-hooks       カスタムフックなど
+|-models      TypeScriptの型定義（interfaceとか) 
+|-pages       ページ（これが表示されるページ)
+|-public      公開されるもの（画像やアイコンはここ）
+|-styles      CSSファイル、pageごとに書く
+|-utils       共通で使える便利な関数など定数とか書いてもOK
+```
+
 ## Tips
 ### npm
 Node Package Manager (npm)
