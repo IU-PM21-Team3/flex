@@ -14,6 +14,7 @@ const uploadPhoto: NextPage = () => {
   const [imageDate, setImageDate] = useState(defaultDate);
   const [imageHeight, setImgHeight] = useState(300);
   const [imageWidth, setImgWidth] = useState(300);
+  const [imageName, setImgName] = useState('imageNotFound');
 
   //ref : https://zenn.dev/dove/articles/1927889e1c4153
   const onUploadImageChanged: ChangeEventHandler<HTMLInputElement> =
@@ -26,6 +27,8 @@ const uploadPhoto: NextPage = () => {
 
       const imageUrl = URL.createObjectURL(imgFile);
       setImageUrl(imageUrl);
+
+      setImgName(imgFile.name);
     }
 
   return (
@@ -42,7 +45,8 @@ const uploadPhoto: NextPage = () => {
         src={imageUrl}
         height={imageHeight}
         width={imageWidth}
-        objectFit="contain" />
+        objectFit="contain"
+        alt={imageName} />
 
       <div>画像の最終更新日 : {imageDate.toISOString()}</div>
     </DefaultLayout>
