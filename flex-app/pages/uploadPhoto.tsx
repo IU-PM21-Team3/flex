@@ -8,7 +8,7 @@ import imageNotFound from '../images/ImageNotFound.png'
  * 画像のアップロードを行う
  * @returns 画像をアップロードするページ
  */
-const uploadPhoto: NextPage = () => {
+const UploadPhoto: NextPage = () => {
   const defaultDate: Date = new Date(0, 0, 0, 0, 0, 0, 0);
   const [imageUrl, setImageUrl] = useState(imageNotFound.src);
   const [imageDate, setImageDate] = useState(defaultDate);
@@ -53,4 +53,4 @@ const uploadPhoto: NextPage = () => {
   )
 }
 
-export default uploadPhoto
+export default UploadPhoto
