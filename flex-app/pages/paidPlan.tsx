@@ -1,5 +1,4 @@
 import { NextPage } from 'next';
-import logo from './logo.svg';
 import styles from '../styles/paidPlan.module.css';
 
 const UI:NextPage= (props) => {
@@ -23,7 +22,7 @@ const UI:NextPage= (props) => {
      </div>
        <label>
          <br/>
-         <a href="" className={styles.btn}><big>お申込み手続きへ進む</big></a>     
+         <a href="" className={styles.btn}><big>お申込み手続きへ進む</big></a>
        </label> 
    </div>      
 )
