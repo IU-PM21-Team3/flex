@@ -1,6 +1,3 @@
-import * as functions from "firebase-functions";
+import { getTrafficInfo } from './GetTrafficInfo.server';
 
-export const gettrafficinfo = functions.https.onRequest((request, response) => {
-  // 仮で空のJsonを返す
-  response.send("{}");
-});
+export const gettrafficinfo = getTrafficInfo;
