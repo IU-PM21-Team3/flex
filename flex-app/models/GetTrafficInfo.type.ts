@@ -1,0 +1,1 @@
+../../flex-functions/src/GetTrafficInfo.type.ts
