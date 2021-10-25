@@ -1,3 +1,6 @@
+# Transpiled Files
+lib/*
+
 # Logs
 logs
 *.log
