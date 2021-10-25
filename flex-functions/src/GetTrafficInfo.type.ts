@@ -42,7 +42,7 @@ export interface IOdptTrainInformation {
   "odpt:transferRailways"?: string[]
   /** 復旧見込み時刻 */
   "odpt:resumeEstimate"?: Date
-};
+}
 
 /** 多言語対応の情報を記録できる型 */
 export interface IMultiLangMessage {
