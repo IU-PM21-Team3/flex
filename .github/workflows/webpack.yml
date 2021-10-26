@@ -1,0 +1,40 @@
+name: Deploy (Production Release)
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [16.x]
+    
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - run: cd ./flex-app
+
+    - run: npm install
+
+    - name: cache node_modules
+      id: node_modules_cache_id
+      uses: actions/cache@v2
+      with:
+        path:
+          flex-app/node_modules
+        key: node-v${{ matrix.node-version }}-deps-${{ hashFiles(format('{0}{1}', github.workspace, '/package-lock.json')) }}
+
+    - uses: FirebaseExtended/action-hosting-deploy@v0
+      with:
+        repoToken: '${{ secrets.GITHUB_TOKEN }}'
+        firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_TR_DEV_DAEMON }}'
+        projectId: tr-flex-dev
+        channelId: live
