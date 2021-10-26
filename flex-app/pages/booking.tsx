@@ -2,6 +2,7 @@ import type { NextPage } from "next"
 import { useState } from "react"
 import Calender from 'react-calendar'
 import 'react-calendar/dist/Calendar.css'
+import DefaultLayout from "../components/DefaultLayout";
 import CheckBox from "../components/SimpleCheckBox";
 import styles from '../styles/BookingPage.module.css';
 
@@ -43,6 +44,7 @@ const BookingPage: NextPage = () => {
 
 
   return (
+    <DefaultLayout>
     <div className={styles.booking}>
       <h1>施設予約</h1>
       <h2>{facilityData.name}</h2>
@@ -83,6 +85,7 @@ const BookingPage: NextPage = () => {
 
       <button className={styles.book_button}>施設予約する</button>
     </div>
+    </DefaultLayout>
   );
 }
 

@@ -1,8 +1,10 @@
 import { NextPage } from 'next';
+import DefaultLayout from '../components/DefaultLayout';
 import styles from '../styles/paidPlan.module.css';
 
 const UI:NextPage= (props) => {
   return (
+    <DefaultLayout>
     <div className={styles.APP}>   
     <h1>有料プランの手続き</h1>
      有料プランのお申込み<br/><br/>
@@ -25,6 +27,7 @@ const UI:NextPage= (props) => {
          <a href="" className={styles.btn}><big>お申込み手続きへ進む</big></a>
        </label> 
    </div>      
+    </DefaultLayout>
 )
 }    
 
