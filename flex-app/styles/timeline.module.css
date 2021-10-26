@@ -1,0 +1,88 @@
+/*daytable*/
+.daytable {
+  position: absolute;
+  left: 0em;
+  top: 2em;
+  padding: 3em 8.2em;
+  margin: 1em 1em;
+  width: 3.6em;
+  height: 3em;
+  display: inline-block;
+  color: #2c2c2f;
+  background: #cde4ff;/*背景色*/
+}
+
+/*timetable*/
+.timetable {
+  border-top:2px dotted #000000;
+  position: absolute;/*親を基準*/
+  left: 0px;
+  top: 7em;
+  padding: 1em 8.2em;
+  margin: 1em 1em;
+  width: 3.6em;
+  height: 35em;
+  display: inline-block;
+  color: #2c2c2f;
+  background: #cde4ff;/*背景色*/
+}
+
+/*スクロールバー*/
+.timetable {
+  overflow:hidden;
+  overflow-y: scroll;
+}
+
+/*ボタンのデザイン*/
+.button button{
+  cursor: pointer;
+  display: inline-block;
+  zoom: 1;
+  background: #00a2b7;
+  color: #fff;
+  border: 1px solid #0aa2b5;
+  border-radius: 4px;
+  padding: 5px 10px;
+}
+
+/*ボタンの位置*/
+.button #previous {
+  position: absolute; 
+  top: 0; 
+  left: 0; 
+}
+
+
+/*ボタンの位置*/
+.button #next {
+  position: absolute; 
+  top: 0;
+  right: 0; 
+}
+
+.daytable #day {
+  position: absolute;  
+  top: 0;
+  left: 60px; 
+}
+
+.timetable #time { 
+  position: absolute; 
+  top: -30px;
+  left: -30px; 
+}
+
+/*timeの行間隔*/
+.timetable #time { 
+  line-height: 100px;
+}
+
+.timetable ul {
+  list-style: none;
+}
+
+.line {
+  position: absolute; 
+  top: 30px;
+  left: 30px; 
+}
