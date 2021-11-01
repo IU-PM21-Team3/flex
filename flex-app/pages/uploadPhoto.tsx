@@ -1,7 +1,6 @@
 import type { NextPage } from 'next'
 import Image from 'next/image'
 import { ChangeEvent, ChangeEventHandler, useState } from 'react'
-import DefaultLayout from '../components/DefaultLayout'
 import imageNotFound from '../images/ImageNotFound.png'
 
 /**
@@ -32,7 +31,7 @@ const UploadPhoto: NextPage = () => {
     }
 
   return (
-    <DefaultLayout>
+    <div>
       <h1>uploadPhoto Page</h1>
 
       <input
@@ -49,7 +48,7 @@ const UploadPhoto: NextPage = () => {
         alt={imageName} />
 
       <div>画像の最終更新日 : {imageDate.toISOString()}</div>
-    </DefaultLayout>
+    </div>
   )
 }
 

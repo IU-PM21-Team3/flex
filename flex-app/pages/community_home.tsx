@@ -1,11 +1,10 @@
 import type { NextPage } from "next";
-import DefaultLayout from "../components/DefaultLayout";
 import image from "../images/CommunityTop.jpg";
 import Link from "next/link";
 
 const Community_Home: NextPage = () => {
   return (
-    <DefaultLayout>
+    <div>
       <h1>Community Page</h1>
       <br />
       <div>
@@ -14,7 +13,7 @@ const Community_Home: NextPage = () => {
         </Link>
         <p>浅草寺</p>
       </div>
-    </DefaultLayout>
+    </div>
   );
 };
 

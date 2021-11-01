@@ -1,6 +1,5 @@
 import type { NextPage } from "next";
 import { TextInput } from "../components/Talk_TextInput";
-import DefaultLayout from "../components/DefaultLayout";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import { Paper } from "@material-ui/core";
 
@@ -43,15 +42,13 @@ const useStyles = makeStyles((theme: Theme) =>
 const Community_Talk: NextPage = () => {
   const classes = useStyles();
   return (
-    <DefaultLayout>
-      <div className={classes.container}>
-        <Paper className={classes.paper}>
-          <p>浅草寺のコミュニティ</p>
-          <Paper id="style-1" className={classes.messagesBody}></Paper>
-          <TextInput />
-        </Paper>
-      </div>
-    </DefaultLayout>
+    <div className={classes.container}>
+      <Paper className={classes.paper}>
+        <p>浅草寺のコミュニティ</p>
+        <Paper id="style-1" className={classes.messagesBody}></Paper>
+        <TextInput />
+      </Paper>
+    </div>
   );
 };
 
