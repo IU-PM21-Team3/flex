@@ -1,5 +1,6 @@
 import { FirebaseApp, initializeApp } from "firebase/app";
 import { getAuth, Auth } from "firebase/auth";
+import { getFirestore, Firestore } from "firebase/firestore";
 
 const clientCredentials = {
   apiKey: "AIzaSyBG-xl2BWKRWFm88QxrtIK4SqRowbKB054",
@@ -13,4 +14,5 @@ const clientCredentials = {
 export default class flexFirebase {
   public static app: FirebaseApp = initializeApp(clientCredentials);
   public static auth: Auth = getAuth(this.app);
+  public static store: Firestore = getFirestore(this.app);
 }
