@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
-import { Marker, InfoWindow } from "@react-google-maps/api";
-import { stringify } from "querystring";
+// import React, { useState, useEffect } from "react";
+// import { Marker, InfoWindow } from "@react-google-maps/api";
+// import { stringify } from "querystring";
 import axios from "axios";
 
+/*
 interface GMapWindow extends Window {
   google: any;
 }
@@ -11,6 +12,7 @@ interface GMapWindow extends Window {
   google: any;
 }
 declare const google: GMapWindow;
+*/
 
 var business_status: any = "";
 
@@ -33,6 +35,7 @@ async function Get_buisiness_stats(placeID: string) {
     });
 }
 
+/*
 export default function PlaceInfo() {
   const places = [
     { info: "あいうえお", location: { lat: 35.69575, lng: 139.77521 } },
@@ -57,7 +60,7 @@ export default function PlaceInfo() {
             lng: marker.location.lng,
           }}
           onMouseOver={() => {
-            setSelected(marker);
+            // setSelected(marker);
             // マウスオーバーで<InfoWindow>が描画されます。
           }}
           icon={{
@@ -87,3 +90,4 @@ export default function PlaceInfo() {
     </>
   );
 }
+*/
