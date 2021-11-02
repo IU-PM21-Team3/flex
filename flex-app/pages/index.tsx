@@ -1,4 +1,5 @@
 import type { NextPage } from 'next'
+import TempPageList from '../components/TempPageList'
 
 const Home: NextPage = () => {
   return (
@@ -7,6 +8,7 @@ const Home: NextPage = () => {
       <div>
         このページはトップページです.  上部のメニューより移動したいページを選択してください
       </div>
+      <TempPageList />
     </div>
   )
 }
