@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Marker, InfoWindow } from "@react-google-maps/api";
 import { stringify } from "querystring";
+import axios from "axios";
 
 interface GMapWindow extends Window {
   google: any;
@@ -11,16 +12,15 @@ interface GMapWindow extends Window {
 }
 declare const google: GMapWindow;
 
-var axios = require("axios");
 var business_status: any = "";
 
-async function Get_buisiness_stats(placeID: string){
+async function Get_buisiness_stats(placeID: string) {
   var config = {
     method: "get",
     url: `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeID}&fields=name%2Crating%2Cformatted_phone_number%2Cbusiness_status&key=AIzaSyD5hEtmrnaidWTm_VEVo0Qq6lmgV4WyWKQ`,
     headers: {},
   };
-  
+
   return await axios(config)
     .then(function (response: any) {
       business_status = /"business_status" : (.+)/.exec(JSON.stringify(response.data))[1];
@@ -45,7 +45,7 @@ export default function PlaceInfo() {
     buisiness_status = Get_buisiness_stats(placeID)
   });
 
-  return ( 
+  return (
     <>
       {places.map((marker) => (
         <Marker
