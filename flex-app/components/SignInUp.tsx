@@ -1,10 +1,11 @@
 import flexFirebase from "../firebase/clientApp";
-import { GoogleLoginButton } from 'react-social-login-buttons';
+import { GoogleLoginButton, MicrosoftLoginButton } from 'react-social-login-buttons';
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   GoogleAuthProvider,
-  signInWithRedirect,
+  OAuthProvider,
+  signInWithPopup,
   UserCredential,
 } from "firebase/auth";
 import {
@@ -46,7 +47,11 @@ const SignInUp = ({ signInUpText }: { signInUpText: SignInUpTextValues }) => {
 
   const GoogleButtonPushed = () => {
     setIsLoading(true);
-    signInWithRedirect(flexFirebase.auth, new GoogleAuthProvider()).finally(() => setIsLoading(false));
+    signInWithPopup(flexFirebase.auth, new GoogleAuthProvider()).finally(() => setIsLoading(false));
+  };
+  const MicrosoftButtonPushed = () => {
+    setIsLoading(true);
+    signInWithPopup(flexFirebase.auth, new OAuthProvider('microsoft.com')).finally(() => setIsLoading(false));
   };
 
   const onFormSubmitted = () => {
@@ -76,6 +81,9 @@ const SignInUp = ({ signInUpText }: { signInUpText: SignInUpTextValues }) => {
       <GoogleLoginButton onClick={GoogleButtonPushed} align="center" iconSize={'20'}>
         <span style={{ fontSize: 16 }}>Googleで{_signInUpText}</span>
       </GoogleLoginButton>
+      <MicrosoftLoginButton onClick={MicrosoftButtonPushed} align="center" iconSize={'20'}>
+        <span style={{ fontSize: 16 }}>Microsoftで{_signInUpText}</span>
+      </MicrosoftLoginButton>
 
       <form onSubmit={submitHandler}>
         <div>
