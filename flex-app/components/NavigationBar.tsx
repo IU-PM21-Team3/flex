@@ -5,6 +5,7 @@ import { signOut } from "firebase/auth";
 import flexFirebase from '../firebase/clientApp';
 import { GetAuthContext } from "../contexts/authContext";
 import SignInUp, { SignInUpTextValues, SignInText, SignUpText } from "./SignInUp";
+import React from "react";
 import {
   AppBar,
   Toolbar,
