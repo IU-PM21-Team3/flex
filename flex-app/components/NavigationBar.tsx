@@ -1,10 +1,10 @@
 import { NextPage } from 'next'
-import PageList from './PageList';
 import { useState, Fragment } from "react";
 import { signOut } from "firebase/auth";
 import flexFirebase from '../firebase/clientApp';
 import { GetAuthContext } from "../contexts/authContext";
 import SignInUp, { SignInUpTextValues, SignInText, SignUpText } from "./SignInUp";
+import React from "react";
 import {
   AppBar,
   Toolbar,

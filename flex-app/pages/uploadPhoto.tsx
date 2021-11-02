@@ -3,6 +3,7 @@ import Image from 'next/image'
 import { ChangeEvent, ChangeEventHandler, useState } from 'react'
 import imageNotFound from '../images/ImageNotFound.png'
 import PrivatePage from "../components/PrivatePage"
+import React from "react";
 
 /**
  * 画像のアップロードを行う

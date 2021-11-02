@@ -1,5 +1,5 @@
 import { NextPage } from "next"
-import { useState } from "react"
+import React, { useState } from "react"
 import MyLink from "./MyLink"
 
 type page = {
@@ -22,21 +22,21 @@ const TempPageList: React.FC = () => {
 
   return (
     <>
-    <h2>ページリスト</h2>
-    <ul>
-      {
-        // [tip] TSだとreturn入れないとmap表示されない？
-        pages.map(page => {
-          return (
-            <li key={page.name}>
-              <MyLink href={page.path}>
-                {page.name}
-              </MyLink>
-            </li>
-          )
-        })
-      }
-    </ul>
+      <h2>ページリスト</h2>
+      <ul>
+        {
+          // [tip] TSだとreturn入れないとmap表示されない？
+          pages.map(page => {
+            return (
+              <li key={page.name}>
+                <MyLink href={page.path}>
+                  {page.name}
+                </MyLink>
+              </li>
+            )
+          })
+        }
+      </ul>
     </>
   )
 }

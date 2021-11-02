@@ -1,6 +1,7 @@
 import { createContext, useState, useContext, useEffect, ReactNode } from "react";
 import { User } from "firebase/auth";
 import flexFirebase from "../firebase/clientApp";
+import React from "react";
 
 interface IContainsUser {
   user: User | null;
