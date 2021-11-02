@@ -1,7 +1,6 @@
-import { NextPage } from 'next';
 import MyLink from './MyLink';
 
-const PageList: NextPage = () => (
+const PageList = () => (
   <div>
     <MyLink href="/">
       HOME

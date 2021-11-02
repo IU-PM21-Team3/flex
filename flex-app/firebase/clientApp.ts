@@ -1,14 +1,16 @@
 import { FirebaseApp, initializeApp } from "firebase/app";
+import { getAuth, Auth } from "firebase/auth";
 
 const clientCredentials = {
-  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
-  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
-  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+  apiKey: "AIzaSyBG-xl2BWKRWFm88QxrtIK4SqRowbKB054",
+  authDomain: "tr-flex-dev.firebaseapp.com",
+  projectId: "tr-flex-dev",
+  storageBucket: "tr-flex-dev.appspot.com",
+  messagingSenderId: "1048074287810",
+  appId: "1:1048074287810:web:700112690e24e0ef04d95b",
 };
 
 export default class flexFirebase {
   public static app: FirebaseApp = initializeApp(clientCredentials);
+  public static auth: Auth = getAuth(this.app);
 }
