@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import React, { ReactNode } from "react";
 import { GetAuthContext } from "../contexts/authContext";
 
 const PrivatePage = (props: { children?: ReactNode }) => {
