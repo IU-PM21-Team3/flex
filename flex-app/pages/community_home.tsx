@@ -1,20 +1,20 @@
 import type { NextPage } from "next";
-import DefaultLayout from "../components/DefaultLayout";
 import image from "../images/CommunityTop.jpg";
-import Link from "next/link";
+import MyLink from "../components/MyLink";
+import PrivatePage from "../components/PrivatePage";
 
 const Community_Home: NextPage = () => {
   return (
-    <DefaultLayout>
+    <PrivatePage>
       <h1>Community Page</h1>
       <br />
       <div>
-        <Link href="/community_talk">
+        <MyLink href="/community_talk">
           <input type="image" src={image.src} alt="Image" />
-        </Link>
+        </MyLink>
         <p>浅草寺</p>
       </div>
-    </DefaultLayout>
+    </PrivatePage>
   );
 };
 
