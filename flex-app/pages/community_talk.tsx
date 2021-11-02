@@ -2,6 +2,7 @@ import type { NextPage } from "next";
 import { TextInput } from "../components/Talk_TextInput";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import { Paper } from "@material-ui/core";
+import PrivatePage from "../components/PrivatePage";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -42,13 +43,15 @@ const useStyles = makeStyles((theme: Theme) =>
 const Community_Talk: NextPage = () => {
   const classes = useStyles();
   return (
-    <div className={classes.container}>
-      <Paper className={classes.paper}>
-        <p>浅草寺のコミュニティ</p>
-        <Paper id="style-1" className={classes.messagesBody}></Paper>
-        <TextInput />
-      </Paper>
-    </div>
+    <PrivatePage>
+      <div className={classes.container}>
+        <Paper className={classes.paper}>
+          <p>浅草寺のコミュニティ</p>
+          <Paper id="style-1" className={classes.messagesBody}></Paper>
+          <TextInput />
+        </Paper>
+      </div>
+    </PrivatePage>
   );
 };
 

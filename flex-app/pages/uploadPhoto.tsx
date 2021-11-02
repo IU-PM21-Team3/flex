@@ -2,6 +2,7 @@ import type { NextPage } from 'next'
 import Image from 'next/image'
 import { ChangeEvent, ChangeEventHandler, useState } from 'react'
 import imageNotFound from '../images/ImageNotFound.png'
+import PrivatePage from "../components/PrivatePage"
 
 /**
  * 画像のアップロードを行う
@@ -31,7 +32,7 @@ const UploadPhoto: NextPage = () => {
     }
 
   return (
-    <div>
+    <PrivatePage>
       <h1>uploadPhoto Page</h1>
 
       <input
@@ -48,7 +49,7 @@ const UploadPhoto: NextPage = () => {
         alt={imageName} />
 
       <div>画像の最終更新日 : {imageDate.toISOString()}</div>
-    </div>
+    </PrivatePage>
   )
 }
 

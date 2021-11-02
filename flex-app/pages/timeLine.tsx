@@ -1,9 +1,12 @@
 import type { NextPage } from 'next'
 import TimeLine from '../components/timeLine'
+import PrivatePage from "../components/PrivatePage";
 
 const Time: NextPage = () => {
   return (
-    <TimeLine />
+    <PrivatePage>
+      <TimeLine />
+    </PrivatePage>
   )
 }
 
