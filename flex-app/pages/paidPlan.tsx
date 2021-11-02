@@ -1,6 +1,7 @@
 import { NextPage } from 'next';
 import styles from '../styles/paidPlan.module.css';
 import PrivatePage from "../components/PrivatePage";
+import React from "react";
 
 const UI: NextPage = (props) => {
   return (

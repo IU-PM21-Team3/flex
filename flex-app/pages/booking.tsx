@@ -5,6 +5,7 @@ import 'react-calendar/dist/Calendar.css'
 import CheckBox from "../components/SimpleCheckBox";
 import styles from '../styles/BookingPage.module.css';
 import PrivatePage from "../components/PrivatePage";
+import React from "react";
 
 import { formatDate } from '../utils/utils'
 
