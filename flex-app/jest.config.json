@@ -9,5 +9,10 @@
     "/src/",
     "/public/",
     "/build/"
-  ]
+  ],
+  "transform": {
+    "^.+\\.tsx?$": [
+      "@swc/jest"
+    ]
+  }
 }
