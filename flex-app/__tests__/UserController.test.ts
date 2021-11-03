@@ -58,3 +58,5 @@ test("Create User Test With 2 PlanSummaries", async () => {
 
   expect(actual.data()).toStrictEqual(testUserData);
 });
+
+afterAll(() => flexFirebase.Dispose());
