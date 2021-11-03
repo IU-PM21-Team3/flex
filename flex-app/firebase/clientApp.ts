@@ -1,8 +1,8 @@
-import { FirebaseApp, initializeApp } from "firebase/app";
+import { FirebaseApp, initializeApp, FirebaseOptions, deleteApp } from "firebase/app";
 import { getAuth, Auth } from "firebase/auth";
 import { getFirestore, Firestore } from "firebase/firestore";
 
-const clientCredentials = {
+const clientCredentials: FirebaseOptions = {
   apiKey: "AIzaSyBG-xl2BWKRWFm88QxrtIK4SqRowbKB054",
   authDomain: "tr-flex-dev.firebaseapp.com",
   projectId: "tr-flex-dev",
@@ -11,8 +11,27 @@ const clientCredentials = {
   appId: "1:1048074287810:web:700112690e24e0ef04d95b",
 };
 
-export default class flexFirebase {
-  public static app: FirebaseApp = initializeApp(clientCredentials);
-  public static auth: Auth = getAuth(this.app);
-  public static store: Firestore = getFirestore(this.app);
+export class flexFirebase {
+  public get app(): FirebaseApp { return this._app; }
+  public get auth(): Auth { return this._auth; }
+  public get store(): Firestore { return this._store; }
+
+  private _app: FirebaseApp;
+  private _auth: Auth;
+  private _store: Firestore;
+
+  constructor(app?: FirebaseApp, credentials?: FirebaseOptions) {
+    this._app = app ?? initializeApp(credentials ?? clientCredentials);
+
+    this._auth = getAuth(this.app);
+    this._store = getFirestore(this.app);
+  }
+
+  public Dispose(): Promise<void> {
+    return deleteApp(this.app);
+  }
 }
+
+const AppScopeFirebase = new flexFirebase();
+
+export default AppScopeFirebase;
