@@ -5,6 +5,7 @@
   "coverageProvider": "v8",
   "testEnvironment": "node",
   "testPathIgnorePatterns": [
+    "/__tests__/FirebaseEmulatorConnection.ts",
     "/node_modules/",
     "/src/",
     "/public/",

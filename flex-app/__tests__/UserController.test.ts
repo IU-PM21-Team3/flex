@@ -1,6 +1,6 @@
 import { UserController } from "../firebase/UsersController";
 import { DBUser } from "../firebase/DBTypes";
-import flexFirebase from "../firebase/clientApp";
+import flexFirebase from "./FirebaseEmulatorConnection";
 import { doc } from "firebase/firestore";
 
 const testUserID_1: string = "niocbqnwio";

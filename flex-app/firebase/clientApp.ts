@@ -16,9 +16,9 @@ export class flexFirebase {
   public get auth(): Auth { return this._auth; }
   public get store(): Firestore { return this._store; }
 
-  private _app: FirebaseApp;
-  private _auth: Auth;
-  private _store: Firestore;
+  protected _app: FirebaseApp;
+  protected _auth: Auth;
+  protected _store: Firestore;
 
   constructor(app?: FirebaseApp, credentials?: FirebaseOptions) {
     this._app = app ?? initializeApp(credentials ?? clientCredentials);
