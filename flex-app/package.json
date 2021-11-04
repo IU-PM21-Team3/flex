@@ -30,6 +30,7 @@
     "@swc/jest": "^0.2.5",
     "@types/jest": "^27.0.2",
     "@types/react": "17.0.26",
+    "babel-jest": "^26.6.1",
     "eslint": "7.32.0",
     "eslint-config-next": "11.1.2",
     "jest": "^27.3.1",
