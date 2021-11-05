@@ -52,4 +52,14 @@ export class UserController {
 
     return deleteDoc(ref);
   }
+
+  public changeDisplayName(newName: string): Promise<void> {
+    const id: string | undefined = flexFirestore.auth.currentUser?.uid;
+    if (id == null)
+      throw new Error("UID is null.  Is it truly logged in?");
+
+    const ref = this.getUserDocRef(id);
+
+    return updateDoc(ref, { displayName: newName });
+  }
 }
