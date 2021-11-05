@@ -29,6 +29,12 @@
     "import"
   ],
   "rules": {
+    "require-jsdoc": "off",
+    "new-cap": "off",
+    "camelcase": "off",
+    "import/no-named-as-default": "off",
+    "valid-jsdoc": "off",
+    "guard-for-in": "off",
     "quotes": [
       "error",
       "double"
@@ -42,7 +48,7 @@
     "max-len": [
       "warn",
       {
-        "code": 160
+        "code": 256
       }
     ],
     "linebreak-style": 0
