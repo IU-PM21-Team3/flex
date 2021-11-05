@@ -1,8 +1,10 @@
 import {
   getDoc,
-  setDoc,
+  getDocs,
   deleteDoc,
   updateDoc,
+  query,
+  collection,
   DocumentSnapshot,
   DocumentReference,
   Firestore,
@@ -54,5 +56,18 @@ export class UserController {
     const ref = this.getUserDocRef(id);
 
     return updateDoc(ref, { displayName: newName });
+  }
+
+  public getUsersArray(): Promise<{ [uid: string]: DBUser }> {
+    const usersCollection = collection(this.db, "users");
+    const requestQuery = query(usersCollection).withConverter(DBUserConverter);
+
+    return getDocs(requestQuery).then((value) => {
+      const retArr: { [uid: string]: DBUser } = {};
+
+      value.forEach(result => retArr[result.id] = result.data());
+
+      return retArr;
+    });
   }
 }
