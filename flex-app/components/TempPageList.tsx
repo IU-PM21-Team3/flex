@@ -16,6 +16,7 @@ const pages: page[] = [
   { name: "有料プラン登録", path: "/paidPlan" },
   { name: "施設予約処理", path: "/booking" },
   { name: "コミュニティ一覧", path: "/community_home" },
+  { name: "(管理者用) ユーザ一覧", path: "/admin/userList" },
 ]
 
 const TempPageList: React.FC = () => {
