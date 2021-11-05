@@ -33,16 +33,6 @@ export class UserController {
     return getDoc(ref);
   }
 
-  public setUserData(user: DBUser, id?: string): Promise<void> {
-    id ??= flexFirestore.auth.currentUser?.uid;
-    if (id == null)
-      throw new Error("UID is null.  Is it truly logged in?");
-
-    const ref = this.getUserDocRef(id);
-
-    return setDoc(ref, user);
-  }
-
   public deleteUserData(id?: string): Promise<void> {
     id ??= flexFirestore.auth.currentUser?.uid;
     if (id == null)
