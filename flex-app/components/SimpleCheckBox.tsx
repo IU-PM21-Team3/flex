@@ -14,7 +14,7 @@ const SimpleCheckBox = ({ checked, label }: CheckBoxProps) => {
       />
       <label>{label}</label>
     </>
-  )
-}
+  );
+};
 
-export default SimpleCheckBox
+export default SimpleCheckBox;

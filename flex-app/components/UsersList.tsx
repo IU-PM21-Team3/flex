@@ -1,5 +1,4 @@
-import React from "react";
-import { useState, useEffect } from "react";
+import React, { useState } from "react";
 import MaterialTable from "material-table";
 import { DBUser } from "../firebase/DBTypes";
 import { UserController } from "../firebase/UsersController";
@@ -14,11 +13,11 @@ interface DBUserWithUID extends DBUser {
 const usersCtrler = new UserController(flexFirebase.store);
 
 function getUsers(): Promise<DBUserWithUID[]> {
-  return usersCtrler.getUsersArray().then(dic => {
+  return usersCtrler.getUsersArray().then((dic) => {
     const retArr: DBUserWithUID[] = [];
 
     for (const key in dic) {
-      let tmp: DBUserWithUID = dic[key] as DBUserWithUID;
+      const tmp: DBUserWithUID = dic[key] as DBUserWithUID;
 
       tmp.uid = key;
       tmp.createdDateInStr = tmp.createdDate.toISOString();
@@ -35,7 +34,7 @@ const ProductPage = () => {
   const [isLoading, setIsLoading] = useState<VisibilityState>("hidden");
 
   // 再描画がかかると実行される
-  getUsers().then(arr => {
+  getUsers().then((arr) => {
     // 更新が必要な時のみ更新を行う
     if (arr.toString() != users.toString()) {
       setUsers(arr);
@@ -44,7 +43,7 @@ const ProductPage = () => {
     setIsLoading("hidden");
   });
 
-  //Table Icon ref : https://material-table.com/#/docs/install
+  // Table Icon ref : https://material-table.com/#/docs/install
   return (
     <div style={{ width: "90%", margin: "auto" }}>
       <link

@@ -13,6 +13,6 @@ const PrivatePage = (props: { children?: ReactNode }) => {
   }
 
   return <div>{props.children}</div>;
-}
+};
 
 export default PrivatePage;

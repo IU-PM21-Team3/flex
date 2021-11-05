@@ -1,5 +1,5 @@
-import type { NextPage } from 'next'
-import TempPageList from '../components/TempPageList'
+import type { NextPage } from "next";
+import TempPageList from "../components/TempPageList";
 import React from "react";
 
 const Home: NextPage = () => {
@@ -11,7 +11,7 @@ const Home: NextPage = () => {
       </div>
       <TempPageList />
     </div>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;

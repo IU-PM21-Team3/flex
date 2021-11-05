@@ -1,10 +1,9 @@
-import { NextPage } from 'next'
-import { useState, Fragment } from "react";
+import { NextPage } from "next";
+import React, { useState, Fragment } from "react";
 import { signOut } from "firebase/auth";
-import flexFirebase from '../firebase/clientApp';
+import flexFirebase from "../firebase/clientApp";
 import { GetAuthContext } from "../contexts/authContext";
 import SignInUp, { SignInUpTextValues, SignInText, SignUpText } from "./SignInUp";
-import React from "react";
 import {
   AppBar,
   Toolbar,
@@ -20,7 +19,7 @@ import {
 
 const SignOutText = "ログアウト";
 
-const styles = makeStyles(theme => ({
+const styles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
   },
@@ -38,7 +37,7 @@ const styles = makeStyles(theme => ({
   },
 }));
 
-const NavigationBar: NextPage = (props) => {
+const NavigationBar: NextPage = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [signInUpText, setSignInUpText] = useState<SignInUpTextValues>(SignInText);
   const classes = styles();

@@ -1,9 +1,9 @@
-import { NextPage } from 'next';
-import styles from '../styles/paidPlan.module.css';
+import { NextPage } from "next";
+import styles from "../styles/paidPlan.module.css";
 import PrivatePage from "../components/PrivatePage";
 import React from "react";
 
-const UI: NextPage = (props) => {
+const UI: NextPage = () => {
   return (
     <PrivatePage>
       <div className={styles.APP}>
@@ -29,7 +29,7 @@ const UI: NextPage = (props) => {
         </label>
       </div>
     </PrivatePage>
-  )
-}
+  );
+};
 
 export default UI;
