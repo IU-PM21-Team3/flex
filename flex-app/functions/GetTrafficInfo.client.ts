@@ -1,6 +1,6 @@
 import { httpsCallable } from "firebase/functions";
 import { IOdptTrainInformation, /* fromIOdptTrainInformationArrWithString */ } from "../models/GetTrafficInfo.type";
-import { MyFirebaseApps } from "../firebase/clientApp";
+import MyFirebaseApps from "../firebase/clientApp";
 
 const functions = MyFirebaseApps.functions;
 
