@@ -1,5 +1,15 @@
-import { getDoc, setDoc, deleteDoc, DocumentSnapshot, DocumentReference, Firestore, doc } from "firebase/firestore";
-import { DBUser, DBUserConverter } from "./DBTypes";
+import {
+  getDoc,
+  setDoc,
+  deleteDoc,
+  updateDoc,
+  DocumentSnapshot,
+  DocumentReference,
+  Firestore,
+  doc
+} from "firebase/firestore";
+import { DBUser } from "./DBTypes";
+import { DBUserConverter } from "./DBTypes.Converters";
 import flexFirestore from "./clientApp";
 
 export class UserController {
