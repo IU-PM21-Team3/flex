@@ -19,14 +19,21 @@ export class UserController {
     return doc(this.db, "/users", id).withConverter(DBUserConverter);
   }
 
+  private setUidOrThrowError(id?: string): string {
+    id ??= flexFirestore.auth.currentUser?.uid;
+
+    if (id == null)
+      throw new Error("UID is null.  Is it truly logged in?");
+
+    return id;
+  }
+
   constructor(db: Firestore) {
     this.db = db;
   }
 
   public getUserData(id?: string): Promise<DocumentSnapshot<DBUser>> {
-    id ??= flexFirestore.auth.currentUser?.uid;
-    if (id == null)
-      throw new Error("UID is null.  Is it truly logged in?");
+    id = this.setUidOrThrowError(id);
 
     const ref = this.getUserDocRef(id);
 
@@ -34,9 +41,7 @@ export class UserController {
   }
 
   public deleteUserData(id?: string): Promise<void> {
-    id ??= flexFirestore.auth.currentUser?.uid;
-    if (id == null)
-      throw new Error("UID is null.  Is it truly logged in?");
+    id = this.setUidOrThrowError(id);
 
     const ref = this.getUserDocRef(id);
 
@@ -44,9 +49,7 @@ export class UserController {
   }
 
   public changeDisplayName(newName: string): Promise<void> {
-    const id: string | undefined = flexFirestore.auth.currentUser?.uid;
-    if (id == null)
-      throw new Error("UID is null.  Is it truly logged in?");
+    const id: string = this.setUidOrThrowError();
 
     const ref = this.getUserDocRef(id);
 
