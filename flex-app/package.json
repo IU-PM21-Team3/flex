@@ -2,7 +2,10 @@
   "name": "flex-app",
   "version": "0.1.0",
   "private": true,
-  "main": "functions/index.ts",
+  "main": "lib/functions/index.js",
+  "engines": {
+    "node": "16"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -13,6 +16,7 @@
     "serve": "npm run build && firebase emulators:start --only functions,hosting",
     "shell": "npm run build && firebase functions:shell",
     "deploy": "firebase deploy --only functions,hosting",
+    "deploy:functions": "firebase deploy --only functions",
     "logs": "firebase functions:log"
   },
   "dependencies": {
