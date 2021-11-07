@@ -1,7 +1,8 @@
-import { httpsCallable } from "firebase/functions";
-import { IOdptTrainInformation, /* fromIOdptTrainInformationArrWithString */ } from "../models/GetTrafficInfo.type";
-import MyFirebaseApps from "../firebase/clientApp";
-
+export { };
+// import { httpsCallable } from "firebase/functions";
+// import { IOdptTrainInformation, /* fromIOdptTrainInformationArrWithString */ } from "../models/GetTrafficInfo.type";
+// import MyFirebaseApps from "../firebase/clientApp";
+/*
 const functions = MyFirebaseApps.functions;
 
 export async function getTrafficInfo(): Promise<IOdptTrainInformation<Date>[] | null> {
@@ -18,3 +19,4 @@ export async function getTrafficInfo(): Promise<IOdptTrainInformation<Date>[] | 
 
   return returnValue;
 }
+*/

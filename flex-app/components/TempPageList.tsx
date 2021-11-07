@@ -1,6 +1,5 @@
-import { NextPage } from "next"
-import React, { useState } from "react"
-import MyLink from "./MyLink"
+import React from "react";
+import MyLink from "./MyLink";
 
 type page = {
   name: string,
@@ -17,30 +16,29 @@ const pages: page[] = [
   { name: "施設予約処理", path: "/booking" },
   { name: "コミュニティ一覧", path: "/community_home" },
   { name: "(管理者用) ユーザ一覧", path: "/admin/userList" },
-]
+];
 
 const TempPageList: React.FC = () => {
-
   return (
     <>
       <h2>ページリスト</h2>
       <ul>
         {
           // [tip] TSだとreturn入れないとmap表示されない？
-          pages.map(page => {
+          pages.map((page) => {
             return (
               <li key={page.name}>
                 <MyLink href={page.path}>
                   {page.name}
                 </MyLink>
               </li>
-            )
+            );
           })
         }
       </ul>
     </>
-  )
-}
+  );
+};
 
 
-export default TempPageList
+export default TempPageList;

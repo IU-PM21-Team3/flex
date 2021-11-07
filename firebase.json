@@ -4,10 +4,26 @@
     "indexes": "flex-firestore/firestore.indexes.json"
   },
   "functions": {
-    "source": "flex-functions",
+    "source": "flex-app",
+    "runtime": "nodejs16",
     "predeploy": [
       "npm --prefix \"$RESOURCE_DIR\" run lint",
+      "npm --prefix \"$RESOURCE_DIR\" run tsc:functions",
       "npm --prefix \"$RESOURCE_DIR\" run build"
+    ]
+  },
+  "hosting": {
+    "public": "flex-app/public",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "function": "nextjsFunc"
+      }
     ]
   },
   "emulators": {

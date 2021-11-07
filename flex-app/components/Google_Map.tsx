@@ -11,7 +11,7 @@ const center = {
   lng: 139.77521,
 };
 
-function G_Map () {
+function G_Map() {
   return (
     <LoadScript googleMapsApiKey="AIzaSyD5hEtmrnaidWTm_VEVo0Qq6lmgV4WyWKQ">
       <GoogleMap
@@ -21,6 +21,6 @@ function G_Map () {
       ></GoogleMap>
     </LoadScript>
   );
-};
+}
 
 export default G_Map;

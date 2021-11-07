@@ -8,6 +8,6 @@ const userList = () => {
       <UsersListTable />
     </PrivatePage>
   );
-}
+};
 
 export default userList;
