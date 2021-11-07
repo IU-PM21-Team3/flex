@@ -2,7 +2,7 @@
 .daytable {
   position: absolute;
   left: 0em;
-  top: 2em;
+  top: 5em;
   padding: 3em 8.2em;
   margin: 1em 1em;
   width: 3.6em;
@@ -17,7 +17,7 @@
   border-top:2px dotted #000000;
   position: absolute;/*親を基準*/
   left: 0px;
-  top: 7em;
+  top: 10em;
   padding: 1em 8.2em;
   margin: 1em 1em;
   width: 3.6em;
@@ -62,27 +62,46 @@
 
 .daytable #day {
   position: absolute;  
-  top: 0;
-  left: 60px; 
+  top: -20px;
+  left: 45px; 
 }
 
 .timetable #time { 
   position: absolute; 
-  top: -30px;
-  left: -30px; 
+  top: -60px;
+  left: -40px; 
 }
 
 /*timeの行間隔*/
 .timetable #time { 
-  line-height: 100px;
+  line-height: 120px;
 }
 
 .timetable ul {
   list-style: none;
 }
 
-.line {
+.timetable #line {
   position: absolute; 
-  top: 30px;
-  left: 30px; 
+  top: 0px;
+  left: 100px; 
+}
+
+/*旅程のテーマの位置*/
+.theme {
+  position: absolute;  
+  top: 3em;
+  left: 20px; 
+  display: inline-block;
+}
+
+/*タイムラインに追加する場所のセル*/
+.placetable #place {
+  position: absolute;
+  left: 5em;
+  width: 12em;
+  height:3em;
+  display: inline-block;
+  color: black;
+  background: white;
 }

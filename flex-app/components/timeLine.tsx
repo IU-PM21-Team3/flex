@@ -1,97 +1,70 @@
 import styles from '../styles/timeline.module.css';
-import * as moment from 'moment';
-import Prev from './Prev';
+import { formatDate } from '../utils/utils'
 import React, {useState} from 'react';
-import Next from './Next';
+import PLACE from './Place';
 
-const TimeLine = () => {
-  const time=['04:00', 
-  '05:00', 
-  '06:00', 
-  '07:00', 
-  '08:00', 
-  '09:00', 
-  '10:00', 
-  '11:00',
-  '12:00', 
-  '13:00',
-  '14:00',
-  '15:00',
-  '16:00',
-  '17:00',
-  '18:00',
-  '19:00',
-  '20:00',
-  '21:00',
-  '22:00',
-  '23:00',
-  '24:00'];
-
-  /*const initialState: moment.Moment = moment().add(2, 'd').format('MM/DD(ddd)');*/
-  var today = new Date();
-  var year  = today.getFullYear(); 
-  var month = today.getMonth()+1;   
-  var date = today.getDate();
-  var day = today.getDay();
-
-
-  const [count, setCount] = useState(date);
-  const click = () => {
-  setCount(count-1);
+const TimeLine = (props: {beginDate :Date,  endDate :Date}) => {
+  
+  const time: Array<string>=new Array(21)
+  for (var i=0; i<21; i++) {
+      time[i]=String('00'+(i+4)).slice(-2)+':00';
   }
  
-/*
-  moment.locale('ja', {
-    weekdays: ['日曜日','月曜日','火曜日','水曜日','木曜日','金曜日','土曜日'],
-    weekdaysShort: ['日','月','火','水','木','金','土']
-  })
-*/
+//beginDateとendDateの差分を求める
+var date1: Date = props.beginDate;
+var date2: Date = props.endDate;
+var getDiff: number = date2.getTime() - date1.getTime();
+var termDay: number = getDiff/(1000*60*60*24);
+
+const planDate: Date[] = [props.beginDate]
+
+for(let d: Date=props.beginDate, i: number=0; i<termDay; i++) {
+   d = new Date(d.getFullYear(), d.getMonth(),d.getDate()+1);
+  planDate.push(d);
+}
+
+  const [index, setIndex] = useState(0);
+
+  //ボタン「>」をクリックしたら日付進める
+  const nextclick = () => {
+  if(index < planDate.length-1 ) {
+    setIndex(index+1);
+    }
+  }
+ 
+  //ボタン「＜」クリックしたら日付戻す
+  const prevclick = () => {
+    if(index > 0 ) {
+      setIndex(index-1);
+      }
+  }
+
+  // const interact = useInteractJS()
   return (
-    <body>
+    <body>   
+     
+      {/* <button onClick={places}>スケジュール</button>  */}
       <div className={styles.daytable}>
           <div className={styles.button}>
-            <Prev count={count} click={click}/>
-            <Next count={count} click={click}/>
+             <button id={styles.previous} onClick={prevclick}>＜</button>
+             <button id={styles.next} onClick={nextclick}>＞</button>
           </div>
-          <div id={styles.day}>
-          <h1>{month}/{count}</h1>
-          </div>
-        </div>
-          <div className={styles.timetable}>
+            <div id={styles.day}>
+              <h1>{formatDate(planDate[index],"yyyy-MM-dd")}</h1>  
+            </div>
+            <big>Day{index+1}</big>
+      </div>
+        <div className={styles.timetable}>
           <div id={styles.time}>
             <ul>
-              <li>{time[0]}</li> 
-              <li>{time[1]}</li>
-              <li>{time[2]}</li>
-              <li>{time[3]}</li>
-              <li>{time[4]}</li>
-              <li>{time[5]}</li>
-              <li>{time[6]}</li>
-              <li>{time[7]}</li>
-              <li>{time[8]}</li>
-              <li>{time[9]}</li>
-              <li>{time[10]}</li>
-              <li>{time[11]}</li>
-              <li>{time[12]}</li>
-              <li>{time[13]}</li>
-              <li>{time[14]}</li>
-              <li>{time[15]}</li>
-              <li>{time[16]}</li>
-              <li>{time[17]}</li>
-              <hr/>
-              <li>{time[18]}</li>
-              <li>{time[19]}</li>
-              <li>{time[20]}</li>
+            {time.map((time, i) => <li key={i}>{time}</li>)}
             </ul>
-              </div>
-              <div className={styles.line}>
-              <hr/>
-              <hr/>
-              </div>
-         </div>
-   </body>
-  
-  ) 
-}    
+          </div>
+          <PLACE index={index}/>
+        </div>
+        
+    </body>
+  )
+}
 
 export default TimeLine;
