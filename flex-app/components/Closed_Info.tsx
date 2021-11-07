@@ -18,23 +18,23 @@ let business_status = "";
 
 export async function Get_buisiness_stats(placeID: string) {
   return await axios.get(
-      `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeID}&fields=name%2Crating%2Cformatted_phone_number%2Cbusiness_status&key=AIzaSyD5hEtmrnaidWTm_VEVo0Qq6lmgV4WyWKQ`
+    `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeID}&fields=name%2Crating%2Cformatted_phone_number%2Cbusiness_status&key=AIzaSyD5hEtmrnaidWTm_VEVo0Qq6lmgV4WyWKQ`
   )
-      .then(function(response: AxiosResponse) {
-        const tmp = /"business_status" : (.+)/.exec(JSON.stringify(response.data));
+    .then(function(response: AxiosResponse) {
+      const tmp = /"business_status" : (.+)/.exec(JSON.stringify(response.data));
 
-        if (tmp == null) {
-          return null;
-        } else {
-          business_status = tmp[1];
-        }
+      if (tmp == null) {
+        return null;
+      } else {
+        business_status = tmp[1];
+      }
 
-        return business_status;
-      })
+      return business_status;
+    })
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      .catch(function(error: any) {
-        console.log(error);
-      });
+    .catch(function(error: any) {
+      console.log(error);
+    });
 }
 
 /*

@@ -24,8 +24,9 @@ export class UserController {
   private setUidOrThrowError(id?: string): string {
     id ??= flexFirestore.auth.currentUser?.uid;
 
-    if (id == null)
+    if (id == null) {
       throw new Error("UID is null.  Is it truly logged in?");
+    }
 
     return id;
   }
@@ -65,7 +66,7 @@ export class UserController {
     return getDocs(requestQuery).then((value) => {
       const retArr: { [uid: string]: DBUser } = {};
 
-      value.forEach(result => retArr[result.id] = result.data());
+      value.forEach((result) => retArr[result.id] = result.data());
 
       return retArr;
     });

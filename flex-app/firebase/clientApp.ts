@@ -13,10 +13,18 @@ const clientCredentials: FirebaseOptions = {
 };
 
 export class flexFirebase {
-  public get app(): FirebaseApp { return this._app; }
-  public get auth(): Auth { return this._auth; }
-  public get store(): Firestore { return this._store; }
-  public get functions(): Functions { return this._functions; }
+  public get app(): FirebaseApp {
+    return this._app;
+  }
+  public get auth(): Auth {
+    return this._auth;
+  }
+  public get store(): Firestore {
+    return this._store;
+  }
+  public get functions(): Functions {
+    return this._functions;
+  }
 
   protected _app: FirebaseApp;
   protected _auth: Auth;
