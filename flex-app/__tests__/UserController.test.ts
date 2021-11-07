@@ -3,8 +3,8 @@ import { DBUser } from "../firebase/DBTypes";
 import flexFirebase from "./FirebaseEmulatorConnection";
 import { doc } from "firebase/firestore";
 
-const testUserID_1: string = "niocbqnwio";
-const testUserID_2: string = "nibewocji0f";
+const testUserID_1 = "niocbqnwio";
+const testUserID_2 = "nibewocji0f";
 
 test("Create User Test With Empty PlanSummaries", async () => {
   const ctrler = new UserController(flexFirebase.store);
@@ -14,7 +14,7 @@ test("Create User Test With Empty PlanSummaries", async () => {
     displayName: "DispName",
     planType: "admin",
     planSummaries: []
-  }
+  };
 
   await ctrler.setUserData(testUserData, testUserID);
 
@@ -50,7 +50,7 @@ test("Create User Test With 2 PlanSummaries", async () => {
         planDoc: doc(flexFirebase.store, "/travelPlans", "plan02")
       },
     ]
-  }
+  };
 
   await ctrler.setUserData(testUserData, testUserID);
 

@@ -1,7 +1,7 @@
 import { DocumentReference, FirestoreDataConverter, DocumentData, doc } from "firebase/firestore";
 import { DBTravelPlanSummary, DBActionData, DBUser, DBDailyPlan, DBTravelPlan } from "./DBTypes";
 
-//#region Firebaseとのデータ型変換用便利関数群
+// #region Firebaseとのデータ型変換用便利関数群
 
 /**
  * Firebaseから返された日付データをJavaScriptのDate型に変換する
@@ -58,7 +58,7 @@ function ToDocRefArr<T>(gotArr: any): T[] {
  * @returns 出力データ
  */
 function ToDBActionData(v: any): DBActionData {
-  let retD = v as DBActionData;
+  const retD = v as DBActionData;
 
   retD.arriveDate = FromFirebaseDateToJSDate(v.arriveDate);
   retD.leaveDate = FromFirebaseDateToJSDate(v.leaveDate);
@@ -66,16 +66,16 @@ function ToDBActionData(v: any): DBActionData {
   return retD;
 }
 
-//#endregion
+// #endregion
 
-//#region FirestoreDataConverter
+// #region FirestoreDataConverter
 /** Firestoreとのデータ変換を実装する */
 export const DBUserConverter: FirestoreDataConverter<DBUser> = {
   toFirestore: (ts) => ts,
 
   fromFirestore: (ss, opts) => {
     const gotData: DocumentData = ss.data(opts);
-    let retD: DBUser = gotData as DBUser;
+    const retD: DBUser = gotData as DBUser;
 
     if (Array.isArray(gotData.planSummaries)) {
       retD.planSummaries = gotData.planSummaries.map((v, i, arr) => ToDBTravelPlanSummary(v));
@@ -85,7 +85,7 @@ export const DBUserConverter: FirestoreDataConverter<DBUser> = {
 
     return retD;
   }
-}
+};
 
 /** Firestoreとのデータ変換を実装する */
 export const DBActionDataConverter: FirestoreDataConverter<DBActionData> = {
@@ -93,14 +93,14 @@ export const DBActionDataConverter: FirestoreDataConverter<DBActionData> = {
 
   fromFirestore: (ss, opts) => {
     const gotD: DocumentData = ss.data(opts);
-    let retD: DBActionData = gotD as DBActionData;
+    const retD: DBActionData = gotD as DBActionData;
 
     retD.arriveDate = FromFirebaseDateToJSDate(gotD.arriveDate);
     retD.leaveDate = FromFirebaseDateToJSDate(gotD.leaveDate);
 
     return retD;
   }
-}
+};
 
 /** Firestoreとのデータ変換を実装する */
 export const DBTravelPlanConverter: FirestoreDataConverter<DBTravelPlan> = {
@@ -108,7 +108,7 @@ export const DBTravelPlanConverter: FirestoreDataConverter<DBTravelPlan> = {
 
   fromFirestore: (ss, opts) => {
     const gotD: DocumentData = ss.data(opts);
-    let retD: DBTravelPlan = gotD as DBTravelPlan;
+    const retD: DBTravelPlan = gotD as DBTravelPlan;
 
     retD.planSummary = ToDBTravelPlanSummary(gotD.planSummary);
     retD.readableUsers = ToDocRefArr(gotD.readableUsers);
@@ -116,7 +116,7 @@ export const DBTravelPlanConverter: FirestoreDataConverter<DBTravelPlan> = {
 
     return retD;
   }
-}
+};
 
 /** Firestoreとのデータ変換を実装する */
 export const DBDailyPlanConverter: FirestoreDataConverter<DBDailyPlan> = {
@@ -124,7 +124,7 @@ export const DBDailyPlanConverter: FirestoreDataConverter<DBDailyPlan> = {
 
   fromFirestore: (ss, opts) => {
     const gotD: DocumentData = ss.data(opts);
-    let retD: DBDailyPlan = { actions: [] };
+    const retD: DBDailyPlan = { actions: [] };
 
     if (Array.isArray(gotD.actions)) {
       retD.actions = gotD.actions.map((v, i, arr) => ToDBActionData(v));
@@ -132,5 +132,5 @@ export const DBDailyPlanConverter: FirestoreDataConverter<DBDailyPlan> = {
 
     return retD;
   }
-}
-//#endregion
+};
+// #endregion

@@ -1,43 +1,42 @@
-import styles from '../styles/timeline.module.css';
-import { formatDate } from '../utils/utils'
-import React, { useState } from 'react';
-import PLACE from './Place';
+import styles from "../styles/timeline.module.css";
+import { formatDate } from "../utils/utils";
+import React, { useState } from "react";
+import PLACE from "./Place";
 
 const TimeLine = (props: { beginDate: Date, endDate: Date }) => {
-
-  const time: Array<string> = new Array(21)
-  for (var i = 0; i < 21; i++) {
-    time[i] = String('00' + (i + 4)).slice(-2) + ':00';
+  const time: Array<string> = new Array(21);
+  for (let i = 0; i < 21; i++) {
+    time[i] = String("00" + (i + 4)).slice(-2) + ":00";
   }
 
-  //beginDateとendDateの差分を求める
-  var date1: Date = props.beginDate;
-  var date2: Date = props.endDate;
-  var getDiff: number = date2.getTime() - date1.getTime();
-  var termDay: number = getDiff / (1000 * 60 * 60 * 24);
+  // beginDateとendDateの差分を求める
+  const date1: Date = props.beginDate;
+  const date2: Date = props.endDate;
+  const getDiff: number = date2.getTime() - date1.getTime();
+  const termDay: number = getDiff / (1000 * 60 * 60 * 24);
 
-  const planDate: Date[] = [props.beginDate]
+  const planDate: Date[] = [props.beginDate];
 
-  for (let d: Date = props.beginDate, i: number = 0; i < termDay; i++) {
+  for (let d: Date = props.beginDate, i = 0; i < termDay; i++) {
     d = new Date(d.getFullYear(), d.getMonth(), d.getDate() + 1);
     planDate.push(d);
   }
 
   const [index, setIndex] = useState(0);
 
-  //ボタン「>」をクリックしたら日付進める
+  // ボタン「>」をクリックしたら日付進める
   const nextclick = () => {
     if (index < planDate.length - 1) {
       setIndex(index + 1);
     }
-  }
+  };
 
-  //ボタン「＜」クリックしたら日付戻す
+  // ボタン「＜」クリックしたら日付戻す
   const prevclick = () => {
     if (index > 0) {
       setIndex(index - 1);
     }
-  }
+  };
 
   // const interact = useInteractJS()
   return (
@@ -64,7 +63,7 @@ const TimeLine = (props: { beginDate: Date, endDate: Date }) => {
       </div>
 
     </body>
-  )
-}
+  );
+};
 
 export default TimeLine;
