@@ -1,11 +1,11 @@
 import type { NextPage } from "next";
 import { TextInput } from "../components/Talk_TextInput";
-import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
+import { createStyles, makeStyles } from "@material-ui/core/styles";
 import { Paper } from "@material-ui/core";
 import PrivatePage from "../components/PrivatePage";
 import React from "react";
 
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles(() =>
   createStyles({
     paper: {
       width: "100vw",
