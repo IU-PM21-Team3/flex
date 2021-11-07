@@ -22,13 +22,23 @@
     "sourceType": "module"
   },
   "ignorePatterns": [
-    "/lib/**/*" // Ignore built files.
+    "/lib/**/*", // Ignore built files.
+    "/node_modules/**/*",
+    "/.next/**/*"
   ],
   "plugins": [
     "@typescript-eslint",
     "import"
   ],
   "rules": {
+    "indent": [
+      "error",
+      2
+    ],
+    "semi": [
+      "error",
+      "always"
+    ],
     "require-jsdoc": "off",
     "new-cap": "off",
     "camelcase": "off",
@@ -51,6 +61,9 @@
         "code": 256
       }
     ],
-    "linebreak-style": 0
+    "linebreak-style": [
+      "error",
+      "unix"
+    ]
   }
 }
