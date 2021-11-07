@@ -1,18 +1,41 @@
-import firebase from "firebase/app";
-import "firebase/auth";
-import "firebase/firestore";
+import { Functions, getFunctions } from "@firebase/functions";
+import { FirebaseApp, initializeApp, FirebaseOptions, deleteApp } from "firebase/app";
+import { getAuth, Auth } from "firebase/auth";
+import { getFirestore, Firestore } from "firebase/firestore";
 
-const clientCredentials = {
-  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
-  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
-  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+const clientCredentials: FirebaseOptions = {
+  apiKey: "AIzaSyBG-xl2BWKRWFm88QxrtIK4SqRowbKB054",
+  authDomain: "tr-flex-dev.firebaseapp.com",
+  projectId: "tr-flex-dev",
+  storageBucket: "tr-flex-dev.appspot.com",
+  messagingSenderId: "1048074287810",
+  appId: "1:1048074287810:web:700112690e24e0ef04d95b",
 };
 
-if (!firebase.apps.length) {
-  firebase.initializeApp(clientCredentials);
+export class flexFirebase {
+  public get app(): FirebaseApp { return this._app; }
+  public get auth(): Auth { return this._auth; }
+  public get store(): Firestore { return this._store; }
+  public get functions(): Functions { return this._functions; }
+
+  protected _app: FirebaseApp;
+  protected _auth: Auth;
+  protected _store: Firestore;
+  protected _functions: Functions;
+
+  constructor(app?: FirebaseApp, credentials?: FirebaseOptions) {
+    this._app = app ?? initializeApp(credentials ?? clientCredentials);
+
+    this._auth = getAuth(this.app);
+    this._store = getFirestore(this.app);
+    this._functions = getFunctions(this.app);
+  }
+
+  public Dispose(): Promise<void> {
+    return deleteApp(this.app);
+  }
 }
 
-export default firebase;
+const AppScopeFirebase = new flexFirebase();
+
+export default AppScopeFirebase;

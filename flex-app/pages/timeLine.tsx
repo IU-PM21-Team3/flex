@@ -6,11 +6,11 @@ import Schedule from '../components/Schedule'
 //旅程のテーマと日付の設定
 type travelPlanProps = {
   planName: string,
- // description: string,
+  // description: string,
   beginDate: Date,
   endDate: Date,
- // lastUpdate: Date
- // planDoc: Reference
+  // lastUpdate: Date
+  // planDoc: Reference
 }
 
 //初期値
@@ -19,16 +19,16 @@ const travelPlanProps: travelPlanProps = {
   beginDate: new Date(2021, 11, 29),
   endDate: new Date(2021, 12, 3)
 }
-  
+
 
 const Time: NextPage = () => {
   return (
     <DefaultLayout>
       {/* <Schedule beginData={travelPlanProps.beginDate} endData={travelPlanProps.endDate}/> */}
-      <Schedule planName={travelPlanProps.planName} beginDate={travelPlanProps.beginDate} endDate={travelPlanProps.endDate}/>
-      <TimeLine beginDate={travelPlanProps.beginDate} endDate={travelPlanProps.endDate}/>
+      <Schedule planName={travelPlanProps.planName} beginDate={travelPlanProps.beginDate} endDate={travelPlanProps.endDate} />
+      <TimeLine beginDate={travelPlanProps.beginDate} endDate={travelPlanProps.endDate} />
     </DefaultLayout>
   )
 }
 
-export default Time
+export default Time;
