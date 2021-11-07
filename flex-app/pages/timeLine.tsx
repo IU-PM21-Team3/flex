@@ -1,7 +1,7 @@
 import type { NextPage } from 'next'
-import DefaultLayout from '../components/DefaultLayout'
 import TimeLine from '../components/timeLine'
 import Schedule from '../components/Schedule'
+import PrivatePage from "../components/PrivatePage"
 
 //旅程のテーマと日付の設定
 type travelPlanProps = {
@@ -23,11 +23,11 @@ const travelPlanProps: travelPlanProps = {
 
 const Time: NextPage = () => {
   return (
-    <DefaultLayout>
+    <PrivatePage>
       {/* <Schedule beginData={travelPlanProps.beginDate} endData={travelPlanProps.endDate}/> */}
       <Schedule planName={travelPlanProps.planName} beginDate={travelPlanProps.beginDate} endDate={travelPlanProps.endDate} />
       <TimeLine beginDate={travelPlanProps.beginDate} endDate={travelPlanProps.endDate} />
-    </DefaultLayout>
+    </PrivatePage>
   )
 }
 
