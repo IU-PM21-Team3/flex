@@ -23,7 +23,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: node_modules
-          key: node-v${{ matrix.node-version }}-deps-${{ hashFiles(format('{0}{1}', github.workspace, '/package-lock.json')) }}
+          key: node-v${{ matrix.node-version }}-deps-${{ hashFiles(format('{0}{1}', github.workspace, '/flex-app/package-lock.json')) }}
 
       - uses: actions/setup-node@v2
         with:
