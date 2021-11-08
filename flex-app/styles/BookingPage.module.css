@@ -8,7 +8,6 @@
   margin: 0 auto;
 }
 
-
 .book_table {
   width: 300px;
   margin: 0 auto;
@@ -21,4 +20,9 @@
 .book_button {
   width: 300px;
   text-align: center;
+}
+
+.radio_label {
+  display: inline-block;
+  margin: 0 10px;
 }

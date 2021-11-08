@@ -2,7 +2,7 @@ import type { NextPage } from "next";
 import React, { useState, ChangeEventHandler, ChangeEvent } from "react";
 import Calender from "react-calendar";
 import "react-calendar/dist/Calendar.css";
-import styles from "../styles/BookingPage.module.css";
+import styles from "../../styles/BookingPage.module.css";
 import PrivatePage from "../../components/PrivatePage";
 
 import { formatDate } from "../../utils/utils";
@@ -58,8 +58,9 @@ const BookingPage: NextPage = () => {
           />
           {
             times.radio.map((v, i) => (
-              <label key={i}>
+              <label className={styles.radio_label} key={i}>
                 <input
+                  className={styles.radio_input}
                   type="radio"
                   checked={v.checked}
                   value={v.rangeStr}

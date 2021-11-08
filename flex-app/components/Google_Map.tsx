@@ -2,7 +2,7 @@ import React from "react";
 import { GoogleMap, LoadScript } from "@react-google-maps/api";
 
 const containerStyle = {
-  width: "400px",
+  width: "600px",
   height: "400px",
 };
 
@@ -17,7 +17,7 @@ function G_Map() {
       <GoogleMap
         mapContainerStyle={containerStyle}
         center={center}
-        zoom={17}
+        zoom={13}
       ></GoogleMap>
     </LoadScript>
   );

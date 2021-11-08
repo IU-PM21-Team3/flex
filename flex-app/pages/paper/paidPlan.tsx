@@ -1,5 +1,5 @@
 import { NextPage } from "next";
-import styles from "../styles/paidPlan.module.css";
+import styles from "../../styles/paidPlan.module.css";
 import PrivatePage from "../../components/PrivatePage";
 import React from "react";
 

@@ -1,0 +1,10 @@
+.c_btn {
+  max-width: 100%;
+  padding: 10px;
+  border: 1px solid #aaa;
+  border-radius: 5px;
+  display: block;
+}
+
+.c_wrap {
+}

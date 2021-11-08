@@ -9,11 +9,41 @@ body {
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
 
-a {
-  /* color: inherit;
-  text-decoration: none; */
-}
-
 * {
   box-sizing: border-box;
+}
+
+input {
+  letter-spacing: 1px;
+  margin: 0.4rem 0;
+  padding: 10px;
+  width: 100%;
+  max-width: 320px;
+  border-radius: 5px;
+  border: 1px solid #aaa;
+}
+
+textarea {
+  letter-spacing: 1px;
+  padding: 10px;
+  width: 100%;
+  max-width: 320px;
+  line-height: 1.5;
+  border-radius: 5px;
+  border: 1px solid #aaa;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+label.required::after {
+  content: "必須";
+  margin-left: 1em;
+  padding: 0 6px;
+  border-radius: 4px;
+  font-size: 0.6em;
+  color: white;
+  background-color: #cc4444;
 }
