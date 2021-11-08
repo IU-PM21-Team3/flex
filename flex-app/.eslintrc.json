@@ -62,7 +62,7 @@
       }
     ],
     "linebreak-style": [
-      "error",
+      "warn",
       "windows"
     ]
   }
