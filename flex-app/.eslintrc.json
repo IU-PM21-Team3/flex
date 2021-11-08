@@ -63,7 +63,7 @@
     ],
     "linebreak-style": [
       "error",
-      "unix"
+      "windows"
     ]
   }
 }
