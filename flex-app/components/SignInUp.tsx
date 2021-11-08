@@ -57,21 +57,21 @@ const SignInUp = ({ signInUpText }: { signInUpText: SignInUpTextValues }) => {
     setIsLoading(true);
     if (_signInUpText == SignUpText) {
       createUserWithEmailAndPassword(flexFirebase.auth, email, password)
-          .then(() => {
+        .then(() => {
           // ユーザ登録成功時の処理 (DBにユーザ登録)
-          })
-          .catch((e) => {
-            console.error(e);
-            setErrorMessage("ユーザ登録に失敗しました.  " + e.toString());
-          })
-          .finally(() => setIsLoading(false));
+        })
+        .catch((e) => {
+          console.error(e);
+          setErrorMessage("ユーザ登録に失敗しました.  " + e.toString());
+        })
+        .finally(() => setIsLoading(false));
     } else {
       signInWithEmailAndPassword(flexFirebase.auth, email, password)
-          .catch((e) => {
-            console.error(e);
-            setErrorMessage("ログインに失敗しました.  " + e.toString());
-          })
-          .finally(() => setIsLoading(false));
+        .catch((e) => {
+          console.error(e);
+          setErrorMessage("ログインに失敗しました.  " + e.toString());
+        })
+        .finally(() => setIsLoading(false));
     }
   };
 
