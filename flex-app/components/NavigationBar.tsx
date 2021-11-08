@@ -19,12 +19,12 @@ import {
 
 const SignOutText = "ログアウト";
 
-const styles = makeStyles((theme) => ({
+const styles = makeStyles( ( theme ) => ( {
   root: {
     flexGrow: 1,
   },
   menuButton: {
-    marginRight: theme.spacing(4),
+    marginRight: theme.spacing( 4 ),
   },
   title: {
     flexGrow: 1,
@@ -35,32 +35,32 @@ const styles = makeStyles((theme) => ({
   SignInUpOutArea: {
     marginLeft: "auto",
   },
-}));
+} ) );
 
 const NavigationBar: NextPage = () => {
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [signInUpText, setSignInUpText] = useState<SignInUpTextValues>(SignInText);
+  const [ isDialogOpen, setIsDialogOpen ] = useState( false );
+  const [ signInUpText, setSignInUpText ] = useState<SignInUpTextValues>( SignInText );
   const classes = styles();
 
   function openDialogToSignIn() {
-    setIsDialogOpen(false);
-    setSignInUpText(SignInText);
-    setIsDialogOpen(true);
+    setIsDialogOpen( false );
+    setSignInUpText( SignInText );
+    setIsDialogOpen( true );
   }
   function openDialogToSignUp() {
-    setIsDialogOpen(false);
-    setSignInUpText(SignUpText);
-    setIsDialogOpen(true);
+    setIsDialogOpen( false );
+    setSignInUpText( SignUpText );
+    setIsDialogOpen( true );
   }
 
   function renderSignInUpOrSignOut() {
-    if (GetAuthContext().user == null) {
+    if ( GetAuthContext().user == null ) {
       return (
         <Fragment>
           <div><Button color="inherit" onClick={openDialogToSignIn}>{SignInText}</Button></div>
           <div><Button color="inherit" onClick={openDialogToSignUp}>{SignUpText}</Button></div>
 
-          <Dialog open={isDialogOpen} onClose={() => setIsDialogOpen(false)} fullWidth maxWidth={"sm"}>
+          <Dialog open={isDialogOpen} onClose={() => setIsDialogOpen( false )} fullWidth maxWidth={"sm"}>
             <DialogTitle className={classes.title}>{signInUpText}</DialogTitle>
 
             <DialogContent>
@@ -70,14 +70,14 @@ const NavigationBar: NextPage = () => {
         </Fragment>
       );
     } else {
-      return <Button color="inherit" onClick={() => signOut(flexFirebase.auth)}>{SignOutText}</Button>;
+      return <Button color="inherit" onClick={() => signOut( flexFirebase.auth )}>{SignOutText}</Button>;
     }
   }
 
   return (
     <AppBar position="static">
       <Toolbar>
-        <Typography variant="h6" className={classes.title}>
+        <Typography variant="h5" className={classes.title}>
           flex
         </Typography>
 
@@ -85,7 +85,7 @@ const NavigationBar: NextPage = () => {
           {renderSignInUpOrSignOut()}
         </div>
       </Toolbar>
-    </AppBar>
+    </AppBar >
   );
 };
 

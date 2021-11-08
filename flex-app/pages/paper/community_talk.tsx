@@ -1,8 +1,8 @@
 import type { NextPage } from "next";
-import { TextInput } from "../components/Talk_TextInput";
+import { TextInput } from "../../components/Talk_TextInput";
 import { createStyles, makeStyles } from "@material-ui/core/styles";
 import { Paper } from "@material-ui/core";
-import PrivatePage from "../components/PrivatePage";
+import PrivatePage from "../../components/PrivatePage";
 import React from "react";
 
 const useStyles = makeStyles(() =>

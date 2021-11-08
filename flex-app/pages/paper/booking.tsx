@@ -3,9 +3,9 @@ import React, { useState, ChangeEventHandler, ChangeEvent } from "react";
 import Calender from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import styles from "../styles/BookingPage.module.css";
-import PrivatePage from "../components/PrivatePage";
+import PrivatePage from "../../components/PrivatePage";
 
-import { formatDate } from "../utils/utils";
+import { formatDate } from "../../utils/utils";
 
 
 const facilityData = {
