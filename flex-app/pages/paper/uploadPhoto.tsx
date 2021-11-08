@@ -1,7 +1,7 @@
 import type { NextPage } from "next";
 import Image from "next/image";
 import React, { ChangeEvent, ChangeEventHandler, useState } from "react";
-import imageNotFound from "../images/ImageNotFound.png";
+import imageNotFound from "../../images/ImageNotFound.png";
 import PrivatePage from "../../components/PrivatePage";
 
 /**

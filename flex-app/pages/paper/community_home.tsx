@@ -1,5 +1,5 @@
 import type { NextPage } from "next";
-import image from "../images/CommunityTop.jpg";
+import image from "../../images/CommunityTop.jpg";
 import MyLink from "../../components/MyLink";
 import PrivatePage from "../../components/PrivatePage";
 import React from "react";
