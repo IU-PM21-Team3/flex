@@ -2,7 +2,7 @@ import React from "react";
 import styles from "../styles/timeline.module.css";
 import { formatDate } from "../utils/utils";
 
-const date = new Date();
+// const date = new Date();
 const Schedule = (props: {planName :string, beginDate :Date, endDate :Date}) => {
   return (
     <div className={styles.theme}>
