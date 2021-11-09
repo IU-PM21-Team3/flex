@@ -11,13 +11,13 @@ type travelPlanProps = {
   endDate: Date,
   // lastUpdate: Date
   // planDoc: Reference
-}
+};
 
 // 初期値
 const travelPlanProps: travelPlanProps = {
   planName: "福島-茨城旅行",
-  beginDate: new Date(2021, 11, 29),
-  endDate: new Date(2021, 12, 3)
+  beginDate: new Date( 2021, 11, 30 ),
+  endDate: new Date( 2021, 12, 1 )
 };
 
 
