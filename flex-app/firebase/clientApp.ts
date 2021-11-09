@@ -1,7 +1,28 @@
 import { Functions, getFunctions } from "@firebase/functions";
 import { FirebaseApp, initializeApp, FirebaseOptions, deleteApp } from "firebase/app";
-import { getAuth, Auth } from "firebase/auth";
-import { getFirestore, Firestore } from "firebase/firestore";
+import { getAuth, Auth, connectAuthEmulator, signInAnonymously } from "firebase/auth";
+import { getFirestore, Firestore, connectFirestoreEmulator } from "firebase/firestore";
+import { connectFunctionsEmulator } from "firebase/functions";
+
+// ref : https://www.reddit.com/r/Firebase/comments/nntc4d/cant_connect_to_firestore_emulator_in_nextjs/
+const isBrowser =
+  typeof window !== "undefined" && typeof window.document !== "undefined";
+
+const isLocalhost =
+  isBrowser &&
+  Boolean(
+    window.location.hostname === "localhost" ||
+    window.location.hostname === "[::1]" ||
+    window.location.hostname.match(
+      /^127(?:\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}$/
+    )
+  );
+
+const __DEBUG__ = isLocalhost && process.env.NEXT_PUBLIC_USE_FIREBASE_EMULATOR === "true";
+const __DEBUG_SERVER_ADDR__ = "127.0.0.1";
+const __DEBUG_AUTH_EMU_PORT__ = 9099;
+const __DEBUG_STORE_EMU_PORT__ = 8080;
+const __DEBUG_FUNC_EMU_PORT__ = 5001;
 
 const clientCredentials: FirebaseOptions = {
   apiKey: "AIzaSyBG-xl2BWKRWFm88QxrtIK4SqRowbKB054",
@@ -37,6 +58,17 @@ export class flexFirebase {
     this._auth = getAuth(this.app);
     this._store = getFirestore(this.app);
     this._functions = getFunctions(this.app);
+
+    // エミュレータに接続する
+    if (__DEBUG__) {
+      console.log("__DEBUG_MODE__");
+      connectAuthEmulator(this.auth, `http://${__DEBUG_SERVER_ADDR__}:${__DEBUG_AUTH_EMU_PORT__}`);
+      connectFirestoreEmulator(this.store, __DEBUG_SERVER_ADDR__, __DEBUG_STORE_EMU_PORT__);
+      connectFunctionsEmulator(this.functions, __DEBUG_SERVER_ADDR__, __DEBUG_FUNC_EMU_PORT__);
+
+      // デバッグ時に匿名ユーザを使用する場合用
+      // signInAnonymously(this.auth);
+    }
   }
 
   public Dispose(): Promise<void> {
