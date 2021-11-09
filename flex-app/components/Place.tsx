@@ -1,6 +1,5 @@
 import { useRef, useEffect, useState, CSSProperties, } from "react";
 import interact from "interactjs";
-//import { Visibility } from "@material-ui/icons";
 
 type Partial<T> = {
   [ P in keyof T ]?: T[ P ]
@@ -105,17 +104,42 @@ export function useInteractJS( position: Partial<typeof initPosition> = initPosi
   };
 }
 
+const PLACE = ( props: { id: number; index: number; name: string; starttime: string; endtime: string; } ) => {
 
+  //スケジュールの初期値開始時間からy座標を求める
+  var tmp_y = props.starttime;
+  var hhmm_y = tmp_y.split( ":" );
+  var hh_y = ( parseInt( hhmm_y[ 0 ] ) - 4 ) * 120;
+  var mm_y = parseInt( hhmm_y[ 1 ] ) * 2;
 
+  //スケジュールの初期値終了時間からheightを求める
+  var tmp_height = props.endtime;
+  var hhmm_height = tmp_height.split( ":" );
+  var hh_height = ( parseInt( hhmm_height[ 0 ] ) - 4 ) * 120;
+  var mm_height = parseInt( hhmm_height[ 1 ] ) * 2;
 
-const PLACE = ( props: { id: number; index: number; name: string; y: number; height: number; } ) => {
-  const Position = {
+  //初期値
+  var Position = {
     width: 190,
-    height: props.height,
+    height: hh_height + mm_height - hh_y - mm_y,
     x: -80,
-    y: props.y
+    y: hh_y + mm_y
   };
+
   const interact = useInteractJS( Position );
+
+  //ドラッグアンドドロップ、リサイズで時刻表示かえる
+  //y座標
+  var run_hh_mm_y = Math.floor( interact.position.y );
+  var run_hh_y = Math.floor( run_hh_mm_y / 120 + 4 );
+  var run_mm_y = Math.floor( ( run_hh_mm_y % 120 ) / 2 );
+  var run_hhmm_y = String( "00" + run_hh_y ).slice( -2 ) + ":" + String( "00" + run_mm_y ).slice( -2 );//表示される開始時刻
+
+  //height
+  var run_hh_mm_height = Math.floor( interact.position.y + interact.position.height );
+  var run_hh_height = Math.floor( run_hh_mm_height / 120 + 4 );
+  var run_mm_height = Math.floor( ( run_hh_mm_height % 120 ) / 2 );
+  var run_hhmm_height = String( "00" + run_hh_height ).slice( -2 ) + ":" + String( "00" + run_mm_height ).slice( -2 );//表示される開始時刻
 
   return (
     <body>
@@ -123,19 +147,16 @@ const PLACE = ( props: { id: number; index: number; name: string; y: number; hei
         ref={interact.ref}
         style={{
           ...interact.style,
-          // height: Places[props.index].height,
-          // top: Places[props.index].y,
           border: "2px solid #0489B1",
           backgroundColor: "#A9D0F5"
         }}>
         {props.name}
+        <br />{run_hhmm_y}-{run_hhmm_height}
         {/* 以下のボタンはAutoでドラッグアンドドロップの有効化、blockで無効化 */}
         {/* <button onClick={() => interact.enable()}>Auto</button> */}
         {/* <button onClick={() => interact.disable()}>block</button> */}
       </div>
-
     </body>
   );
 };
-
 export default PLACE;

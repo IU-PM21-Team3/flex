@@ -14,9 +14,10 @@ type travelPlanProps = {
 };
 
 // 初期値
+//+1ヶ月分で表示されてしまう
 const travelPlanProps: travelPlanProps = {
   planName: "福島-茨城旅行",
-  beginDate: new Date( 2021, 11, 30 ),
+  beginDate: new Date( 2021, 11, 30 ),//+1ヶ月分で表示されてしまう
   endDate: new Date( 2021, 12, 1 )
 };
 
@@ -24,11 +25,9 @@ const travelPlanProps: travelPlanProps = {
 const Time: NextPage = () => {
   return (
     <PrivatePage>
-      {/* <Schedule beginData={travelPlanProps.beginDate} endData={travelPlanProps.endDate}/> */}
       <Schedule planName={travelPlanProps.planName} beginDate={travelPlanProps.beginDate} endDate={travelPlanProps.endDate} />
       <TimeLine beginDate={travelPlanProps.beginDate} endDate={travelPlanProps.endDate} />
     </PrivatePage>
   );
 };
-
 export default Time;
