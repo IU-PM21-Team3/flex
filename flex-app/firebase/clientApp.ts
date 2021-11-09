@@ -18,6 +18,8 @@ const isLocalhost =
     )
   );
 
+const isInitWithAnonymousUser = isLocalhost && false;
+
 const __DEBUG__ = isLocalhost && process.env.NEXT_PUBLIC_USE_FIREBASE_EMULATOR === "true";
 const __DEBUG_SERVER_ADDR__ = "127.0.0.1";
 const __DEBUG_AUTH_EMU_PORT__ = 9099;
@@ -67,7 +69,9 @@ export class flexFirebase {
       connectFunctionsEmulator(this.functions, __DEBUG_SERVER_ADDR__, __DEBUG_FUNC_EMU_PORT__);
 
       // デバッグ時に匿名ユーザを使用する場合用
-      // signInAnonymously(this.auth);
+      if (isInitWithAnonymousUser) {
+        signInAnonymously(this.auth);
+      }
     }
   }
 
