@@ -1,10 +1,11 @@
 import type { NextPage } from "next";
-import { TextInput } from "../components/Talk_TextInput";
-import DefaultLayout from "../components/DefaultLayout";
-import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
+import { TextInput } from "../../components/Talk_TextInput";
+import { createStyles, makeStyles } from "@material-ui/core/styles";
 import { Paper } from "@material-ui/core";
+import PrivatePage from "../../components/PrivatePage";
+import React from "react";
 
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles(() =>
   createStyles({
     paper: {
       width: "100vw",
@@ -43,7 +44,7 @@ const useStyles = makeStyles((theme: Theme) =>
 const Community_Talk: NextPage = () => {
   const classes = useStyles();
   return (
-    <DefaultLayout>
+    <PrivatePage>
       <div className={classes.container}>
         <Paper className={classes.paper}>
           <p>浅草寺のコミュニティ</p>
@@ -51,7 +52,7 @@ const Community_Talk: NextPage = () => {
           <TextInput />
         </Paper>
       </div>
-    </DefaultLayout>
+    </PrivatePage>
   );
 };
 
