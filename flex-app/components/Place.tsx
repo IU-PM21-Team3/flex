@@ -1,6 +1,6 @@
 import { useRef, useEffect, useState, CSSProperties, } from "react";
 import interact from "interactjs";
-//import { Visibility } from "@material-ui/icons";
+// import { Visibility } from "@material-ui/icons";
 
 type Partial<T> = {
   [ P in keyof T ]?: T[ P ]
@@ -21,12 +21,12 @@ const initPosition = {
    * @param position HTML要素の初期座標と大きさ、指定されない場合はinitPositionで指定された値になる
    */
 export function useInteractJS( position: Partial<typeof initPosition> = initPosition ) {
-  const [ _position, setPosition ] = useState( {
+  const [_position, setPosition] = useState( {
     ...initPosition,
     ...position
   } );
 
-  const [ isEnabled, setEnable ] = useState( true );
+  const [isEnabled, setEnable] = useState( true );
 
   const interactRef = useRef( null );
   let { x, y, width, height } = _position;
@@ -84,7 +84,7 @@ export function useInteractJS( position: Partial<typeof initPosition> = initPosi
       disable();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ isEnabled ] );
+  }, [isEnabled] );
 
   useEffect( () => {
     return disable;
@@ -104,8 +104,6 @@ export function useInteractJS( position: Partial<typeof initPosition> = initPosi
     disable: () => setEnable( false )
   };
 }
-
-
 
 
 const PLACE = ( props: { id: number; index: number; name: string; y: number; height: number; } ) => {
