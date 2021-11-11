@@ -20,12 +20,12 @@ const initPosition = {
    * @param position HTML要素の初期座標と大きさ、指定されない場合はinitPositionで指定された値になる
    */
 export function useInteractJS( position: Partial<typeof initPosition> = initPosition ) {
-  const [ _position, setPosition ] = useState( {
+  const [_position, setPosition] = useState( {
     ...initPosition,
     ...position
   } );
 
-  const [ isEnabled, setEnable ] = useState( true );
+  const [isEnabled, setEnable] = useState( true );
 
   const interactRef = useRef( null );
   let { x, y, width, height } = _position;
@@ -83,7 +83,7 @@ export function useInteractJS( position: Partial<typeof initPosition> = initPosi
       disable();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ isEnabled ] );
+  }, [isEnabled] );
 
   useEffect( () => {
     return disable;
@@ -105,21 +105,20 @@ export function useInteractJS( position: Partial<typeof initPosition> = initPosi
 }
 
 const PLACE = ( props: { id: number; index: number; name: string; starttime: string; endtime: string; } ) => {
+  // スケジュールの初期値開始時間からy座標を求める
+  const tmp_y = props.starttime;
+  const hhmm_y = tmp_y.split( ":" );
+  const hh_y = ( parseInt( hhmm_y[0] ) - 4 ) * 120;
+  const mm_y = parseInt( hhmm_y[1] ) * 2;
 
-  //スケジュールの初期値開始時間からy座標を求める
-  var tmp_y = props.starttime;
-  var hhmm_y = tmp_y.split( ":" );
-  var hh_y = ( parseInt( hhmm_y[ 0 ] ) - 4 ) * 120;
-  var mm_y = parseInt( hhmm_y[ 1 ] ) * 2;
+  // スケジュールの初期値終了時間からheightを求める
+  const tmp_height = props.endtime;
+  const hhmm_height = tmp_height.split( ":" );
+  const hh_height = ( parseInt( hhmm_height[0] ) - 4 ) * 120;
+  const mm_height = parseInt( hhmm_height[1] ) * 2;
 
-  //スケジュールの初期値終了時間からheightを求める
-  var tmp_height = props.endtime;
-  var hhmm_height = tmp_height.split( ":" );
-  var hh_height = ( parseInt( hhmm_height[ 0 ] ) - 4 ) * 120;
-  var mm_height = parseInt( hhmm_height[ 1 ] ) * 2;
-
-  //初期値
-  var Position = {
+  // 初期値
+  const Position = {
     width: 190,
     height: hh_height + mm_height - hh_y - mm_y,
     x: -80,
@@ -128,18 +127,18 @@ const PLACE = ( props: { id: number; index: number; name: string; starttime: str
 
   const interact = useInteractJS( Position );
 
-  //ドラッグアンドドロップ、リサイズで時刻表示かえる
-  //y座標
-  var run_hh_mm_y = Math.floor( interact.position.y );
-  var run_hh_y = Math.floor( run_hh_mm_y / 120 + 4 );
-  var run_mm_y = Math.floor( ( run_hh_mm_y % 120 ) / 2 );
-  var run_hhmm_y = String( "00" + run_hh_y ).slice( -2 ) + ":" + String( "00" + run_mm_y ).slice( -2 );//表示される開始時刻
+  // ドラッグアンドドロップ、リサイズで時刻表示かえる
+  // y座標
+  const run_hh_mm_y = Math.floor( interact.position.y );
+  const run_hh_y = Math.floor( run_hh_mm_y / 120 + 4 );
+  const run_mm_y = Math.floor( ( run_hh_mm_y % 120 ) / 2 );
+  const run_hhmm_y = String( "00" + run_hh_y ).slice( -2 ) + ":" + String( "00" + run_mm_y ).slice( -2 );// 表示される開始時刻
 
-  //height
-  var run_hh_mm_height = Math.floor( interact.position.y + interact.position.height );
-  var run_hh_height = Math.floor( run_hh_mm_height / 120 + 4 );
-  var run_mm_height = Math.floor( ( run_hh_mm_height % 120 ) / 2 );
-  var run_hhmm_height = String( "00" + run_hh_height ).slice( -2 ) + ":" + String( "00" + run_mm_height ).slice( -2 );//表示される開始時刻
+  // height
+  const run_hh_mm_height = Math.floor( interact.position.y + interact.position.height );
+  const run_hh_height = Math.floor( run_hh_mm_height / 120 + 4 );
+  const run_mm_height = Math.floor( ( run_hh_mm_height % 120 ) / 2 );
+  const run_hhmm_height = String( "00" + run_hh_height ).slice( -2 ) + ":" + String( "00" + run_mm_height ).slice( -2 );// 表示される開始時刻
 
   return (
     <body>

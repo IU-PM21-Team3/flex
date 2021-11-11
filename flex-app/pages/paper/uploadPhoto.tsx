@@ -1,8 +1,8 @@
 import type { NextPage } from "next";
 import Image from "next/image";
 import React, { ChangeEvent, ChangeEventHandler, useState } from "react";
-import imageNotFound from "../images/ImageNotFound.png";
-import PrivatePage from "../components/PrivatePage";
+import imageNotFound from "../../images/ImageNotFound.png";
+import PrivatePage from "../../components/PrivatePage";
 
 /**
  * 画像のアップロードを行う
