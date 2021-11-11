@@ -1,40 +1,40 @@
-/*daytable*/
+/*daytable。日付が書いてある方のテーブル*/
 .daytable {
   position: absolute;
   left: 0em;
-  top: 5em;
+  top: 7em;
   padding: 3em 8.2em;
   margin: 1em 1em;
   width: 3.6em;
   height: 3em;
   display: inline-block;
   color: #2c2c2f;
-  background: #cde4ff;/*背景色*/
+  background: #cde4ff; /*背景色*/
 }
 
-/*timetable*/
+/*timetable。時間が書いてある方のテーブル*/
 .timetable {
-  border-top:2px dotted #000000;
-  position: absolute;/*親を基準*/
+  border-top: 2px dotted #000000;
+  position: absolute; /*親を基準*/
   left: 0px;
-  top: 10em;
+  top: 12em;
   padding: 1em 8.2em;
   margin: 1em 1em;
   width: 3.6em;
   height: 35em;
   display: inline-block;
   color: #2c2c2f;
-  background: #cde4ff;/*背景色*/
+  background: #cde4ff; /*背景色*/
 }
 
 /*スクロールバー*/
 .timetable {
-  overflow:hidden;
+  overflow: hidden;
   overflow-y: scroll;
 }
 
 /*ボタンのデザイン*/
-.button button{
+.button button {
   cursor: pointer;
   display: inline-block;
   zoom: 1;
@@ -47,33 +47,34 @@
 
 /*ボタンの位置*/
 .button #previous {
-  position: absolute; 
-  top: 0; 
-  left: 0; 
+  position: absolute;
+  top: 0;
+  left: 0;
 }
-
 
 /*ボタンの位置*/
 .button #next {
-  position: absolute; 
+  position: absolute;
   top: 0;
-  right: 0; 
+  right: 0;
 }
 
+/*TimeLine上にある日付*/
 .daytable #day {
-  position: absolute;  
+  position: absolute;
   top: -20px;
-  left: 45px; 
+  left: 45px;
 }
 
-.timetable #time { 
-  position: absolute; 
+/*timeの位置*/
+.timetable #time {
+  position: absolute;
   top: -60px;
-  left: -40px; 
+  left: -40px;
 }
 
 /*timeの行間隔*/
-.timetable #time { 
+.timetable #time {
   line-height: 120px;
 }
 
@@ -81,17 +82,11 @@
   list-style: none;
 }
 
-.timetable #line {
-  position: absolute; 
-  top: 0px;
-  left: 100px; 
-}
-
 /*旅程のテーマの位置*/
 .theme {
-  position: absolute;  
+  position: absolute;
   top: 3em;
-  left: 20px; 
+  left: 20px;
   display: inline-block;
 }
 
@@ -100,8 +95,23 @@
   position: absolute;
   left: 5em;
   width: 12em;
-  height:3em;
+  height: 3em;
   display: inline-block;
   color: black;
   background: white;
 }
+
+.theme {
+  position: absolute;
+  top: 5em;
+}
+
+/*
+.area {
+  display: none;
+}
+
+.area.show {
+  display: block;
+}
+*/
