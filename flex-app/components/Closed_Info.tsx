@@ -5,8 +5,8 @@ import axios, { AxiosResponse } from "axios";
 
 let business_status: any = "";
 
-export async function fetch_all_place_data(/* placeID: string*/) {
-  return await axios
+export function fetch_all_place_data(/* placeID: string*/) {
+  return axios
     .get(
       "https://maps.googleapis.com/maps/api/place/details/json?place_id=ChIJCewJkL2LGGAR3Qmk0vCTGkg&fields=geometry%2Cformatted_address%2Cname%2Crating%2Cformatted_phone_number%2Cbusiness_status&key=AIzaSyD5hEtmrnaidWTm_VEVo0Qq6lmgV4WyWKQ"
     )
@@ -20,8 +20,8 @@ export async function fetch_all_place_data(/* placeID: string*/) {
     });
 }
 
-export async function Fetch_Lat(/* placeID: string*/) {
-  return await axios
+export function Fetch_Lat(/* placeID: string*/) {
+  return axios
     .get(
       "https://maps.googleapis.com/maps/api/place/details/json?place_id=ChIJCewJkL2LGGAR3Qmk0vCTGkg&fields=geometry%2Cformatted_address%2Cname%2Crating%2Cformatted_phone_number%2Cbusiness_status&key=AIzaSyD5hEtmrnaidWTm_VEVo0Qq6lmgV4WyWKQ"
     )
@@ -37,8 +37,8 @@ export async function Fetch_Lat(/* placeID: string*/) {
     });
 }
 
-export async function Fetch_Lng(/* placeID: string*/) {
-  return await axios
+export function Fetch_Lng(/* placeID: string*/) {
+  return axios
     .get(
       "https://maps.googleapis.com/maps/api/place/details/json?place_id=ChIJCewJkL2LGGAR3Qmk0vCTGkg&fields=geometry%2Cformatted_address%2Cname%2Crating%2Cformatted_phone_number%2Cbusiness_status&key=AIzaSyD5hEtmrnaidWTm_VEVo0Qq6lmgV4WyWKQ"
     )
@@ -54,8 +54,8 @@ export async function Fetch_Lng(/* placeID: string*/) {
     });
 }
 
-export async function Get_buisiness_stats(placeID: string) {
-  return await axios
+export function Get_buisiness_stats(placeID: string) {
+  return axios
     .get(
       `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeID}&fields=name%2Crating%2Cformatted_phone_number%2Cbusiness_status&key=AIzaSyD5hEtmrnaidWTm_VEVo0Qq6lmgV4WyWKQ`
     )
