@@ -14,10 +14,10 @@ type travelPlanProps = {
 };
 
 // 初期値
-//+1ヶ月分で表示されてしまう
+// +1ヶ月分で表示されてしまう
 const travelPlanProps: travelPlanProps = {
   planName: "福島-茨城旅行",
-  beginDate: new Date( 2021, 11, 30 ),//+1ヶ月分で表示されてしまう
+  beginDate: new Date( 2021, 11, 30 ), // +1ヶ月分で表示されてしまう
   endDate: new Date( 2021, 12, 1 )
 };
 
