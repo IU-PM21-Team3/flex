@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from "react";
-import { Marker, InfoWindow } from "@react-google-maps/api";
-import { stringify } from "querystring";
-import axios, { AxiosResponse } from "axios";
+import React from "react";
+import { Marker } from "@react-google-maps/api";
+import axios from "axios";
 
 let business_status: any = "";
 
@@ -71,24 +70,12 @@ export function Get_buisiness_stats(placeID: string) {
     });
 }
 
-function num1() {
-  return 35.6585805;
-}
-
-function num2() {
-  return 139.7454329;
-}
 
 // ****************************************
 // ***** 開発中 ***************************
 // 地図上にマーカーをつけて表示するためのもの
 
 export function ClosedInfo() {
-  const [selected, setSelected] = useState(null);
-
-  const x = Fetch_Lat();
-  const y = Fetch_Lng();
-
   const b = { lat: 35.6585805, lng: 139.7454329 };
 
   return (

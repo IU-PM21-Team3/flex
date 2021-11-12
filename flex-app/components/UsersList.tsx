@@ -58,15 +58,16 @@ const ProductPage = () => {
       <LinearProgress style={{ visibility: isLoading }} />
 
       <MaterialTable
+        title="ユーザ一覧"
         columns={[
-          { title: "UID", field: "uid" },
           { title: "表示名", field: "displayName" },
           { title: "プラン種類", field: "planType" },
           { title: "ユーザ作成日", field: "createdDateInStr" },
+          { title: "UID", field: "uid" },
         ]}
         data={users}
         options={{
-          showTitle: false,
+          showTitle: true,
         }}
       />
     </div >
