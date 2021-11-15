@@ -11,6 +11,7 @@ const pages: page[] = [
   { name: "ログインページ", path: "/login" },
   { name: "旅程一覧ページ", path: "/user" },
   { name: "旅程作成ページ", path: "/create" },
+  { name: "(タイムライン)", path: "/timeLine" },
   { name: "(管理者用) ユーザ一覧", path: "/admin/userList" },
 
   // 紙芝居↓
