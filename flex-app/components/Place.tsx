@@ -148,21 +148,19 @@ const PLACE = ( props: { id: number; index: number; name: string; starttime: str
   const run_hhmm_height = String( "00" + run_hh_height ).slice( -2 ) + ":" + String( "00" + run_mm_height ).slice( -2 );// 表示される開始時刻
 
   return (
-    <body>
-      <div
-        ref={interact.ref}
-        style={{
-          ...interact.style,
-          border: "2px solid #0489B1",
-          backgroundColor: "#A9D0F5"
-        }}>
-        {props.name}
-        <br />{run_hhmm_y}-{run_hhmm_height}
-        {/* 以下のボタンはAutoでドラッグアンドドロップの有効化、blockで無効化 */}
-        {/* <button onClick={() => interact.enable()}>Auto</button> */}
-        {/* <button onClick={() => interact.disable()}>block</button> */}
-      </div>
-    </body>
+    <div
+      ref={interact.ref}
+      style={{
+        ...interact.style,
+        border: "2px solid #0489B1",
+        backgroundColor: "#A9D0F5"
+      }}>
+      {props.actionData.placeName}
+      <br />{run_hhmm_y}-{run_hhmm_height}
+      {/* 以下のボタンはAutoでドラッグアンドドロップの有効化、blockで無効化 */}
+      {/* <button onClick={() => interact.enable()}>Auto</button> */}
+      {/* <button onClick={() => interact.disable()}>block</button> */}
+    </div>
   );
 };
 export default PLACE;

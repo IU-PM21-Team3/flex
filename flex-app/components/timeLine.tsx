@@ -79,7 +79,7 @@ const TimeLine = ( props: { beginDate: Date, endDate: Date; } ) => {
   };
 
   return (
-    <body>
+    <div>
       <div className={styles.daytable}>
         <div className={styles.button}>
           <button id={styles.previous} onClick={prevclick}>＜</button>
@@ -116,7 +116,7 @@ const TimeLine = ( props: { beginDate: Date, endDate: Date; } ) => {
           </div>
         </div>
       </div>
-    </body>
+    </div>
   );
 };
 export default TimeLine;
