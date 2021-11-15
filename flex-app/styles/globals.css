@@ -13,24 +13,40 @@ body {
   box-sizing: border-box;
 }
 
+form {
+  width: 100%;
+  text-align: center;
+  margin: 0 auto;
+}
+
 input {
   letter-spacing: 1px;
   margin: 0.4rem 0;
   padding: 10px;
+
   width: 100%;
   max-width: 320px;
+
   border-radius: 5px;
   border: 1px solid #aaa;
+
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
 
 textarea {
   letter-spacing: 1px;
   padding: 10px;
+
   width: 100%;
   max-width: 320px;
+
   line-height: 1.5;
   border-radius: 5px;
   border: 1px solid #aaa;
+
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
 
 label {
@@ -46,4 +62,8 @@ label.required::after {
   font-size: 0.6em;
   color: white;
   background-color: #cc4444;
+}
+
+.pageHeadText {
+  margin-left: 5%;
 }
