@@ -17,6 +17,7 @@ jobs:
 
     steps:
       - run: git config --global core.autocrlf true
+        working-directory: /usr/bin
       
       - uses: actions/checkout@v2
 
