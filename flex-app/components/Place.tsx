@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState, CSSProperties, } from "react";
+import React, { useRef, useEffect, useState, CSSProperties, } from "react";
 import interact from "interactjs";
 
 type Partial<T> = {
@@ -27,7 +27,7 @@ export function useInteractJS( position: Partial<typeof initPosition> = initPosi
 
   const [isEnabled, setEnable] = useState( true );
 
-  const interactRef = useRef( null );
+  const interactRef = useRef<HTMLDivElement | null>(null);
   let { x, y, width, height } = _position;
 
   const enable = () => {
