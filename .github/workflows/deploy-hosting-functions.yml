@@ -16,7 +16,7 @@ jobs:
         working-directory: flex-app
 
     steps:
-      - run: git config --global core.autocrlf true
+      - run: /usr/bin/git config --global core.autocrlf true
       
       - uses: actions/checkout@v2
 
