@@ -17,11 +17,10 @@ type travelPlanProps = {
 };
 
 // 初期値
-// +1ヶ月分で表示されてしまう
-const travelPlanProps: DBTravelPlanSummary = {
+const travelPlanProps: travelPlanProps = {
   planName: "福島-茨城旅行",
-  description: "試験用のデータ",
-  beginDate: new Date( 2021, 11, 30 ), // +1ヶ月分で表示されてしまう
+  // Dateの「月」指定は 0 ~ 11 である点に注意
+  beginDate: new Date( 2021, 11, 30 ),
   endDate: new Date(2021, 12, 1),
   lastUpdate: new Date(),
   planDoc: doc(app.store, "/travelPlans/testData")
