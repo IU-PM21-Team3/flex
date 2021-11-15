@@ -31,7 +31,11 @@ export function useInteractJS( position: Partial<typeof initPosition> = initPosi
   let { x, y, width, height } = _position;
 
   const enable = () => {
-    interact( ( interactRef.current as unknown ) as HTMLElement )
+    if (interactRef == null || interactRef.current == null) {
+      return;
+    }
+
+    interact((interactRef.current as unknown) as HTMLElement)
       .draggable( {
         inertia: false
       } )
@@ -73,6 +77,9 @@ export function useInteractJS( position: Partial<typeof initPosition> = initPosi
   };
 
   const disable = () => {
+    if (interactRef == null || interactRef.current == null) {
+      return;
+    }
     interact( ( interactRef.current as unknown ) as HTMLElement ).unset();
   };
 
