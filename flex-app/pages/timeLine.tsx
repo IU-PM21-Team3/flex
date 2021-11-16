@@ -3,8 +3,8 @@ import TimeLine from "../components/timeLine";
 import Schedule from "../components/Schedule";
 import PrivatePage from "../components/PrivatePage";
 import { DBTravelPlanSummary } from "../firebase/DBTypes";
-import { doc } from "firebase/firestore";
-import app from "../firebase/clientApp";
+// import { doc } from "firebase/firestore";
+// import app from "../firebase/clientApp";
 
 export const travelPlanSampleID = "testData";
 
@@ -16,7 +16,6 @@ export const travelPlanProps: DBTravelPlanSummary = {
   endDate: new Date(2021, 12, 1),
   lastUpdate: new Date(),
   description: "テスト用データ",
-  planDoc: doc(app.store, "/travelPlans/" + travelPlanSampleID)
 };
 
 

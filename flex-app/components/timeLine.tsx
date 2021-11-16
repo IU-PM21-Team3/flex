@@ -109,23 +109,15 @@ function getYYYYMMDD(date: Date): Date {
 }
 
 function getPlanSummaryByID(id: string): DBTravelPlanSummary {
-  if (travelPlanProps.planDoc.path === "travelPlans/" + id) {
-    return travelPlanProps;
-  } else {
-    console.error("TravelPlanID is invalid\n", "expected:", "tralvelPlans/" + id, "actual:", travelPlanProps.planDoc.path);
-    // throw new Error("TravelPlanID不一致");
-    return travelPlanProps;
-  }
+  console.log("getPlanSUmmaryByID Requested:", id);
+
+  return travelPlanProps;
 }
 
 function getPlanActionsByIDAndDate(id: string, date: Date): DBActionData[] {
-  if (travelPlanProps.planDoc.path === "travelPlans/" + id) {
-    return Places[date.toDateString()];
-  } else {
-    console.error("TravelPlanID is invalid\n", "expected:", "tralvelPlans/" + id, "actual:", travelPlanProps.planDoc.path);
-    // throw new Error("TravelPlanID不一致");
-    return Places[date.toDateString()];
-  }
+  console.log("getPlanSUmmaryByID Requested:", id);
+
+  return Places[date.toDateString()];
 }
 
 function changeTLShowing(router: NextRouter, planid: string, showingdate: Date) {
