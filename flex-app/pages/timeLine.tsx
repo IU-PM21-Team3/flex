@@ -5,6 +5,7 @@ import PrivatePage from "../components/PrivatePage";
 import { DBTravelPlanSummary } from "../firebase/DBTypes";
 import { doc } from "firebase/firestore";
 import app from "../firebase/clientApp";
+import PlaceMap from "../components/PlaceMap";
 
 export const travelPlanSampleID = "testData";
 
@@ -25,6 +26,7 @@ const Time: NextPage = () => {
     <PrivatePage>
       <Schedule planName={travelPlanProps.planName} beginDate={travelPlanProps.beginDate} endDate={travelPlanProps.endDate} />
       <TimeLine />
+      <PlaceMap />
     </PrivatePage>
   );
 };

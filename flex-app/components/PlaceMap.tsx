@@ -35,7 +35,7 @@ export async function nearbysearch(center: any, type: string) {
     });
 }
 
-class Sample extends Component<any, LocateState> {
+class PlaceMap extends Component<any, LocateState> {
   googleGeocoder: any = null;
   constructor(props: any) {
     super(props);
@@ -104,6 +104,8 @@ class Sample extends Component<any, LocateState> {
       height: "60vh",
     };
 
+    console.log(nearbysearch(this.state.center, "restaurant"))
+
     return (
       <div>
         <label style={labelStyle}>
@@ -129,4 +131,4 @@ class Sample extends Component<any, LocateState> {
   }
 }
 
-export default Sample;
+export default PlaceMap;
