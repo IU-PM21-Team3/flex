@@ -15,7 +15,7 @@
     "emu": "firebase emulators:start",
     "test": "jest",
     "tsc:functions": "tsc -p functions",
-    "serve": "npm run build && firebase emulators:start --only functions,hosting",
+    "serve": "npm run build && firebase emulators:start",
     "shell": "npm run build && firebase functions:shell",
     "deploy": "firebase deploy --only functions,hosting",
     "deploy:functions": "firebase deploy --only functions",
