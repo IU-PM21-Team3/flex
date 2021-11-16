@@ -17,7 +17,7 @@ import flexFirestore from "./clientApp";
 export class UserController {
   private db: Firestore;
 
-  private getUserDocRef(id: string): DocumentReference<DBUser> {
+  public getUserDocRef(id: string): DocumentReference<DBUser> {
     return doc(this.db, "/users", id).withConverter(DBUserConverter);
   }
 
