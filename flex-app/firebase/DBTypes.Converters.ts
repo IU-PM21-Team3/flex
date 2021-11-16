@@ -33,7 +33,6 @@ function ToDBTravelPlanSummary(d: DocumentData): DBTravelPlanSummary {
     beginDate: FromFirebaseDateToJSDate(d.beginDate),
     endDate: FromFirebaseDateToJSDate(d.endDate),
     lastUpdate: FromFirebaseDateToJSDate(d.lastUpdate),
-    planDoc: RemoveFirestorePathOffset(d.planDoc)
   };
 }
 
@@ -42,7 +41,7 @@ function ToDBTravelPlanSummary(d: DocumentData): DBTravelPlanSummary {
  * @param gotArr 入力配列
  * @returns 出力配列
  */
-function ToDocRefArr<T>(gotArr: any): T[] {
+function ToDocRefArr<T>(gotArr: DocumentReference[]): T[] {
   const retArr: T[] = [];
 
   if (Array.isArray(gotArr)) {
@@ -78,7 +77,7 @@ export const DBUserConverter: FirestoreDataConverter<DBUser> = {
     const retD: DBUser = gotData as DBUser;
 
     if (Array.isArray(gotData.planSummaries)) {
-      retD.planSummaries = gotData.planSummaries.map((v, i, arr) => ToDBTravelPlanSummary(v));
+      retD.planSummaries = gotData.planSummaries.map((v) => RemoveFirestorePathOffset(v).withConverter(DBTravelPlanSummaryConverter));
     }
 
     retD.createdDate = FromFirebaseDateToJSDate(gotData.createdDate);
@@ -110,9 +109,23 @@ export const DBTravelPlanConverter: FirestoreDataConverter<DBTravelPlan> = {
     const gotD: DocumentData = ss.data(opts);
     const retD: DBTravelPlan = gotD as DBTravelPlan;
 
-    retD.planSummary = ToDBTravelPlanSummary(gotD.planSummary);
     retD.readableUsers = ToDocRefArr(gotD.readableUsers);
     retD.writableUsers = ToDocRefArr(gotD.writableUsers);
+
+    return retD;
+  }
+};
+
+export const DBTravelPlanSummaryConverter: FirestoreDataConverter<DBTravelPlanSummary> = {
+  toFirestore: (ts) => ts,
+
+  fromFirestore: (ss, opts)=> {
+    const gotD: DocumentData = ss.data(opts);
+    const retD: DBTravelPlanSummary = gotD as DBTravelPlanSummary;
+
+    retD.beginDate = FromFirebaseDateToJSDate(gotD.beginDate);
+    retD.endDate = FromFirebaseDateToJSDate(gotD.endDate);
+    retD.lastUpdate = FromFirebaseDateToJSDate(gotD.lastUpdate);
 
     return retD;
   }
@@ -127,7 +140,7 @@ export const DBDailyPlanConverter: FirestoreDataConverter<DBDailyPlan> = {
     const retD: DBDailyPlan = { actions: [] };
 
     if (Array.isArray(gotD.actions)) {
-      retD.actions = gotD.actions.map((v, i, arr) => ToDBActionData(v));
+      retD.actions = gotD.actions.map((v) => ToDBActionData(v));
     }
 
     return retD;
