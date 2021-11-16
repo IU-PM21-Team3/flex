@@ -104,6 +104,8 @@ class PlaceMap extends Component<any, LocateState> {
       height: "60vh",
     };
 
+    console.log(nearbysearch(this.state.center, "restaurant"))
+
     return (
       <div>
         <label style={labelStyle}>
