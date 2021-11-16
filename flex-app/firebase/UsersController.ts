@@ -17,7 +17,7 @@ import flexFirestore from "./clientApp";
 export class UserController {
   private db: Firestore;
 
-  public getUserDocRef(id: string): DocumentReference<DBUser> {
+  public _getUserDocRef(id: string): DocumentReference<DBUser> {
     return doc(this.db, "/users", id).withConverter(DBUserConverter);
   }
 
@@ -38,7 +38,7 @@ export class UserController {
   public getUserData(id?: string): Promise<DocumentSnapshot<DBUser>> {
     id = this.setUidOrThrowError(id);
 
-    const ref = this.getUserDocRef(id);
+    const ref = this._getUserDocRef(id);
 
     return getDoc(ref);
   }
@@ -46,7 +46,7 @@ export class UserController {
   public deleteUserData(id?: string): Promise<void> {
     id = this.setUidOrThrowError(id);
 
-    const ref = this.getUserDocRef(id);
+    const ref = this._getUserDocRef(id);
 
     return deleteDoc(ref);
   }
@@ -54,7 +54,7 @@ export class UserController {
   public changeDisplayName(newName: string): Promise<void> {
     const id: string = this.setUidOrThrowError();
 
-    const ref = this.getUserDocRef(id);
+    const ref = this._getUserDocRef(id);
 
     return updateDoc(ref, { displayName: newName });
   }
