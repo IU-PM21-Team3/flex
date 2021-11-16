@@ -1,43 +1,43 @@
 import React, { Component } from "react";
 import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
-import axios, { AxiosResponse } from "axios";
+import axios from "axios";
 
-interface GMapWindow extends Window {
-  google: any;
-}
-declare const window: GMapWindow;
-interface GMapWindow extends Window {
-  google: any;
-}
-declare const google: GMapWindow;
+// interface GMapWindow extends Window {
+//   google: any;
+// }
+// declare const window: GMapWindow;
+// interface GMapWindow extends Window {
+//   google: any;
+// }
+// declare const google: GMapWindow;
 
 interface LocateState {
   locationName: string;
-  center: any;
+  center: google.maps.LatLngLiteral;
   isShowMarker: boolean;
 }
 
-var places: {}
+// let places: {};
 
 export async function nearbysearch(center: any, type: string) {
   return await axios
     .get(
       `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${center.lat}%2C${center.lng}&radius=1500&type=${type}&key=AIzaSyD5hEtmrnaidWTm_VEVo0Qq6lmgV4WyWKQ`
     )
-    .then(function (response: any) {
+    .then(function(response: any) {
       const result = response.data;
-      console.log(result)
+      console.log(result);
       if (result == null) return null;
       else return result;
     })
-    .catch(function (error: any) {
+    .catch(function(error: any) {
       console.log(error);
     });
 }
 
-class Sample extends Component<{}, LocateState> {
+class Sample extends Component<any, LocateState> {
   googleGeocoder: any = null;
-  constructor(props: {}) {
+  constructor(props: any) {
     super(props);
     this.state = {
       locationName: "",
@@ -77,7 +77,7 @@ class Sample extends Component<{}, LocateState> {
     );
   }
   // nearbysearch() {
-  //   let map 
+  //   let map
   //   const service = new window.google.maps.places.PlacesService(map);
   //   let request = {
   //     location: this.state.center,
