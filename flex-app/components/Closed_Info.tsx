@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from "react";
-import { Marker, InfoWindow } from "@react-google-maps/api";
-import { stringify } from "querystring";
-import axios, { AxiosResponse } from "axios";
+import React from "react";
+import { Marker } from "@react-google-maps/api";
+import axios from "axios";
 
 // const example = "ChIJCewJkL2LGGAR3Qmk0vCTGkg";
 
@@ -12,12 +11,12 @@ export async function fetch_all_place_data(placeID: string) {
     .get(
       `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeID}&fields=geometry%2Cformatted_address%2Cname%2Crating%2Cformatted_phone_number%2Cbusiness_status&key=AIzaSyD5hEtmrnaidWTm_VEVo0Qq6lmgV4WyWKQ`
     )
-    .then(function (response: any) {
+    .then(function(response: any) {
       const result = response.data;
       if (result == null) return null;
       else return result;
     })
-    .catch(function (error: any) {
+    .catch(function(error: any) {
       console.log(error);
     });
 }
@@ -29,12 +28,12 @@ export async function fetch_position(placeID: string) {
     .get(
       `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeID}&fields=geometry%2Cformatted_address%2Cname%2Crating%2Cformatted_phone_number%2Cbusiness_status&key=AIzaSyD5hEtmrnaidWTm_VEVo0Qq6lmgV4WyWKQ`
     )
-    .then(function (response: any) {
+    .then(function(response: any) {
       const result = response.data;
       if (result == null) return null;
       else return result.result.geometry.location;
     })
-    .catch(function (error: any) {
+    .catch(function(error: any) {
       console.log(error);
     });
 }
@@ -46,14 +45,15 @@ export async function fetch_buisiness_stats(placeID: string) {
     .get(
       `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeID}&fields=name%2Crating%2Cformatted_phone_number%2Cbusiness_status&key=AIzaSyD5hEtmrnaidWTm_VEVo0Qq6lmgV4WyWKQ`
     )
-    .then(function (response: any) {
+    .then(function(response: any) {
       let business_status: any = "";
       const result = response.data;
       if (result == null) return null;
       else business_status = result.result.business_status;
       return business_status;
     })
-    .catch(function (error: any) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    .catch(function(error: any) {
       console.log(error);
     });
 }
@@ -63,7 +63,7 @@ export async function fetch_buisiness_stats(placeID: string) {
 // 地図上にマーカーをつけて表示するためのもの
 
 export function ClosedInfo({ placeID }: { placeID: string }) {
-  const [selected, setSelected] = useState(null);
+  // const [selected, setSelected] = useState(null);
 
   return <Marker position={fetch_position(placeID)} />;
 }
