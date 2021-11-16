@@ -1,10 +1,16 @@
 import { UserController } from "../firebase/UsersController";
-import { DBUser } from "../firebase/DBTypes";
+import { DBTravelPlanSummary, DBUser } from "../firebase/DBTypes";
 import flexFirebase from "./FirebaseEmulatorConnection";
-import { doc } from "firebase/firestore";
+import { doc, Firestore, setDoc } from "firebase/firestore";
+import { TravelPlanController } from "../firebase/TravelPlanController";
+import { DBUserConverter } from "../firebase/DBTypes.Converters";
 
 const testUserID_1 = "niocbqnwio";
 const testUserID_2 = "nibewocji0f";
+
+const setUserData = (db:Firestore, userData: DBUser, userid: string) => {
+  return setDoc(doc(db, "/users", userid).withConverter(DBUserConverter), userData);
+};
 
 test("Create User Test With Empty PlanSummaries", async () => {
   const ctrler = new UserController(flexFirebase.store);
@@ -13,10 +19,11 @@ test("Create User Test With Empty PlanSummaries", async () => {
   const testUserData: DBUser = {
     displayName: "DispName",
     planType: "admin",
-    planSummaries: []
+    planSummaries: [],
+    createdDate: new Date()
   };
 
-  await ctrler.setUserData(testUserData, testUserID);
+  await setUserData(flexFirebase.store, testUserData, testUserID);
 
   const actual = await ctrler.getUserData(testUserID);
 
@@ -27,32 +34,41 @@ test("Delete User Test 1", () => (new UserController(flexFirebase.store)).delete
 
 test("Create User Test With 2 PlanSummaries", async () => {
   const ctrler = new UserController(flexFirebase.store);
+  const travelCtrler = new TravelPlanController(flexFirebase.store, ctrler);
 
+  // #region データを準備
   const testUserID: string = testUserID_2;
   const testUserData: DBUser = {
     displayName: "DispName",
     planType: "admin",
-    planSummaries: [
-      {
-        planName: "Plan01",
-        description: "Plan01Description",
-        beginDate: new Date(2021, 10, 10),
-        endDate: new Date(2021, 12, 31),
-        lastUpdate: new Date(),
-        planDoc: doc(flexFirebase.store, "/travelPlans", "plan01")
-      },
-      {
-        planName: "Plan02",
-        description: "Plan02Description",
-        beginDate: new Date(2022, 10, 10),
-        endDate: new Date(2022, 12, 31),
-        lastUpdate: new Date(),
-        planDoc: doc(flexFirebase.store, "/travelPlans", "plan02")
-      },
-    ]
+    planSummaries: [],
+    createdDate: new Date()
   };
 
-  await ctrler.setUserData(testUserData, testUserID);
+  const summary1: DBTravelPlanSummary = {
+    planName: "Plan01",
+    description: "Plan01Description",
+    beginDate: new Date(2021, 10, 10),
+    endDate: new Date(2021, 12, 31),
+    lastUpdate: new Date()
+  };
+  const summary2: DBTravelPlanSummary = {
+    planName: "Plan02",
+    description: "Plan02Description",
+    beginDate: new Date(2022, 10, 10),
+    endDate: new Date(2022, 12, 31),
+    lastUpdate: new Date()
+  };
+  // #endregion
+
+  // ユーザデータをセット
+  await setUserData(flexFirebase.store, testUserData, testUserID);
+
+  const summary1Result = await travelCtrler.createNewTravelPlan(testUserID, summary1);
+  const summary2Result = await travelCtrler.createNewTravelPlan(testUserID, summary2);
+
+  testUserData.planSummaries.push(summary1Result);
+  testUserData.planSummaries.push(summary2Result);
 
   const actual = await ctrler.getUserData(testUserID);
 
