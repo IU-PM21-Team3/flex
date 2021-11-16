@@ -119,16 +119,7 @@ export const DBTravelPlanConverter: FirestoreDataConverter<DBTravelPlan> = {
 export const DBTravelPlanSummaryConverter: FirestoreDataConverter<DBTravelPlanSummary> = {
   toFirestore: (ts) => ts,
 
-  fromFirestore: (ss, opts)=> {
-    const gotD: DocumentData = ss.data(opts);
-    const retD: DBTravelPlanSummary = gotD as DBTravelPlanSummary;
-
-    retD.beginDate = FromFirebaseDateToJSDate(gotD.beginDate);
-    retD.endDate = FromFirebaseDateToJSDate(gotD.endDate);
-    retD.lastUpdate = FromFirebaseDateToJSDate(gotD.lastUpdate);
-
-    return retD;
-  }
+  fromFirestore: (ss, opts) => ToDBTravelPlanSummary(ss.data(opts))
 };
 
 /** Firestoreとのデータ変換を実装する */
