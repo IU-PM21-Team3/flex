@@ -1,5 +1,6 @@
-import { useRef, useEffect, useState, CSSProperties, } from "react";
+import React, { useRef, useEffect, useState, CSSProperties, } from "react";
 import interact from "interactjs";
+import { DBActionData } from "../firebase/DBTypes";
 
 type Partial<T> = {
   [ P in keyof T ]?: T[ P ]
@@ -27,11 +28,15 @@ export function useInteractJS( position: Partial<typeof initPosition> = initPosi
 
   const [isEnabled, setEnable] = useState( true );
 
-  const interactRef = useRef( null );
+  const interactRef = useRef<HTMLDivElement | null>(null);
   let { x, y, width, height } = _position;
 
   const enable = () => {
-    interact( ( interactRef.current as unknown ) as HTMLElement )
+    if (interactRef == null || interactRef.current == null) {
+      return;
+    }
+
+    interact((interactRef.current as unknown) as HTMLElement)
       .draggable( {
         inertia: false
       } )
@@ -73,6 +78,9 @@ export function useInteractJS( position: Partial<typeof initPosition> = initPosi
   };
 
   const disable = () => {
+    if (interactRef == null || interactRef.current == null) {
+      return;
+    }
     interact( ( interactRef.current as unknown ) as HTMLElement ).unset();
   };
 
@@ -104,18 +112,21 @@ export function useInteractJS( position: Partial<typeof initPosition> = initPosi
   };
 }
 
-const PLACE = ( props: { id: number; index: number; name: string; starttime: string; endtime: string; } ) => {
+const PLACE = ( props: {key: string, actionData : DBActionData } ) => {
   // スケジュールの初期値開始時間からy座標を求める
-  const tmp_y = props.starttime;
-  const hhmm_y = tmp_y.split( ":" );
-  const hh_y = ( parseInt( hhmm_y[0] ) - 4 ) * 120;
-  const mm_y = parseInt( hhmm_y[1] ) * 2;
+  const tmp_y = props.actionData.arriveDate;
+  // const hhmm_y = tmp_y.split( ":" );
+  const hh_y = (tmp_y.getHours() - 4 ) * 120;
+  const mm_y = tmp_y.getMinutes() * 2;
 
   // スケジュールの初期値終了時間からheightを求める
-  const tmp_height = props.endtime;
-  const hhmm_height = tmp_height.split( ":" );
-  const hh_height = ( parseInt( hhmm_height[0] ) - 4 ) * 120;
-  const mm_height = parseInt( hhmm_height[1] ) * 2;
+  const tmp_height = props.actionData.leaveDate;
+  const tmp_height_isSameDate = tmp_height.toDateString() == tmp_y.toDateString();
+  const hh_height_num = tmp_height_isSameDate ? tmp_height.getHours() : 24;
+  const mm_height_num = tmp_height_isSameDate ? tmp_height.getMinutes() : 0;
+  // const hhmm_height = tmp_height.split( ":" );
+  const hh_height = ( hh_height_num - 4 ) * 120;
+  const mm_height = mm_height_num * 2;
 
   // 初期値
   const Position = {
@@ -141,21 +152,19 @@ const PLACE = ( props: { id: number; index: number; name: string; starttime: str
   const run_hhmm_height = String( "00" + run_hh_height ).slice( -2 ) + ":" + String( "00" + run_mm_height ).slice( -2 );// 表示される開始時刻
 
   return (
-    <body>
-      <div
-        ref={interact.ref}
-        style={{
-          ...interact.style,
-          border: "2px solid #0489B1",
-          backgroundColor: "#A9D0F5"
-        }}>
-        {props.name}
-        <br />{run_hhmm_y}-{run_hhmm_height}
-        {/* 以下のボタンはAutoでドラッグアンドドロップの有効化、blockで無効化 */}
-        {/* <button onClick={() => interact.enable()}>Auto</button> */}
-        {/* <button onClick={() => interact.disable()}>block</button> */}
-      </div>
-    </body>
+    <div
+      ref={interact.ref}
+      style={{
+        ...interact.style,
+        border: "2px solid #0489B1",
+        backgroundColor: "#A9D0F5"
+      }}>
+      {props.actionData.placeName}
+      <br />{run_hhmm_y}-{run_hhmm_height}
+      {/* 以下のボタンはAutoでドラッグアンドドロップの有効化、blockで無効化 */}
+      {/* <button onClick={() => interact.enable()}>Auto</button> */}
+      {/* <button onClick={() => interact.disable()}>block</button> */}
+    </div>
   );
 };
 export default PLACE;

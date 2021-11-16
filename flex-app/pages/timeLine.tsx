@@ -2,23 +2,22 @@ import type { NextPage } from "next";
 import TimeLine from "../components/timeLine";
 import Schedule from "../components/Schedule";
 import PrivatePage from "../components/PrivatePage";
+import { DBTravelPlanSummary } from "../firebase/DBTypes";
+import { doc } from "firebase/firestore";
+import app from "../firebase/clientApp";
+import PlaceMap from "../components/PlaceMap";
 
-// 旅程のテーマと日付の設定
-type travelPlanProps = {
-  planName: string,
-  // description: string,
-  beginDate: Date,
-  endDate: Date,
-  // lastUpdate: Date
-  // planDoc: Reference
-};
+export const travelPlanSampleID = "testData";
 
 // 初期値
-// +1ヶ月分で表示されてしまう
-const travelPlanProps: travelPlanProps = {
+export const travelPlanProps: DBTravelPlanSummary = {
   planName: "福島-茨城旅行",
-  beginDate: new Date( 2021, 11, 30 ), // +1ヶ月分で表示されてしまう
-  endDate: new Date( 2021, 12, 1 )
+  // Dateの「月」指定は 0 ~ 11 である点に注意
+  beginDate: new Date( 2021, 11, 30 ),
+  endDate: new Date(2021, 12, 1),
+  lastUpdate: new Date(),
+  description: "テスト用データ",
+  planDoc: doc(app.store, "/travelPlans/" + travelPlanSampleID)
 };
 
 
@@ -26,7 +25,8 @@ const Time: NextPage = () => {
   return (
     <PrivatePage>
       <Schedule planName={travelPlanProps.planName} beginDate={travelPlanProps.beginDate} endDate={travelPlanProps.endDate} />
-      <TimeLine beginDate={travelPlanProps.beginDate} endDate={travelPlanProps.endDate} />
+      <TimeLine />
+      <PlaceMap />
     </PrivatePage>
   );
 };

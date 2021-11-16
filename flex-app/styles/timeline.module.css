@@ -62,8 +62,20 @@
 /*TimeLine上にある日付*/
 .daytable #day {
   position: absolute;
-  top: -20px;
-  left: 45px;
+  top: 0;
+  left: 0;
+  text-align: center;
+  width: 100%;
+  font-size: 70%;
+}
+
+/*TimeLine上にあるDay N*/
+.daytable #dayN {
+  position: absolute;
+  left: 0;
+  bottom: 1.25em;
+  text-align: center;
+  width: 100%;
 }
 
 /*timeの位置*/
