@@ -1,9 +1,51 @@
 rules_version = '2';
+// ref : https://techblog.sgr-ksmt.dev/2018/12/11/194022/
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /{document=**} {
-      allow read, write: if
-          request.time < timestamp.date(2021, 11, 24);
+    function existingData() {
+      return resource.data;
+    }
+    function incomingData() {
+      return request.resource.data;
+    }
+    function isAdminUser(){
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.planType == "admin";
+    }
+    function isAuthNotNull(){
+      return request.auth != null;
+    }
+    function checkIsNotChanged(fieldName){
+      return incomingData()[fieldName] == existingData()[fieldName];
+    }
+
+    match /users/{userID} {
+      function isMyData(){
+        return userID == request.auth.uid;
+      }
+      function isValidUserData(data){
+        return (
+          'displayName' in data && data.displayName is string
+          && 'planType' in data && data.planType is string
+          && 'planSummaries' in data && data.planSummaries is list
+          && 'createdDate' in data && data.createdDate is timestamp
+        )
+      }
+      allow get: if isAuthNotNull() && (isMyData() || isAdminUser());
+      allow list: if isAuthNotNull() && isAdminUser();
+
+      // create は deny (cloud functionsから admin-sdk 経由で行う)
+      allow update: if
+        // 認証済みである
+        isAuthNotNull()
+        // 入力データのバリデーション
+        && isValidUserData(incomingData())
+        // 通常ユーザであれば, 自身のデータへの書き込みであり, かつプラン/登録日時の変更が行われていないか
+        // あるいは, 管理者ユーザであるか (管理者はすべての操作が可能)
+        && (
+          (isMyData() && checkIsNotChanged('planType') && checkIsNotChanged('createdDate'))
+          || isAdminUser()
+        );
+      // delete は deny (cloud functions から admin-sdk 経由で行う)
     }
   }
 }
