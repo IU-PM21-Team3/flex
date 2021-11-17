@@ -1,6 +1,7 @@
 import { UserController } from "../firebase/UsersController";
 import { DBTravelPlanSummary, DBUser } from "../firebase/DBTypes";
 import flexFirebase from "./FirebaseEmulatorConnection";
+// import flexFirebase from "../firebase/clientApp";
 import { doc, Firestore, setDoc } from "firebase/firestore";
 import { TravelPlanController } from "../firebase/TravelPlanController";
 import { DBUserConverter } from "../firebase/DBTypes.Converters";
@@ -73,6 +74,31 @@ test("Create User Test With 2 PlanSummaries", async () => {
   const actual = await ctrler.getUserData(testUserID);
 
   expect(actual.data()).toStrictEqual(testUserData);
+});
+
+test("Add Action Data", async () => {
+  const ctrler = new UserController(flexFirebase.store);
+  const travelCtrler = new TravelPlanController(flexFirebase.store, ctrler);
+
+  // #region データを準備
+  const planID = "BNEJm24DYfFvdjq8wubR";
+  const date = new Date("2021-12-30");
+  // #endregion
+
+  const result = await travelCtrler.addNewDailyPlanAction(planID, date, {
+    actionType: "visit",
+    arriveDate: new Date(2021, 12, 30, 11, 30),
+    leaveDate: new Date(2021, 12, 30, 15, 0),
+    buzinessState: "normal",
+    memo: "SAMPLE MEMO",
+    placeName: "サンプル観光地",
+    placeID: "N/A"
+  }).then((v) => {
+    travelCtrler.getDailyPlanActionCollection(planID, date).then(console.log).catch(console.error);
+    console.log(v);
+  }).catch(console.error);
+
+  expect(result).toBeNull();
 });
 
 afterAll(() => flexFirebase.Dispose());
