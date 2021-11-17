@@ -49,8 +49,8 @@ export class TravelPlanController {
   }
   // #endregion
 
-  constructor(db:Firestore, userCtrler:UserController) {
-    this._db = db;
+  constructor(userCtrler:UserController) {
+    this._db = userCtrler._db;
     this.userCtrler = userCtrler;
   }
 

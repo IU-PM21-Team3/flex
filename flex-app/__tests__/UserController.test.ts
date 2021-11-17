@@ -30,7 +30,7 @@ test("Delete User Test 1", () => (new UserController(flexFirebase.store)).delete
 
 test("Create User Test With 2 PlanSummaries", async () => {
   const ctrler = new UserController(flexFirebase.store);
-  const travelCtrler = new TravelPlanController(flexFirebase.store, ctrler);
+  const travelCtrler = new TravelPlanController(ctrler);
 
   // #region データを準備
   const testUserID: string = testUserID_2;
