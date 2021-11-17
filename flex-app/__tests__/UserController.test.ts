@@ -5,25 +5,20 @@ import flexFirebase from "./FirebaseEmulatorConnection";
 import { doc, Firestore, setDoc } from "firebase/firestore";
 import { TravelPlanController } from "../firebase/TravelPlanController";
 import { DBUserConverter } from "../firebase/DBTypes.Converters";
+import { testUserID_1, testUserID_2, testUserData_1, travelPlanSummary_1, travelPlanSummary_2 } from "./TestDataSources";
 
-const testUserID_1 = "niocbqnwio";
-const testUserID_2 = "nibewocji0f";
 
 const setUserData = (db:Firestore, userData: DBUser, userid: string) => {
   return setDoc(doc(db, "/users", userid).withConverter(DBUserConverter), userData);
 };
 
-test("Create User Test With Empty PlanSummaries", async () => {
+test("getUserData Test", async () => {
   const ctrler = new UserController(flexFirebase.store);
 
   const testUserID: string = testUserID_1;
-  const testUserData: DBUser = {
-    displayName: "DispName",
-    planType: "admin",
-    planSummaries: [],
-    createdDate: new Date()
-  };
+  const testUserData: DBUser = testUserData_1;
 
+  // ユーザデータの作成はサーバ側で行われるものであるため
   await setUserData(flexFirebase.store, testUserData, testUserID);
 
   const actual = await ctrler.getUserData(testUserID);
@@ -39,27 +34,10 @@ test("Create User Test With 2 PlanSummaries", async () => {
 
   // #region データを準備
   const testUserID: string = testUserID_2;
-  const testUserData: DBUser = {
-    displayName: "DispName",
-    planType: "admin",
-    planSummaries: [],
-    createdDate: new Date()
-  };
+  const testUserData: DBUser = testUserData_1;
 
-  const summary1: DBTravelPlanSummary = {
-    planName: "Plan01",
-    description: "Plan01Description",
-    beginDate: new Date(2021, 10, 10),
-    endDate: new Date(2021, 12, 31),
-    lastUpdate: new Date()
-  };
-  const summary2: DBTravelPlanSummary = {
-    planName: "Plan02",
-    description: "Plan02Description",
-    beginDate: new Date(2022, 10, 10),
-    endDate: new Date(2022, 12, 31),
-    lastUpdate: new Date()
-  };
+  const summary1: DBTravelPlanSummary = travelPlanSummary_1;
+  const summary2: DBTravelPlanSummary = travelPlanSummary_2;
   // #endregion
 
   // ユーザデータをセット
