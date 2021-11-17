@@ -8,7 +8,7 @@ import { DBUserConverter } from "../firebase/DBTypes.Converters";
 import { testUserID_1, testUserID_2, testUserData_1, travelPlanSummary_1, travelPlanSummary_2 } from "./TestDataSources";
 
 
-const setUserData = (db:Firestore, userData: DBUser, userid: string) => {
+export const setUserData = (db:Firestore, userData: DBUser, userid: string) => {
   return setDoc(doc(db, "/users", userid).withConverter(DBUserConverter), userData);
 };
 
