@@ -10,6 +10,7 @@ import {
   Firestore,
   doc
 } from "firebase/firestore";
+import { FirebaseFirestore as CompatFirestore } from "@firebase/firestore-types";
 import { DBUser } from "./DBTypes";
 import { DBUserConverter } from "./DBTypes.Converters";
 import flexFirestore from "./clientApp";
@@ -31,8 +32,8 @@ export class UserController {
     return id;
   }
 
-  constructor(db: Firestore) {
-    this._db = db;
+  constructor(db: CompatFirestore | Firestore) {
+    this._db = db as Firestore;
   }
 
   public getUserData(id?: string): Promise<DocumentSnapshot<DBUser>> {

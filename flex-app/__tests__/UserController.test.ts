@@ -7,9 +7,12 @@ import { TravelPlanController } from "../firebase/TravelPlanController";
 import { DBUserConverter } from "../firebase/DBTypes.Converters";
 import { testUserID_1, testUserID_2, testUserData_1, travelPlanSummary_1, travelPlanSummary_2 } from "./TestDataSources";
 
+// CompatFirestore ref : https://github.com/firebase/firebase-js-sdk/issues/5550
+import { FirebaseFirestore as CompatFirestore } from "@firebase/firestore-types";
 
-export const setUserData = (db:Firestore, userData: DBUser, userid: string) => {
-  return setDoc(doc(db, "/users", userid).withConverter(DBUserConverter), userData);
+
+export const setUserData = (db: Firestore | CompatFirestore, userData: DBUser, userid: string) => {
+  return setDoc(doc(db as Firestore, "/users", userid).withConverter(DBUserConverter), userData);
 };
 
 test("getUserData Test", async () => {
