@@ -155,5 +155,17 @@ export class TravelPlanController {
 
     return getDocs(ref);
   }
+
+  /**
+   * 指定の行動日に記録された指定の行動データを取得する
+   * @param planID 旅行プランID
+   * @param date 行動日
+   * @returns 取得したスナップショット および Promiseオブジェクト
+   */
+  public getDailyPlanAction(planID: string, date: Date, id: string): Promise<DocumentSnapshot<DBActionData>> {
+    const ref = this._getDailyPlanActionDocRef(planID, date, id);
+
+    return getDoc(ref);
+  }
   // #endregion
 }
