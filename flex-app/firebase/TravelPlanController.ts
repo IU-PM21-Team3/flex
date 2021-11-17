@@ -1,5 +1,7 @@
 import {
   QuerySnapshot,
+  DocumentSnapshot,
+  getDoc,
   getDocs,
   setDoc,
   addDoc,
@@ -90,6 +92,12 @@ export class TravelPlanController {
     const summaryDocRef = this._getTravelPlanSummaryDocRef(travelPlanID);
 
     return updateDoc(summaryDocRef, summary);
+  }
+
+  public getPlanSummary(travelPlanID: string): Promise<DocumentSnapshot<DBTravelPlanSummary>> {
+    const summaryDocRef = this._getTravelPlanSummaryDocRef(travelPlanID);
+
+    return getDoc(summaryDocRef);
   }
   // #endregion
 
