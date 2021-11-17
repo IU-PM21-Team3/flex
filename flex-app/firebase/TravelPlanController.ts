@@ -29,21 +29,21 @@ export class TravelPlanController {
 
   // #region ref generators
   public _getTravelPlanDocRef(planID: string): DocumentReference<DBTravelPlan> {
-    return doc(this.db, `/${PATH_TRAVEL_PLANS}/${planID}`).withConverter(DBTravelPlanConverter);
+    return doc(this.db, PATH_TRAVEL_PLANS, planID).withConverter(DBTravelPlanConverter);
   }
 
   public _getTravelPlanSummaryCollectionRef(): CollectionReference<DBTravelPlanSummary> {
-    return collection(this.db, `/${PATH_PLAN_SUMARY}`).withConverter(DBTravelPlanSummaryConverter);
+    return collection(this.db, PATH_PLAN_SUMARY).withConverter(DBTravelPlanSummaryConverter);
   }
   public _getTravelPlanSummaryDocRef(planID: string): DocumentReference<DBTravelPlanSummary> {
-    return doc(this.db, `/${PATH_PLAN_SUMARY}/${planID}`).withConverter(DBTravelPlanSummaryConverter);
+    return doc(this.db, PATH_PLAN_SUMARY, planID).withConverter(DBTravelPlanSummaryConverter);
   }
 
   public _getDailyPlanActionCollectionRef(planID: string, date: Date): CollectionReference<DBActionData> {
-    return collection(this.db, `${PATH_TRAVEL_PLANS}/${planID}/${PATH_DAILY_PLANS}/${moment(date).format(DATE_FORMAT)}/${PATH_ACTIONS}`).withConverter(DBActionDataConverter);
+    return collection(this.db, PATH_TRAVEL_PLANS, planID, PATH_DAILY_PLANS, moment(date).format(DATE_FORMAT), PATH_ACTIONS).withConverter(DBActionDataConverter);
   }
   public _getDailyPlanActionDocRef(planID: string, date: Date, actionKey:string): DocumentReference<DBActionData> {
-    return doc(this.db, `${PATH_TRAVEL_PLANS}/${planID}/${PATH_DAILY_PLANS}/${moment(date).format(DATE_FORMAT)}/${PATH_ACTIONS}/${actionKey}`).withConverter(DBActionDataConverter);
+    return doc(this.db, PATH_TRAVEL_PLANS, planID, PATH_DAILY_PLANS, moment(date).format(DATE_FORMAT), PATH_ACTIONS, actionKey).withConverter(DBActionDataConverter);
   }
   // #endregion
 
