@@ -16,3 +16,23 @@ export function getTestEnv(projectId?: string, rulesText?: string, rulesFilePath
     }
   });
 }
+
+export function testWithTestEnv(
+  testName: string,
+  testFunc: (testEnv: RulesTestEnvironment) => void | Promise<unknown>,
+  projectId?: string,
+  rulesText?: string,
+  rulesFilePath?: string,
+  encoding?: BufferEncoding
+) {
+  test(testName, () => {
+    let testEnv: RulesTestEnvironment | undefined = undefined;
+
+    return getTestEnv(projectId, rulesText, rulesFilePath, encoding)
+      .then((v) => {
+        testEnv = v;
+        return testFunc(v);
+      }).
+      finally(() => testEnv?.cleanup());
+  });
+}
