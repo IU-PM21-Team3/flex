@@ -3,12 +3,13 @@ import { TravelPlanController } from "../firebase/TravelPlanController";
 import {
   actionData_1,
   actionData_2,
-} from "./TestDataSources";
+} from "../__tests_utils__/TestDataSources";
 import {
   // assertFails,
   assertSucceeds,
 } from "@firebase/rules-unit-testing";
 import { testWithTestEnv } from "./getTestEnv";
+import { testWithTestEnv } from "../__tests_utils__/getTestEnv";
 
 
 testWithTestEnv("Add Action Data", async (testEnv) => {

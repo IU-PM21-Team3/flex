@@ -9,6 +9,12 @@ export const testUserData_1: DBUser = {
   planSummaries: [],
   createdDate: new Date()
 };
+export const userAuthTest1_TestUserData: DBUser = {
+  displayName: "DispName",
+  planType: "free",
+  planSummaries: [],
+  createdDate: new Date()
+};
 
 export const travelPlanSummary_1: DBTravelPlanSummary = {
   planName: "Plan01",
