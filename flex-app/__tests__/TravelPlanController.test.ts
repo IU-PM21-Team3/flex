@@ -1,11 +1,18 @@
 import { UserController } from "../firebase/UsersController";
-import flexFirebase from "./FirebaseEmulatorConnection";
-// import flexFirebase from "../firebase/clientApp";
 import { TravelPlanController } from "../firebase/TravelPlanController";
-import { actionData_1, actionData_2 } from "./TestDataSources";
+import {
+  actionData_1,
+  actionData_2,
+} from "./TestDataSources";
+import {
+  // assertFails,
+  assertSucceeds,
+} from "@firebase/rules-unit-testing";
+import { testWithTestEnv } from "./getTestEnv";
 
-test("Add Action Data", async () => {
-  const ctrler = new UserController(flexFirebase.store);
+
+testWithTestEnv("Add Action Data", async (testEnv) => {
+  const ctrler = new UserController(testEnv.authenticatedContext("myID").firestore());
   const travelCtrler = new TravelPlanController(ctrler);
 
   // #region データを準備
@@ -14,8 +21,8 @@ test("Add Action Data", async () => {
   // #endregion
 
   const [result_1, result_2] = await Promise.all([
-    travelCtrler.addNewDailyPlanAction(planID, date, actionData_1),
-    travelCtrler.addNewDailyPlanAction(planID, date, actionData_2)
+    assertSucceeds(travelCtrler.addNewDailyPlanAction(planID, date, actionData_1)),
+    assertSucceeds(travelCtrler.addNewDailyPlanAction(planID, date, actionData_2)),
   ]);
 
   const actual = await travelCtrler.getDailyPlanActionCollection(planID, date).then((v) => v.docs);
