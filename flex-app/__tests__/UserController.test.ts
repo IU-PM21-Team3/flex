@@ -1,62 +1,29 @@
 import { UserController } from "../firebase/UsersController";
 import { DBUser } from "../firebase/DBTypes";
-import flexFirebase from "./FirebaseEmulatorConnection";
-import { doc } from "firebase/firestore";
+import { doc, Firestore, setDoc } from "firebase/firestore";
+import { DBUserConverter } from "../firebase/DBTypes.Converters";
+import { testUserID_1, testUserData_1 } from "../__tests_utils__/TestDataSources";
 
-const testUserID_1 = "niocbqnwio";
-const testUserID_2 = "nibewocji0f";
+// CompatFirestore ref : https://github.com/firebase/firebase-js-sdk/issues/5550
+import { FirebaseFirestore as CompatFirestore } from "@firebase/firestore-types";
+import { testWithTestEnv } from "../__tests_utils__/getTestEnv";
 
-test("Create User Test With Empty PlanSummaries", async () => {
-  const ctrler = new UserController(flexFirebase.store);
+
+export const setUserData = (db: Firestore | CompatFirestore, userData: DBUser, userid: string) => {
+  return setDoc(doc(db as Firestore, "/users", userid).withConverter(DBUserConverter), userData);
+};
+
+testWithTestEnv("getUserData Test", async (testEnv) => {
+  const store = testEnv.authenticatedContext("testID").firestore();
+  const ctrler = new UserController(store);
 
   const testUserID: string = testUserID_1;
-  const testUserData: DBUser = {
-    displayName: "DispName",
-    planType: "admin",
-    planSummaries: []
-  };
+  const testUserData: DBUser = testUserData_1;
 
-  await ctrler.setUserData(testUserData, testUserID);
+  // ユーザデータの作成はサーバ側で行われるものであるため
+  await setUserData(store, testUserData, testUserID);
 
   const actual = await ctrler.getUserData(testUserID);
 
   expect(actual.data()).toStrictEqual(testUserData);
 });
-
-test("Delete User Test 1", () => (new UserController(flexFirebase.store)).deleteUserData(testUserID_1));
-
-test("Create User Test With 2 PlanSummaries", async () => {
-  const ctrler = new UserController(flexFirebase.store);
-
-  const testUserID: string = testUserID_2;
-  const testUserData: DBUser = {
-    displayName: "DispName",
-    planType: "admin",
-    planSummaries: [
-      {
-        planName: "Plan01",
-        description: "Plan01Description",
-        beginDate: new Date(2021, 10, 10),
-        endDate: new Date(2021, 12, 31),
-        lastUpdate: new Date(),
-        planDoc: doc(flexFirebase.store, "/travelPlans", "plan01")
-      },
-      {
-        planName: "Plan02",
-        description: "Plan02Description",
-        beginDate: new Date(2022, 10, 10),
-        endDate: new Date(2022, 12, 31),
-        lastUpdate: new Date(),
-        planDoc: doc(flexFirebase.store, "/travelPlans", "plan02")
-      },
-    ]
-  };
-
-  await ctrler.setUserData(testUserData, testUserID);
-
-  const actual = await ctrler.getUserData(testUserID);
-
-  expect(actual.data()).toStrictEqual(testUserData);
-});
-
-afterAll(() => flexFirebase.Dispose());
