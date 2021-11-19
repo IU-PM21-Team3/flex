@@ -8,6 +8,7 @@ import { TravelPlanController } from "../firebase/TravelPlanController";
 import { UserController } from "../firebase/UsersController";
 // import { doc } from "firebase/firestore";
 import app from "../firebase/clientApp";
+import PlaceMap from "../components/PlaceMap";
 
 export const travelPlanSampleID = "testData";
 
@@ -29,6 +30,7 @@ const Time: NextPage = () => {
     <PrivatePage>
       <Schedule planName={travelPlanProps.planName} beginDate={travelPlanProps.beginDate} endDate={travelPlanProps.endDate} />
       <TimeLine travelPlanCtrler={travelCtrler} />
+      <PlaceMap />
     </PrivatePage>
   );
 };
