@@ -10,15 +10,16 @@ import {
   Firestore,
   doc
 } from "firebase/firestore";
+import { FirebaseFirestore as CompatFirestore } from "@firebase/firestore-types";
 import { DBUser } from "./DBTypes";
 import { DBUserConverter } from "./DBTypes.Converters";
 import flexFirestore from "./clientApp";
 
 export class UserController {
-  private db: Firestore;
+  public _db: Firestore;
 
   public _getUserDocRef(id: string): DocumentReference<DBUser> {
-    return doc(this.db, "/users", id).withConverter(DBUserConverter);
+    return doc(this._db, "/users", id).withConverter(DBUserConverter);
   }
 
   private setUidOrThrowError(id?: string): string {
@@ -31,8 +32,8 @@ export class UserController {
     return id;
   }
 
-  constructor(db: Firestore) {
-    this.db = db;
+  constructor(db: CompatFirestore | Firestore) {
+    this._db = db as Firestore;
   }
 
   public getUserData(id?: string): Promise<DocumentSnapshot<DBUser>> {
@@ -60,7 +61,7 @@ export class UserController {
   }
 
   public getUsersArray(): Promise<{ [uid: string]: DBUser }> {
-    const usersCollection = collection(this.db, "users");
+    const usersCollection = collection(this._db, "users");
     const requestQuery = query(usersCollection).withConverter(DBUserConverter);
 
     return getDocs(requestQuery).then((value) => {

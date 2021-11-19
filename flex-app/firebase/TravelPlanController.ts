@@ -1,5 +1,7 @@
 import {
   QuerySnapshot,
+  DocumentSnapshot,
+  getDoc,
   getDocs,
   setDoc,
   addDoc,
@@ -24,31 +26,31 @@ const PATH_ACTIONS = "actions";
 const DATE_FORMAT = "YYYY-MM-DD";
 
 export class TravelPlanController {
-  private db: Firestore;
+  public _db: Firestore;
   private userCtrler: UserController;
 
   // #region ref generators
   public _getTravelPlanDocRef(planID: string): DocumentReference<DBTravelPlan> {
-    return doc(this.db, `/${PATH_TRAVEL_PLANS}/${planID}`).withConverter(DBTravelPlanConverter);
+    return doc(this._db, PATH_TRAVEL_PLANS, planID).withConverter(DBTravelPlanConverter);
   }
 
   public _getTravelPlanSummaryCollectionRef(): CollectionReference<DBTravelPlanSummary> {
-    return collection(this.db, `/${PATH_PLAN_SUMARY}`).withConverter(DBTravelPlanSummaryConverter);
+    return collection(this._db, PATH_PLAN_SUMARY).withConverter(DBTravelPlanSummaryConverter);
   }
   public _getTravelPlanSummaryDocRef(planID: string): DocumentReference<DBTravelPlanSummary> {
-    return doc(this.db, `/${PATH_PLAN_SUMARY}/${planID}`).withConverter(DBTravelPlanSummaryConverter);
+    return doc(this._db, PATH_PLAN_SUMARY, planID).withConverter(DBTravelPlanSummaryConverter);
   }
 
   public _getDailyPlanActionCollectionRef(planID: string, date: Date): CollectionReference<DBActionData> {
-    return collection(this.db, `${PATH_TRAVEL_PLANS}/${planID}/${PATH_DAILY_PLANS}/${moment(date).format(DATE_FORMAT)}/${PATH_ACTIONS}`).withConverter(DBActionDataConverter);
+    return collection(this._db, PATH_TRAVEL_PLANS, planID, PATH_DAILY_PLANS, moment(date).format(DATE_FORMAT), PATH_ACTIONS).withConverter(DBActionDataConverter);
   }
   public _getDailyPlanActionDocRef(planID: string, date: Date, actionKey:string): DocumentReference<DBActionData> {
-    return doc(this.db, `${PATH_TRAVEL_PLANS}/${planID}/${PATH_DAILY_PLANS}/${moment(date).format(DATE_FORMAT)}/${PATH_ACTIONS}/${actionKey}`).withConverter(DBActionDataConverter);
+    return doc(this._db, PATH_TRAVEL_PLANS, planID, PATH_DAILY_PLANS, moment(date).format(DATE_FORMAT), PATH_ACTIONS, actionKey).withConverter(DBActionDataConverter);
   }
   // #endregion
 
-  constructor(db:Firestore, userCtrler:UserController) {
-    this.db = db;
+  constructor(userCtrler:UserController) {
+    this._db = userCtrler._db;
     this.userCtrler = userCtrler;
   }
 
@@ -90,6 +92,12 @@ export class TravelPlanController {
     const summaryDocRef = this._getTravelPlanSummaryDocRef(travelPlanID);
 
     return updateDoc(summaryDocRef, summary);
+  }
+
+  public getPlanSummary(travelPlanID: string): Promise<DocumentSnapshot<DBTravelPlanSummary>> {
+    const summaryDocRef = this._getTravelPlanSummaryDocRef(travelPlanID);
+
+    return getDoc(summaryDocRef);
   }
   // #endregion
 
@@ -146,6 +154,18 @@ export class TravelPlanController {
     const ref = this._getDailyPlanActionCollectionRef(planID, date);
 
     return getDocs(ref);
+  }
+
+  /**
+   * 指定の行動日に記録された指定の行動データを取得する
+   * @param planID 旅行プランID
+   * @param date 行動日
+   * @returns 取得したスナップショット および Promiseオブジェクト
+   */
+  public getDailyPlanAction(planID: string, date: Date, id: string): Promise<DocumentSnapshot<DBActionData>> {
+    const ref = this._getDailyPlanActionDocRef(planID, date, id);
+
+    return getDoc(ref);
   }
   // #endregion
 }
