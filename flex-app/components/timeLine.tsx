@@ -8,65 +8,6 @@ import moment from "moment";
 import { TravelPlanController } from "../firebase/TravelPlanController";
 
 // #region Prepare
-export type PlacesDic = { [date: string]: DBActionData[]; };
-
-// スケジュールの初期値
-const Places: PlacesDic = {};
-Places[new Date(2021, 11, 30).toDateString()] = [
-  {
-    actionType: "visit",
-    arriveDate: new Date(2021, 11, 30, 8, 30),
-    leaveDate: new Date(2021, 11, 30, 12, 0),
-    placeName: "大内宿",
-    buzinessState: "normal",
-    memo: "",
-  },
-  {
-    actionType: "visit",
-    arriveDate: new Date(2021, 11, 30, 13, 0),
-    leaveDate: new Date(2021, 11, 30, 17, 0),
-    placeName: "会津若松",
-    buzinessState: "normal",
-    memo: "",
-  },
-  {
-    actionType: "visit",
-    arriveDate: new Date(2021, 11, 30, 20, 0),
-    leaveDate: new Date(2021, 11, 30, 24, 0),
-    placeName: "旅館",
-    buzinessState: "normal",
-    memo: "",
-  },
-];
-Places[new Date(2021, 11, 31).toDateString()] = [
-  {
-    actionType: "visit",
-    arriveDate: new Date(2021, 11, 31, 12, 0),
-    leaveDate: new Date(2021, 11, 31, 15, 0),
-    placeName: "あぶくま洞",
-    buzinessState: "normal",
-    memo: "",
-  },
-];
-Places[new Date(2022, 0, 1).toDateString()] = [
-  {
-    actionType: "visit",
-    arriveDate: new Date(2022, 0, 1, 11, 0),
-    leaveDate: new Date(2022, 0, 1, 14, 0),
-    placeName: "アクアマリンふくしま",
-    buzinessState: "normal",
-    memo: "",
-  },
-  {
-    actionType: "visit",
-    arriveDate: new Date(2022, 0, 1, 15, 0),
-    leaveDate: new Date(2022, 0, 1, 19, 0),
-    placeName: "小名浜イオン",
-    buzinessState: "normal",
-    memo: "",
-  },
-];
-
 const time: Array<string> = new Array(21);
 for (let i = 0; i < 21; i++) {
   time[i] = String("00" + (i + 4)).slice(-2) + ":00";
