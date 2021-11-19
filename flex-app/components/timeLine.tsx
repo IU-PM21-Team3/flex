@@ -110,8 +110,6 @@ function getYYYYMMDD(date: Date): Date {
 }
 
 function getPlanSummaryByID(ctrler: TravelPlanController, id: string): Promise<DBTravelPlanSummary> {
-  console.log("getPlanSUmmaryByID Requested:", id);
-
   return ctrler.getPlanSummary(id).then((v) => {
     const ret = v.data();
     if (ret == null) {
@@ -123,8 +121,6 @@ function getPlanSummaryByID(ctrler: TravelPlanController, id: string): Promise<D
 }
 
 function getPlanActionsByIDAndDate(ctrler: TravelPlanController, id: string, date: Date): Promise<Map<string, DBActionData>> {
-  console.log("getPlanSUmmaryByID Requested:", id);
-
   return ctrler.getDailyPlanActionCollection(id, date).then((v) => {
     const retVal:Map<string, DBActionData> = new Map();
 
