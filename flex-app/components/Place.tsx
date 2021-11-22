@@ -6,11 +6,13 @@ type Partial<T> = {
   [ P in keyof T ]?: T[ P ]
 };
 
+const INITPOS_X = "3em";
+
 // 初期の要素の配置
 const initPosition = {
   width: 190,
   height: 120,
-  x: -80,
+  x: INITPOS_X,
   y: 0
 };
 
@@ -66,7 +68,7 @@ export function useInteractJS( position: Partial<typeof initPosition> = initPosi
       .on( "resizemove", ( event ) => {
         width = event.rect.width;
         height = event.rect.height;
-        x += event.deltaRect.left;
+        // x += event.deltaRect.left;
         y += event.deltaRect.top;
         setPosition( {
           x,
@@ -100,10 +102,11 @@ export function useInteractJS( position: Partial<typeof initPosition> = initPosi
   return {
     ref: interactRef,
     style: {
-      transform: `translate3D(${_position.x}px, ${_position.y}px, 0)`,
-      width: _position.width + "px",
+      transform: `translate3D(${_position.x}, ${_position.y}px, 0)`,
+      width: `calc(100% - ${_position.x})`,
       height: _position.height + "px",
-      position: "absolute" as CSSProperties[ "position" ]
+      position: "absolute" as CSSProperties["position"],
+      padding: "0.5em"
     },
     position: _position,
     isEnabled,
@@ -132,7 +135,7 @@ const PLACE = ( props: {key: string, actionData : DBActionData } ) => {
   const Position = {
     width: 190,
     height: hh_height + mm_height - hh_y - mm_y,
-    x: -80,
+    x: INITPOS_X,
     y: hh_y + mm_y
   };
 

@@ -142,7 +142,7 @@ const TimeLine = (props: { travelPlanCtrler: TravelPlanController; }) => {
           </ul>
         </div>
         <div className={styles.area}>
-          <div style={{ visibility: "visible" }}>
+          <div style={{ visibility: "visible", position: "relative" }}>
             {placeElems}
           </div>
         </div>
