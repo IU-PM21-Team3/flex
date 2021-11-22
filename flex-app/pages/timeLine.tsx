@@ -1,3 +1,4 @@
+import * as styles from "../styles/timelinepage.style";
 import type { NextPage } from "next";
 import TimeLine from "../components/timeLine";
 import Schedule from "../components/Schedule";
@@ -9,6 +10,7 @@ import { UserController } from "../firebase/UsersController";
 // import { doc } from "firebase/firestore";
 import app from "../firebase/clientApp";
 import PlaceMap from "../components/PlaceMap";
+
 
 export const travelPlanSampleID = "testData";
 
@@ -28,9 +30,18 @@ const Time: NextPage = () => {
 
   return (
     <PrivatePage>
-      <Schedule planName={travelPlanProps.planName} beginDate={travelPlanProps.beginDate} endDate={travelPlanProps.endDate} />
-      <TimeLine travelPlanCtrler={travelCtrler} />
-      <PlaceMap />
+      <div style={styles.colimnProvider}>
+        <div style={styles.leftColumn}>
+          <Schedule planName={travelPlanProps.planName} beginDate={travelPlanProps.beginDate} endDate={travelPlanProps.endDate} />
+          <TimeLine travelPlanCtrler={travelCtrler} />
+        </div>
+        <div style={styles.centerColumn}>
+          abc
+        </div>
+        <div style={styles.rightColumn}>
+          <PlaceMap />
+        </div>
+      </div>
     </PrivatePage>
   );
 };
