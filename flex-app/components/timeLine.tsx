@@ -1,71 +1,13 @@
 import styles from "../styles/timeline.module.css";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import PLACE from "./Place";
 import { DBTravelPlanSummary, DBActionData } from "../firebase/DBTypes";
-import { travelPlanProps, travelPlanSampleID } from "../pages/timeLine";
+import { travelPlanSampleID } from "../pages/timeLine";
 import { useRouter, NextRouter } from "next/router";
 import moment from "moment";
+import { TravelPlanController } from "../firebase/TravelPlanController";
 
 // #region Prepare
-export type PlacesDic = { [date: string]: DBActionData[]; };
-
-// スケジュールの初期値
-const Places: PlacesDic = {};
-Places[new Date(2021, 11, 30).toDateString()] = [
-  {
-    actionType: "visit",
-    arriveDate: new Date(2021, 11, 30, 8, 30),
-    leaveDate: new Date(2021, 11, 30, 12, 0),
-    placeName: "大内宿",
-    buzinessState: "normal",
-    memo: "",
-  },
-  {
-    actionType: "visit",
-    arriveDate: new Date(2021, 11, 30, 13, 0),
-    leaveDate: new Date(2021, 11, 30, 17, 0),
-    placeName: "会津若松",
-    buzinessState: "normal",
-    memo: "",
-  },
-  {
-    actionType: "visit",
-    arriveDate: new Date(2021, 11, 30, 20, 0),
-    leaveDate: new Date(2021, 11, 30, 24, 0),
-    placeName: "旅館",
-    buzinessState: "normal",
-    memo: "",
-  },
-];
-Places[new Date(2021, 11, 31).toDateString()] = [
-  {
-    actionType: "visit",
-    arriveDate: new Date(2021, 11, 31, 12, 0),
-    leaveDate: new Date(2021, 11, 31, 15, 0),
-    placeName: "あぶくま洞",
-    buzinessState: "normal",
-    memo: "",
-  },
-];
-Places[new Date(2022, 0, 1).toDateString()] = [
-  {
-    actionType: "visit",
-    arriveDate: new Date(2022, 0, 1, 11, 0),
-    leaveDate: new Date(2022, 0, 1, 14, 0),
-    placeName: "アクアマリンふくしま",
-    buzinessState: "normal",
-    memo: "",
-  },
-  {
-    actionType: "visit",
-    arriveDate: new Date(2022, 0, 1, 15, 0),
-    leaveDate: new Date(2022, 0, 1, 19, 0),
-    placeName: "小名浜イオン",
-    buzinessState: "normal",
-    memo: "",
-  },
-];
-
 const time: Array<string> = new Array(21);
 for (let i = 0; i < 21; i++) {
   time[i] = String("00" + (i + 4)).slice(-2) + ":00";
@@ -108,24 +50,25 @@ function getYYYYMMDD(date: Date): Date {
   return new Date(date.getFullYear(), date.getMonth(), date.getDate());
 }
 
-function getPlanSummaryByID(id: string): DBTravelPlanSummary {
-  if (travelPlanProps.planDoc.path === "travelPlans/" + id) {
-    return travelPlanProps;
-  } else {
-    console.error("TravelPlanID is invalid\n", "expected:", "tralvelPlans/" + id, "actual:", travelPlanProps.planDoc.path);
-    // throw new Error("TravelPlanID不一致");
-    return travelPlanProps;
-  }
+function getPlanSummaryByID(ctrler: TravelPlanController, id: string): Promise<DBTravelPlanSummary> {
+  return ctrler.getPlanSummary(id).then((v) => {
+    const ret = v.data();
+    if (ret == null) {
+      throw new Error("TravelPlanSummary is NULL");
+    } else {
+      return ret;
+    }
+  });
 }
 
-function getPlanActionsByIDAndDate(id: string, date: Date): DBActionData[] {
-  if (travelPlanProps.planDoc.path === "travelPlans/" + id) {
-    return Places[date.toDateString()];
-  } else {
-    console.error("TravelPlanID is invalid\n", "expected:", "tralvelPlans/" + id, "actual:", travelPlanProps.planDoc.path);
-    // throw new Error("TravelPlanID不一致");
-    return Places[date.toDateString()];
-  }
+function getPlanActionsByIDAndDate(ctrler: TravelPlanController, id: string, date: Date): Promise<Map<string, DBActionData>> {
+  return ctrler.getDailyPlanActionCollection(id, date).then((v) => {
+    const retVal:Map<string, DBActionData> = new Map();
+
+    v.docs.forEach((d) => retVal.set(d.id, d.data()));
+
+    return retVal;
+  });
 }
 
 function changeTLShowing(router: NextRouter, planid: string, showingdate: Date) {
@@ -141,7 +84,12 @@ function nextPrevClick(router:NextRouter, planID:string, beginDate:Date, current
 // #endregion
 
 // #region React (NextJS) Element
-const TimeLine = () => {
+const TimeLine = (props: { travelPlanCtrler: TravelPlanController; }) => {
+  const [currentDate, setCurrentDate] = useState(new Date());
+  const [beginDate, setBeginDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
+  const [placeElems, setPlaceElems] = useState<JSX.Element[]>();
+
   // ref : https://maku.blog/p/r7fou3a/
   // URLクエリパラメータから「旅程ID」と「タイムラインの表示日程」を取得する
   const router = useRouter();
@@ -150,18 +98,30 @@ const TimeLine = () => {
   // クエリ入力が配列であればその最初の要素を採用し, そうでなければ(undefinedでない限り)入力値を使用する
   const planID = Array.isArray(planid) ? planid[0] : planid == null || planid.length <= 0 ? travelPlanSampleID : planid;
 
-  const planSummary = getPlanSummaryByID(planID);
-  const currentDate = getShowingDate(planSummary, showingdate);
-
-  // プランの開始日/終了日のキャッシュ (年月日だけを抽出したものを使用するため)
-  const beginDate = getYYYYMMDD(planSummary.beginDate);
-  const endDate = getYYYYMMDD(planSummary.endDate);
-
   // ボタン「>」をクリックしたら日付進める
   const nextclick = () => nextPrevClick(router, planID, beginDate, currentDate, endDate, 1);
 
   // ボタン「＜」クリックしたら日付戻す
   const prevclick = () => nextPrevClick(router, planID, beginDate, currentDate, endDate, -1);
+
+  useEffect(() => {
+    getPlanSummaryByID(props.travelPlanCtrler, planID).then((planSummary) => {
+      setCurrentDate(getShowingDate(planSummary, showingdate));
+
+      // プランの開始日/終了日のキャッシュ (年月日だけを抽出したものを使用するため)
+      setBeginDate(getYYYYMMDD(planSummary.beginDate));
+      setEndDate(getYYYYMMDD(planSummary.endDate));
+
+      getPlanActionsByIDAndDate(props.travelPlanCtrler, planID, currentDate).then((v) => {
+        const elemArr: JSX.Element[] = [];
+        v.forEach((value, key) => elemArr.push(
+          <PLACE key={key} actionData={value} />
+        ));
+
+        setPlaceElems(elemArr);
+      });
+    });
+  });
 
   return (
     <div>
@@ -183,11 +143,7 @@ const TimeLine = () => {
         </div>
         <div className={styles.area}>
           <div style={{ visibility: "visible" }}>
-            {getPlanActionsByIDAndDate(planID, currentDate)?.map( ( place ) => {
-              return (
-                <PLACE key={place.placeName} actionData={place} />
-              );
-            } )}
+            {placeElems}
           </div>
         </div>
       </div>
