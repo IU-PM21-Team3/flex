@@ -30,6 +30,9 @@ export class TravelPlanController {
   private userCtrler: UserController;
 
   // #region ref generators
+  public _getTravelPlanCollectionRef(): CollectionReference<DBTravelPlan> {
+    return collection(this._db, PATH_TRAVEL_PLANS).withConverter(DBTravelPlanConverter);
+  }
   public _getTravelPlanDocRef(planID: string): DocumentReference<DBTravelPlan> {
     return doc(this._db, PATH_TRAVEL_PLANS, planID).withConverter(DBTravelPlanConverter);
   }
@@ -70,16 +73,17 @@ export class TravelPlanController {
       writableUsers: userDocRefArr,
     };
 
-    // SummaryDataを追加
-    const addSummaryDocResult = await addDoc(this._getTravelPlanSummaryCollectionRef(), summary);
+    // TravelPlanを追加
+    const addTravelPlanDocResult = await addDoc(this._getTravelPlanCollectionRef(), travelPlanData);
 
-    // Summaryに割り振られたIDを使ってTravelPlanを追加
-    await setDoc(this._getTravelPlanDocRef(addSummaryDocResult.id), travelPlanData);
+    // TravelPlanに割り振られたIDを用いてSummaryDataを追加
+    const travelPlanSummaryRef = this._getTravelPlanSummaryDocRef(addTravelPlanDocResult.id);
+    await setDoc(travelPlanSummaryRef, summary);
 
     // 各ユーザの旅行プラン概要リンク集にリンクを追加する
-    userDocRefArr.forEach((userDoc) => updateDoc(userDoc, { planSummaries: arrayUnion(addSummaryDocResult) }));
+    userDocRefArr.forEach((userDoc) => updateDoc(userDoc, { planSummaries: arrayUnion(travelPlanSummaryRef) }));
 
-    return addSummaryDocResult;
+    return travelPlanSummaryRef;
   }
 
   /**
