@@ -4,7 +4,7 @@ import Calender from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import styles from "../../styles/BookingPage.module.css";
 import PrivatePage from "../../components/PrivatePage";
-import Button from '@material-ui/core/Button';
+import Button from "@material-ui/core/Button";
 import { formatDate } from "../../utils/utils";
 
 

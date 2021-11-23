@@ -2,7 +2,7 @@ import { NextPage } from "next";
 import styles from "../../styles/paidPlan.module.css";
 import PrivatePage from "../../components/PrivatePage";
 import React from "react";
-import Button from '@material-ui/core/Button';
+import Button from "@material-ui/core/Button";
 
 const UI: NextPage = () => {
   return (

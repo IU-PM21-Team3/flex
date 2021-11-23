@@ -3,11 +3,10 @@ import image from "../../images/CommunityTop.jpg";
 import MyLink from "../../components/MyLink";
 import PrivatePage from "../../components/PrivatePage";
 import styles from "../../styles/community_home.module.css";
-import Button from '@material-ui/core/Button';
+import Button from "@material-ui/core/Button";
 import React from "react";
 
 const Community_Home: NextPage = () => {
-
   return (
     <PrivatePage>
       <div className={styles.all}>
