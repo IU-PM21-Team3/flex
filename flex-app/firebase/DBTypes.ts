@@ -17,9 +17,6 @@ export interface DBTravelPlanSummary {
 
   /** 旅行プランの最終更新日時 */
   lastUpdate: Date;
-
-  /** 旅行プランDocumentへのリンク */
-  planDoc: DocumentReference
 }
 
 // #region UserData
@@ -35,7 +32,7 @@ export interface DBUser {
   planType: DBUserPlanTypes;
 
   /** 自身が保有する旅行プラン概要の配列 */
-  planSummaries: DBTravelPlanSummary[];
+  planSummaries: DocumentReference<DBTravelPlanSummary>[];
 
   /** ユーザの作成日 */
   createdDate: Date;
@@ -76,13 +73,10 @@ export interface DBActionData {
 /** 旅行プランデータ */
 export interface DBTravelPlan {
   /** 閲覧可能なユーザのリスト */
-  readableUsers: DocumentReference[];
+  readableUsers: DocumentReference<DBUser>[];
 
   /** 書き込み可能なユーザのリスト */
-  writableUsers: DocumentReference[];
-
-  /** この旅行プランの概要情報 */
-  planSummary: DBTravelPlanSummary;
+  writableUsers: DocumentReference<DBUser>[];
 }
 
 /** 1日ごとの旅行プラン (プラン中に存在する行動データの配列) */

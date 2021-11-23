@@ -1,12 +1,8 @@
 /*daytable。日付が書いてある方のテーブル*/
 .daytable {
   position: absolute;
-  left: 0em;
-  top: 7em;
-  padding: 3em 8.2em;
-  margin: 1em 1em;
-  width: 3.6em;
-  height: 3em;
+  width: 95%;
+  height: 7em;
   display: inline-block;
   color: #2c2c2f;
   background: #cde4ff; /*背景色*/
@@ -16,12 +12,9 @@
 .timetable {
   border-top: 2px dotted #000000;
   position: absolute; /*親を基準*/
-  left: 0px;
-  top: 12em;
-  padding: 1em 8.2em;
-  margin: 1em 1em;
-  width: 3.6em;
-  height: 35em;
+  top: 7em;
+  width: 95%;
+  height: calc(100% - 7em);
   display: inline-block;
   color: #2c2c2f;
   background: #cde4ff; /*背景色*/
@@ -62,8 +55,20 @@
 /*TimeLine上にある日付*/
 .daytable #day {
   position: absolute;
-  top: -20px;
-  left: 45px;
+  top: 0;
+  left: 0;
+  text-align: center;
+  width: 100%;
+  font-size: 70%;
+}
+
+/*TimeLine上にあるDay N*/
+.daytable #dayN {
+  position: absolute;
+  left: 0;
+  bottom: 1.25em;
+  text-align: center;
+  width: 100%;
 }
 
 /*timeの位置*/

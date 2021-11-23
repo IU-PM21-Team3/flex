@@ -1,94 +1,139 @@
 import styles from "../styles/timeline.module.css";
-import { formatDate } from "../utils/utils";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PLACE from "./Place";
+import { DBTravelPlanSummary, DBActionData } from "../firebase/DBTypes";
+import { travelPlanSampleID } from "../pages/timeLine";
+import { useRouter, NextRouter } from "next/router";
+import moment from "moment";
+import { TravelPlanController } from "../firebase/TravelPlanController";
 
-// スケジュールの初期値
-const Places = [
-  {
-    id: 0, // Dateのindexと同義
-    starttime: "8:30",
-    endtime: "12:00",
-    name: "大内宿"
-  },
-  {
-    id: 0,
-    starttime: "13:00",
-    endtime: "17:00",
-    name: "会津若松"
-  },
-  {
-    id: 0,
-    starttime: "20:00",
-    endtime: "24:00",
-    name: "旅館"
-  },
-  {
-    id: 1,
-    starttime: "12:00",
-    endtime: "15:00",
-    name: "あぶくま洞"
-  },
-  {
-    id: 2,
-    starttime: "11:00",
-    endtime: "14:00",
-    name: "アクアマリンふくしま"
-  },
-  {
-    id: 2,
-    starttime: "15:00",
-    endtime: "19:00",
-    name: "小名浜イオン"
-  },
-];
+// #region Prepare
+const time: Array<string> = new Array(21);
+for (let i = 0; i < 21; i++) {
+  time[i] = String("00" + (i + 4)).slice(-2) + ":00";
+}
+// #endregion
 
-const TimeLine = ( props: { beginDate: Date, endDate: Date; } ) => {
-  const time: Array<string> = new Array( 21 );
-  for ( let i = 0; i < 21; i++ ) {
-    time[i] = String( "00" + ( i + 4 ) ).slice( -2 ) + ":00";
+// #region Functions
+/**
+ * 日付文字列から表示日設定値を取得する
+ * @param summary 旅程の概要データ (開始日と終了日データを使用する)
+ * @param dateStr 入力日付文字列
+ * @returns 使用する日付文字列
+ */
+function getShowingDate(summary: DBTravelPlanSummary, dateStr?: string | string[]): Date {
+  const beginDate = getYYYYMMDD(summary.beginDate);
+  const endDate = getYYYYMMDD(summary.endDate);
+
+  if (dateStr == null) {
+    return beginDate;
+  } else if (Array.isArray(dateStr)) {
+    dateStr = dateStr[0];
   }
 
-  // beginDateとendDateの差分を求める
-  const date1: Date = props.beginDate;
-  const date2: Date = props.endDate;
-  const getDiff: number = date2.getTime() - date1.getTime();
-  const termDay: number = getDiff / ( 1000 * 60 * 60 * 24 );
-
-  const planDate: Date[] = [props.beginDate];
-
-  for ( let d: Date = props.beginDate, i = 0; i < termDay; i++ ) {
-    d = new Date( d.getFullYear(), d.getMonth(), d.getDate() + 1 );
-    planDate.push( d );
+  const date = getYYYYMMDD(new Date(dateStr));
+  const endDateP1 = addDate(endDate, 1);
+  if (beginDate <= date && date < endDateP1) {
+    return date;
+  } else if (beginDate > date) {
+    return beginDate;
+  } else {
+    return endDate;
   }
+}
 
-  const [index, setIndex] = useState( 0 );
+function addDate(src: Date, daysToAdd: number): Date {
+  return new Date(new Date(src).setDate(src.getDate() + daysToAdd));
+}
+
+function getYYYYMMDD(date: Date): Date {
+  return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+}
+
+function getPlanSummaryByID(ctrler: TravelPlanController, id: string): Promise<DBTravelPlanSummary> {
+  return ctrler.getPlanSummary(id).then((v) => {
+    const ret = v.data();
+    if (ret == null) {
+      throw new Error("TravelPlanSummary is NULL");
+    } else {
+      return ret;
+    }
+  });
+}
+
+function getPlanActionsByIDAndDate(ctrler: TravelPlanController, id: string, date: Date): Promise<Map<string, DBActionData>> {
+  return ctrler.getDailyPlanActionCollection(id, date).then((v) => {
+    const retVal:Map<string, DBActionData> = new Map();
+
+    v.docs.forEach((d) => retVal.set(d.id, d.data()));
+
+    return retVal;
+  });
+}
+
+function changeTLShowing(router: NextRouter, planid: string, showingdate: Date) {
+  router.push({ pathname: window.location.origin + window.location.pathname, query: { planid: planid, showingdate: moment(showingdate).format("YYYY-MM-DD") } });
+}
+
+function nextPrevClick(router:NextRouter, planID:string, beginDate:Date, currentDate:Date, endDate:Date, direction:number) {
+  const newDate = addDate(currentDate, direction);
+  if (beginDate<=newDate && newDate <= endDate) {
+    changeTLShowing(router, planID, newDate);
+  }
+}
+// #endregion
+
+// #region React (NextJS) Element
+const TimeLine = (props: { travelPlanCtrler: TravelPlanController; }) => {
+  const [currentDate, setCurrentDate] = useState(new Date());
+  const [beginDate, setBeginDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
+  const [placeElems, setPlaceElems] = useState<JSX.Element[]>();
+
+  // ref : https://maku.blog/p/r7fou3a/
+  // URLクエリパラメータから「旅程ID」と「タイムラインの表示日程」を取得する
+  const router = useRouter();
+  const { planid, showingdate } = router.query;
+
+  // クエリ入力が配列であればその最初の要素を採用し, そうでなければ(undefinedでない限り)入力値を使用する
+  const planID = Array.isArray(planid) ? planid[0] : planid == null || planid.length <= 0 ? travelPlanSampleID : planid;
 
   // ボタン「>」をクリックしたら日付進める
-  const nextclick = () => {
-    if ( index < planDate.length - 1 ) {
-      setIndex( index + 1 );
-    }
-  };
+  const nextclick = () => nextPrevClick(router, planID, beginDate, currentDate, endDate, 1);
 
   // ボタン「＜」クリックしたら日付戻す
-  const prevclick = () => {
-    if ( index > 0 ) {
-      setIndex( index - 1 );
-    }
-  };
+  const prevclick = () => nextPrevClick(router, planID, beginDate, currentDate, endDate, -1);
+
+  useEffect(() => {
+    getPlanSummaryByID(props.travelPlanCtrler, planID).then((planSummary) => {
+      setCurrentDate(getShowingDate(planSummary, showingdate));
+
+      // プランの開始日/終了日のキャッシュ (年月日だけを抽出したものを使用するため)
+      setBeginDate(getYYYYMMDD(planSummary.beginDate));
+      setEndDate(getYYYYMMDD(planSummary.endDate));
+
+      getPlanActionsByIDAndDate(props.travelPlanCtrler, planID, currentDate).then((v) => {
+        const elemArr: JSX.Element[] = [];
+        v.forEach((value, key) => elemArr.push(
+          <PLACE key={key} actionData={value} />
+        ));
+
+        setPlaceElems(elemArr);
+      });
+    });
+  });
 
   return (
-    <body>
+    <div>
       <div className={styles.daytable}>
+        <div id={styles.day}>
+          <h1>{currentDate.toDateString()}</h1>
+        </div>
         <div className={styles.button}>
           <button id={styles.previous} onClick={prevclick}>＜</button>
           <button id={styles.next} onClick={nextclick}>＞</button>
         </div>
-        <div id={styles.day}>
-          <h1>{formatDate( planDate[index], "yyyy-MM-dd" )}</h1>
-        </div>
-        <big>Day{index + 1}</big>
+        <big id={styles.dayN}>Day{new Date(currentDate.getTime() - beginDate.getTime()).getDate()}</big>
       </div>
       <div className={styles.timetable}>
         <div id={styles.time}>
@@ -97,26 +142,14 @@ const TimeLine = ( props: { beginDate: Date, endDate: Date; } ) => {
           </ul>
         </div>
         <div className={styles.area}>
-          <div style={{ visibility: "visible" }}>
-            {Places.map( ( Places, i ) => {
-              if ( Places.id === index ) {
-                return (
-                  <div style={{ visibility: "visible" }}>
-                    <PLACE id={Places.id} index={index} name={Places.name} starttime={Places.starttime} endtime={Places.endtime} />
-                  </div>
-                );
-              } else {
-                return (
-                  <div style={{ visibility: "hidden" }}>
-                    <PLACE id={Places.id} index={index} name={Places.name} starttime={Places.starttime} endtime={Places.endtime} />
-                  </div>
-                );
-              }
-            } )}
+          <div style={{ visibility: "visible", position: "relative" }}>
+            {placeElems}
           </div>
         </div>
       </div>
-    </body>
+    </div>
   );
 };
+// #endregion
+
 export default TimeLine;

@@ -1,6 +1,6 @@
 import React from "react";
 import MyLink from "./MyLink";
-import Button from '@material-ui/core/Button';
+import Button from "@material-ui/core/Button";
 import styles from "../styles/TempPageList.module.css";
 type page = {
   name: string,
@@ -10,10 +10,11 @@ type page = {
 const pages: page[] = [
   { name: "トップページ", path: "/" },
   { name: "ログインページ", path: "/login" },
-  { name: "旅行プラン一覧", path: "/user" },
-  { name: "旅行プラン作成", path: "/create" },
+  { name: "旅程一覧ページ", path: "/user" },
+  { name: "旅程作成ページ", path: "/create" },
+  { name: "(タイムライン)", path: "/timeLine?planid=TESTPLAN&showingdate=2021-12-31" },
 
-  //管理者用↓
+  // 管理者用↓
   { name: "ユーザ一覧", path: "/admin/userList" },
   { name: "交通情報一覧", path: "/admin/trafficInfoList" },
 

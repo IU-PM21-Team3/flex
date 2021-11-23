@@ -16,6 +16,9 @@ jobs:
         working-directory: flex-app
 
     steps:
+      - run: git config --global core.autocrlf true
+        working-directory: /usr/bin
+      
       - uses: actions/checkout@v2
 
       - name: cache node_modules
