@@ -15,15 +15,8 @@ export const leftColumn: CSSProperties = {
   padding: "1em",
   position: "relative",
 };
-export const centerColumn: CSSProperties = {
-  flex: 1,
-  height: HEIGHT,
-  minWidth: MIN_W_ARR[1],
-  padding: "1em",
-  position: "relative",
-};
 export const rightColumn: CSSProperties = {
-  flex: 4,
+  flex: 5,
   height: HEIGHT,
   minWidth: MIN_W_ARR[2],
   padding: "1em",

@@ -35,9 +35,6 @@ const Time: NextPage = () => {
           <Schedule planName={travelPlanProps.planName} beginDate={travelPlanProps.beginDate} endDate={travelPlanProps.endDate} />
           <TimeLine travelPlanCtrler={travelCtrler} />
         </div>
-        <div style={styles.centerColumn}>
-          abc
-        </div>
         <div style={styles.rightColumn}>
           <PlaceMap />
         </div>
