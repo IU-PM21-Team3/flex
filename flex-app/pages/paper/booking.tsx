@@ -4,7 +4,7 @@ import Calender from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import styles from "../../styles/BookingPage.module.css";
 import PrivatePage from "../../components/PrivatePage";
-
+import Button from "@material-ui/core/Button";
 import { formatDate } from "../../utils/utils";
 
 
@@ -84,8 +84,11 @@ const BookingPage: NextPage = () => {
             <td>{selectTime}</td>
           </tr>
         </table>
-
-        <button className={styles.book_button}>施設予約する</button>
+        <div className={styles.book_button}>
+          <Button size="large" color="primary" variant="contained">施設予約する</Button>
+        </div>
+        <br />
+        <br />
       </div>
     </PrivatePage>
   );

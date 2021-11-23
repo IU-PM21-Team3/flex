@@ -1,0 +1,63 @@
+.title {
+  text-align: center;
+  font-size: 40px;
+  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.2);
+}
+
+.sub_title {
+  text-align: center;
+  font-size: 20px;
+  /* font-family: "ヒラギノ丸ゴ Pro W4", "ヒラギノ丸ゴ Pro", "Hiragino Maru Gothic Pro", "ヒラギノ角ゴ Pro W3", */
+  /* "Hiragino Kaku Gothic Pro", "HG丸ｺﾞｼｯｸM-PRO", "HGMaruGothicMPRO"; */
+}
+
+.all {
+  background-image: url(https://ayaemo.skr.jp/images/material/shop/800x600/restaurant07_day%20by%20MIKI%20Yoshihito.jpg);
+  /* 画面いっぱいに */
+  background-position: center center;
+  background-repeat: no-repeat;
+  /* width: 100%; */
+  /* height: auto; */
+  background-attachment: fixed;
+  background-size: cover;
+  /* 画像を明るくして透過してる風にする */
+  background-color: rgba(255, 255, 255, 0.8);
+  background-blend-mode: lighten;
+}
+
+.oya {
+  display: flex;
+  justify-content: space-around;
+  font-size: 20px;
+}
+/*
+@media (min-width: 800px) {
+  .oya {
+    flex-direction: row;
+  }
+}
+*/
+
+.lower #null {
+  width: 30%;
+}
+
+.lower #query {
+  font-size: 22px;
+}
+
+.lower {
+  font-size: 19px;
+  text-align: center;
+  display: flex;
+  justify-content: space-between;
+  /*
+  position: relative;
+  right: 0%;
+  bottom: 0%;
+*/
+}
+
+.all Button {
+  width: 200px;
+}
