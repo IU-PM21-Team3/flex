@@ -1,5 +1,6 @@
 .all {
-  background-image: url(https://ayaemo.skr.jp/images/material/fantasy/800x600/fantasy01_day%20by%20Karen%20Roe.jpg);
+  /* background-image: url(https://ayaemo.skr.jp/images/material/fantasy/800x600/fantasy01_day%20by%20Karen%20Roe.jpg); */
+  background-image: url(../images/CommunityTop.jpg);
   /* 画面いっぱいに */
   background-position: center center;
   background-repeat: no-repeat;
@@ -9,6 +10,9 @@
   /* 画像を明るくして透過してる風にする */
   background-color: rgba(255, 255, 255, 0.8);
   background-blend-mode: lighten;
+}
+.null {
+  height: 10em;
 }
 
 .title {

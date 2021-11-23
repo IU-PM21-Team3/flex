@@ -23,8 +23,10 @@ const Community_Home: NextPage = () => {
           <MyLink href="/paper/community_talk">
             <Button size="large" color="primary" variant="contained">
               <big>Community Talk</big>
-            </Button> </MyLink>
+            </Button>
+          </MyLink>
         </div>
+        <div className={styles.null} />
       </div>
     </PrivatePage>
   );
