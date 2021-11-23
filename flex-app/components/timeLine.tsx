@@ -8,9 +8,9 @@ import moment from "moment";
 import { TravelPlanController } from "../firebase/TravelPlanController";
 
 // #region Prepare
-const time: Array<string> = new Array(21);
-for (let i = 0; i < 21; i++) {
-  time[i] = String("00" + (i + 4)).slice(-2) + ":00";
+const time: Array<string> = [];
+for (let i = 0; i <= 24; i++) {
+  time.push(`${i}:00`.padStart(5, "0"));
 }
 // #endregion
 
