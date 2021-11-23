@@ -1,7 +1,7 @@
 import { CSSProperties } from "react";
 
-const MIN_W_ARR = ["200px", "200px", "200px"];
-const HEIGHT = "90vh";
+const MIN_W_ARR = ["18em", "200px", "25em"];
+const HEIGHT = "95vh";
 
 export const colimnProvider: CSSProperties = {
   display: "flex",
