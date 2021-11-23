@@ -3,6 +3,7 @@ import React, { useState, Fragment } from "react";
 import { signOut } from "firebase/auth";
 import flexFirebase from "../firebase/clientApp";
 import { GetAuthContext } from "../contexts/authContext";
+import MyLink from "./MyLink";
 import SignInUp, { SignInUpTextValues, SignInText, SignUpText } from "./SignInUp";
 import {
   AppBar,
@@ -21,10 +22,11 @@ const SignOutText = "ログアウト";
 
 const styles = makeStyles((theme) => ({
   root: {
-    flexGrow: 1,
+    minHeight: 70,
   },
   menuButton: {
-    marginRight: theme.spacing(4),
+    // marginRight: theme.spacing(4),
+    marginLeft: theme.spacing(4),
   },
   title: {
     flexGrow: 1,
@@ -77,11 +79,14 @@ const NavigationBar: NextPage = () => {
   return (
     <AppBar position="static">
       <Toolbar>
-        <Typography variant="h5" className={classes.title}>
+        <Typography variant="h5">
           flex
         </Typography>
 
-        <div className={classes.SignInUpOutArea}>
+        <MyLink href="/">
+          TOP
+        </MyLink>
+        <div>
           {renderSignInUpOrSignOut()}
         </div>
       </Toolbar>

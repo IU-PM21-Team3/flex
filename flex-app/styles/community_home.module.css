@@ -1,6 +1,4 @@
-/*h1*/
-
-.APP {
+.all {
   background-image: url(https://ayaemo.skr.jp/images/material/fantasy/800x600/fantasy01_day%20by%20Karen%20Roe.jpg);
   /* 画面いっぱいに */
   background-position: center center;
@@ -13,37 +11,36 @@
   background-blend-mode: lighten;
 }
 
-.APP h1 {
+.title {
+  text-align: center;
+}
+
+.page {
+  text-align: center;
+}
+
+.title h1 {
   color: #325a8c;
 }
-.APP h1::before,
-.APP h1::after {
+.title h1::before,
+.title h1::after {
   content: "□";
 }
-.APP h1::before {
+.title h1::before {
   left: 0;
   top: -3px;
 }
-.APP h1::after {
+.title h1::after {
   left: 5px;
   top: 3px;
   color: #a1b8d1;
 }
 
-/*APP*/
-.APP {
-  text-align: center;
+.page p {
+  font-size: 20px;
 }
 
-/*plan*/
-.plan {
-  font-size: 19px;
-  text-align: left;
-  padding: 1em 1em;
-  margin: 3em 1em;
-  display: inline-block;
-  color: #2c2c2f;
-  background: #cde4ff; /*背景色*/
-  opacity: 0.8;
-  border: 2px solid rgba(11, 44, 235, 0.8);
+.button Button {
+  margin: 0 auto;
+  display: block;
 }
