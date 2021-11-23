@@ -14,7 +14,7 @@ type GMapProps = {
     height: string;
   };
   center?: Pos;
-  positions?: Pos[];
+  positions?: Pos[] | undefined;
   setLatLng?: React.Dispatch<React.SetStateAction<Pos | undefined>>;
   origin?: string,
   destination?: string;
@@ -39,6 +39,7 @@ const GMap = (props: GMapProps) => {
   const [origin, setOrigin] = useState<string>("");
   const [destination, setDestination] = useState<string>("");
   const [response, setResponse] = useState();
+  const [positions, setPositions] = useState<Pos[]>([]);
 
   // 吹き出し（infoWindow）の設定
   // いらなければ消す
@@ -56,16 +57,20 @@ const GMap = (props: GMapProps) => {
     }
     if (props.center) {
       setCenter(props.center);
-    } else {
-      setCenter(defaultCenter);
     }
     if (props.origin) {
       setOrigin(props.origin);
+      console.log("G origin", origin);
     }
     if (props.destination) {
       setDestination(props.destination);
+      console.log("G destination", destination);
     }
-  }, []);
+    if (props.positions) {
+      setPositions(props.positions);
+      console.log("G pos", positions);
+    }
+  }, [props.positions, props.origin, props.destination]);
 
   // 地図をクリックしたときの座標を取得する
   const getLatLngByClick = (event: google.maps.MapMouseEvent) => {
@@ -78,16 +83,18 @@ const GMap = (props: GMapProps) => {
         lng: resLng
       });
     }
+    console.log(resLat, resLng);
   };
 
   // 経路表示に関するコールバック
   const directionsCallback = (response: any) => {
-    console.log(response);
+    console.log("response 1", response);
     if (response !== null) {
       if (response.status === "OK") {
+        console.log("response ok", response);
         setResponse(response);
       } else {
-        console.log("response", response);
+        console.log("response err", response);
       }
     }
   };
@@ -102,12 +109,10 @@ const GMap = (props: GMapProps) => {
         onLoad={() => createOffsetSize()}
       >
         {
-          props.isMarkerShown &&
-          props.positions &&
-          props.positions.map((pos, i) => {
-            <Marker key={i} position={pos} />;
-          })
+          props.isMarkerShown && positions &&
+          positions.map((pos, i) => (<Marker key={i} position={pos} />))
         }
+
         {
           props.isMarkerShown && center &&
           <Marker position={center} />
@@ -129,17 +134,15 @@ const GMap = (props: GMapProps) => {
         }
 
         {
-          (
-            origin !== "" && destination !== ""
-          ) && (
-            <DirectionsService
-              options={{
-                destination: destination,
-                origin: origin,
-              }}
-              callback={directionsCallback}
-            />
-          )
+          origin &&
+          destination &&
+          <DirectionsService
+            options={{
+              destination: destination,
+              origin: origin,
+            }}
+            callback={directionsCallback}
+          />
         }
         {
           response && (
