@@ -27,6 +27,12 @@
 }
 
 /*ボタンのデザイン*/
+.saveButton #matBtn {
+  position: absolute;
+  right: 0.5em;
+  bottom: 1.5em;
+}
+
 .button button {
   cursor: pointer;
   display: inline-block;

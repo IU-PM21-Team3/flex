@@ -6,6 +6,7 @@ import { travelPlanSampleID } from "../pages/timeLine";
 import { useRouter, NextRouter } from "next/router";
 import moment from "moment";
 import { TravelPlanController } from "../firebase/TravelPlanController";
+import { Button } from "@material-ui/core";
 
 // #region Prepare
 const time: Array<string> = [];
@@ -104,6 +105,10 @@ const TimeLine = (props: { travelPlanCtrler: TravelPlanController; }) => {
   // ボタン「＜」クリックしたら日付戻す
   const prevclick = () => nextPrevClick(router, planID, beginDate, currentDate, endDate, -1);
 
+  const onSaveClicked = () => {
+    // 処理
+  };
+
   useEffect(() => {
     getPlanSummaryByID(props.travelPlanCtrler, planID).then((planSummary) => {
       setCurrentDate(getShowingDate(planSummary, showingdate));
@@ -134,6 +139,9 @@ const TimeLine = (props: { travelPlanCtrler: TravelPlanController; }) => {
           <button id={styles.next} onClick={nextclick}>＞</button>
         </div>
         <big id={styles.dayN}>Day{new Date(currentDate.getTime() - beginDate.getTime()).getDate()}</big>
+        <div className={styles.saveButton}>
+          <Button id={styles.matBtn} onClick={onSaveClicked} variant="contained">保存</Button>
+        </div>
       </div>
       <div className={styles.timetable}>
         <div id={styles.time}>
