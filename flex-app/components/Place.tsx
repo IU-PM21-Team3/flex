@@ -136,6 +136,9 @@ const PLACE = ( props: {key: string, actionData : DBActionData } ) => {
   const run_mm_height = Math.floor( ( run_hh_mm_height % ONEHOUR_H ) / ONEMINUTE_H );
   const run_hhmm_height = getHHMM(run_hh_height, run_mm_height);// 表示される開始時刻
 
+  props.actionData.arriveDate.setHours(run_hh_y, run_mm_y);
+  props.actionData.leaveDate.setHours(run_hh_height, run_mm_height);
+
   return (
     <div
       ref={interact.ref}
