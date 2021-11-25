@@ -15,6 +15,11 @@ for (let i = 0; i <= 24; i++) {
 }
 // #endregion
 
+interface KeyValuePair<TKey, TValue>{
+  key: TKey;
+  value: TValue;
+}
+
 // #region Functions
 /**
  * 日付文字列から表示日設定値を取得する
@@ -90,7 +95,7 @@ const TimeLine = (props: { travelPlanCtrler: TravelPlanController; }) => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [beginDate, setBeginDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
-  const [placeElems, setPlaceElems] = useState<JSX.Element[]>();
+  const [placesKVPArr, setPlacesKVPArr] = useState<KeyValuePair<string, DBActionData>[]>([]);
   const [isBusy, setIsBusy] = useState<VisibilityState>("visible");
 
   // ref : https://maku.blog/p/r7fou3a/
@@ -109,6 +114,7 @@ const TimeLine = (props: { travelPlanCtrler: TravelPlanController; }) => {
 
   const onSaveClicked = () => {
     // 処理
+    console.log(placesKVPArr);
   };
 
   useEffect(() => {
@@ -120,12 +126,12 @@ const TimeLine = (props: { travelPlanCtrler: TravelPlanController; }) => {
       setEndDate(getYYYYMMDD(planSummary.endDate));
 
       getPlanActionsByIDAndDate(props.travelPlanCtrler, planID, currentDate).then((v) => {
-        const elemArr: JSX.Element[] = [];
-        v.forEach((value, key) => elemArr.push(
-          <PLACE key={key} actionData={value} />
-        ));
+        const placesArr: KeyValuePair<string, DBActionData>[] = [];
 
-        setPlaceElems(elemArr);
+        v.forEach((value, key) => placesArr.push({ key: key, value: value }));
+
+        setPlacesKVPArr(placesArr);
+        setIsBusy("hidden");
       });
     });
   });
@@ -154,7 +160,7 @@ const TimeLine = (props: { travelPlanCtrler: TravelPlanController; }) => {
         </div>
         <div className={styles.area}>
           <div style={{ visibility: "visible", position: "relative" }}>
-            {placeElems}
+            {placesKVPArr.map((v)=><PLACE key={v.key} actionData={v.value}/>)}
           </div>
         </div>
       </div>
