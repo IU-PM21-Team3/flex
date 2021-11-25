@@ -20,6 +20,12 @@
   background: #cde4ff; /*背景色*/
 }
 
+#loadingProgressBar {
+  position: absolute;
+  top: 7em;
+  width: 95%
+}
+
 /*スクロールバー*/
 .timetable {
   overflow: hidden;

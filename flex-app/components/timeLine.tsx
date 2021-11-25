@@ -6,7 +6,7 @@ import { travelPlanSampleID } from "../pages/timeLine";
 import { useRouter, NextRouter } from "next/router";
 import moment from "moment";
 import { TravelPlanController } from "../firebase/TravelPlanController";
-import { Button } from "@material-ui/core";
+import { Button, LinearProgress } from "@material-ui/core";
 
 // #region Prepare
 const time: Array<string> = [];
@@ -76,9 +76,10 @@ function changeTLShowing(router: NextRouter, planid: string, showingdate: Date) 
   router.push({ pathname: window.location.origin + window.location.pathname, query: { planid: planid, showingdate: moment(showingdate).format("YYYY-MM-DD") } });
 }
 
-function nextPrevClick(router:NextRouter, planID:string, beginDate:Date, currentDate:Date, endDate:Date, direction:number) {
+function nextPrevClick(setIsBusy: React.Dispatch<React.SetStateAction<VisibilityState>>, router:NextRouter, planID:string, beginDate:Date, currentDate:Date, endDate:Date, direction:number) {
   const newDate = addDate(currentDate, direction);
   if (beginDate<=newDate && newDate <= endDate) {
+    setIsBusy("visible");
     changeTLShowing(router, planID, newDate);
   }
 }
@@ -90,6 +91,7 @@ const TimeLine = (props: { travelPlanCtrler: TravelPlanController; }) => {
   const [beginDate, setBeginDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [placeElems, setPlaceElems] = useState<JSX.Element[]>();
+  const [isBusy, setIsBusy] = useState<VisibilityState>("visible");
 
   // ref : https://maku.blog/p/r7fou3a/
   // URLクエリパラメータから「旅程ID」と「タイムラインの表示日程」を取得する
@@ -100,10 +102,10 @@ const TimeLine = (props: { travelPlanCtrler: TravelPlanController; }) => {
   const planID = Array.isArray(planid) ? planid[0] : planid == null || planid.length <= 0 ? travelPlanSampleID : planid;
 
   // ボタン「>」をクリックしたら日付進める
-  const nextclick = () => nextPrevClick(router, planID, beginDate, currentDate, endDate, 1);
+  const nextclick = () => nextPrevClick(setIsBusy, router, planID, beginDate, currentDate, endDate, 1);
 
   // ボタン「＜」クリックしたら日付戻す
-  const prevclick = () => nextPrevClick(router, planID, beginDate, currentDate, endDate, -1);
+  const prevclick = () => nextPrevClick(setIsBusy, router, planID, beginDate, currentDate, endDate, -1);
 
   const onSaveClicked = () => {
     // 処理
@@ -143,6 +145,7 @@ const TimeLine = (props: { travelPlanCtrler: TravelPlanController; }) => {
           <Button id={styles.matBtn} onClick={onSaveClicked} variant="contained">保存</Button>
         </div>
       </div>
+
       <div className={styles.timetable}>
         <div id={styles.time}>
           <ul>
@@ -155,6 +158,8 @@ const TimeLine = (props: { travelPlanCtrler: TravelPlanController; }) => {
           </div>
         </div>
       </div>
+
+      <LinearProgress id={styles.loadingProgressBar} style={{ visibility: isBusy }} />
     </div>
   );
 };
