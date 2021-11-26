@@ -30,9 +30,6 @@ service cloud.firestore {
       return get(/databases/$(database)/documents/travelPlans/$(planID)).data;
     }
 
-      // 管理者であればすべての操作を許可する
-    allow read, write: if isAuthNotNull() && isAdminUser();
-
     match /users/{userID} {
       function isMyData(){
         return userID == request.auth.uid;
@@ -45,6 +42,9 @@ service cloud.firestore {
           && (!('createdDate' in data) || data.createdDate is timestamp)
         )
       }
+
+      // 管理者であればすべての操作を許可する
+      allow read, write: if isAuthNotNull() && isAdminUser();
 
       allow get: if isAuthNotNull() && isMyData();
 
@@ -81,6 +81,9 @@ service cloud.firestore {
         );
       }
 
+      // 管理者であればすべての操作を許可する
+      allow read, write: if isAuthNotNull() && isAdminUser();
+
       allow get: if checkCanReadOrWriteTravelPlan(getTravelPlan(planID).readableUsers);
       // listは管理者にのみ許可
 
@@ -95,6 +98,9 @@ service cloud.firestore {
           && 'readableUsers' in d && d.readableUsers is list
         );
       }
+
+      // 管理者であればすべての操作を許可する
+      allow read, write: if isAuthNotNull() && isAdminUser();
 
       allow get: if checkCanReadOrWriteTravelPlan(resource.data.readableUsers);
       // listは管理者にのみ許可
@@ -126,6 +132,9 @@ service cloud.firestore {
             && (!('memo' in d) && d.memo is string)
           );
         }
+
+        // 管理者であればすべての操作を許可する
+        allow read, write: if isAuthNotNull() && isAdminUser();
 
         allow read: if checkCanReadOrWriteTravelPlan(getTravelPlan(planID).readableUsers);
         allow create: if isValidDailyAction(request.resource.data) && checkCanReadOrWriteTravelPlan(debug(getTravelPlan(planID).writableUsers));
