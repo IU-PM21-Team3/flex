@@ -95,7 +95,7 @@ const TimeLine = (props: { travelPlanCtrler: TravelPlanController; }) => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [beginDate, setBeginDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
-  const [placesKVPArr, setPlacesKVPArr] = useState<KeyValuePair<string, DBActionData>[]>([]);
+  const [placesKVPArr, setPlacesKVPArr] = useState<KeyValuePair<string, DBActionData | null>[]>([]);
   const [isBusy, setIsBusy] = useState<VisibilityState>("visible");
 
   // ref : https://maku.blog/p/r7fou3a/
@@ -160,7 +160,7 @@ const TimeLine = (props: { travelPlanCtrler: TravelPlanController; }) => {
         </div>
         <div className={styles.area}>
           <div style={{ visibility: "visible", position: "relative" }}>
-            {placesKVPArr.map((v)=><PLACE key={v.key} actionData={v.value}/>)}
+            {placesKVPArr.map((v) => v.value == null ? (<></>) : (<PLACE key={v.key} actionData={v.value}/>))}
           </div>
         </div>
       </div>
