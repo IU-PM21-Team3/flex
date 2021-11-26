@@ -37,12 +37,12 @@ service cloud.firestore {
       function isMyData(){
         return userID == request.auth.uid;
       }
-      function isValidUserData(data){
+      function isValidUserDataToUpdate(data){
         return (
-          'displayName' in data && data.displayName is string
-          && 'planType' in data && data.planType is string
-          && 'planSummaries' in data && data.planSummaries is list
-          && 'createdDate' in data && data.createdDate is timestamp
+          (!('displayName' in data) || data.displayName is string)
+          && (!('planType' in data) || data.planType is string)
+          && (!('planSummaries' in data) || data.planSummaries is list)
+          && (!('createdDate' in data) || data.createdDate is timestamp)
         )
       }
 
@@ -53,7 +53,7 @@ service cloud.firestore {
         // 認証済みである
         isAuthNotNull()
         // 入力データのバリデーション
-        && isValidUserData(incomingData())
+        && isValidUserDataToUpdate(incomingData())
         // 通常ユーザであれば, 自身のデータへの書き込みであり, かつプラン/登録日時の変更が行われていないか
         && (
           isMyData() && checkIsNotChanged('planType') && checkIsNotChanged('createdDate')
@@ -71,11 +71,21 @@ service cloud.firestore {
           && 'lastUpdate' in d && d.lastUpdate is timestamp
         );
       }
+      function isValidTravelPlanSummaryDataToUpdate(d) {
+        return (
+          (!('planName' in d) || d.planName is string)
+          && (!('description' in d) || d.description is string)
+          && (!('beginDate' in d) || d.beginDate is timestamp)
+          && (!('endDate' in d) || d.endDate is timestamp)
+          && (!('lastUpdate' in d) || d.lastUpdate is timestamp)
+        );
+      }
 
       allow get: if checkCanReadOrWriteTravelPlan(getTravelPlan(planID).readableUsers);
       // listは管理者にのみ許可
 
-      allow write: if isValidTravelPlanSummaryData(request.resource.data) && checkCanReadOrWriteTravelPlan(getTravelPlan(planID).writableUsers);
+      allow create: if isValidTravelPlanSummaryData(debug(request.resource.data)) && checkCanReadOrWriteTravelPlan(getTravelPlan(planID).writableUsers);
+      allow update: if isValidTravelPlanSummaryDataToUpdate(request.resource.data) && checkCanReadOrWriteTravelPlan(getTravelPlan(planID).writableUsers);
     }
 
     match /travelPlans/{planID} {
@@ -91,23 +101,36 @@ service cloud.firestore {
 
       // サインイン済みであれば誰でもプランを作成できる
       allow create: if isAuthNotNull() && isValidTravelPlanData(request.resource.data);
-      allow write, delete: if checkCanReadOrWriteTravelPlan(resource.data.writableUsers) && isValidTravelPlanData(resource.data.writableUsers);
+      allow write: if checkCanReadOrWriteTravelPlan(resource.data.writableUsers) && isValidTravelPlanData(resource.data.writableUsers);
 
       match /dailyPlans/{date}/actions/{actionID} {
         function isValidDailyAction(d) {
           return (
             'actionType' in d && d.actionType is string
             && 'placeName' in d && d.placeName is string
-            && 'placeID' in d || d.placeID is string
+            && (!('placeID' in d) || d.placeID is string)
             && 'arriveDate' in d && d.arriveDate is timestamp
             && 'leaveDate' in d && d.leaveDate is timestamp
             && 'businessState' in d && d.businessState is string
             && 'memo' in d && d.memo is string
           );
         }
+        function isValidDailyActionToUpdate(d) {
+          return (
+            (!('actionType' in d) || d.actionType is string)
+            && 'placeName' in d || d.placeName is string
+            && (!('placeID' in d) || d.placeID is string)
+            && (!('arriveDate' in d) && d.arriveDate is timestamp)
+            && (!('leaveDate' in d) && d.leaveDate is timestamp)
+            && (!('businessState' in d) && d.businessState is string)
+            && (!('memo' in d) && d.memo is string)
+          );
+        }
 
         allow read: if checkCanReadOrWriteTravelPlan(getTravelPlan(planID).readableUsers);
-        allow write: if isValidDailyAction(request.resource.data) && checkCanReadOrWriteTravelPlan(getTravelPlan(planID).writableUsers);
+        allow create: if isValidDailyAction(request.resource.data) && checkCanReadOrWriteTravelPlan(debug(getTravelPlan(planID).writableUsers));
+        allow update: if isValidDailyActionToUpdate(request.resource.data) && checkCanReadOrWriteTravelPlan(getTravelPlan(planID).writableUsers);
+        allow delete: if checkCanReadOrWriteTravelPlan(getTravelPlan(planID).writableUsers);
       }
     }
   }
