@@ -92,7 +92,7 @@ export class TravelPlanController {
    * @param summary 書き込むデータ
    * @returns Promiseオブジェクト
    */
-  public updatePlanSummary(travelPlanID: string, summary: DBTravelPlanSummary) : Promise<void> {
+  public updatePlanSummary(travelPlanID: string, summary: Partial<DBTravelPlanSummary>) : Promise<void> {
     const summaryDocRef = this._getTravelPlanSummaryDocRef(travelPlanID);
 
     return updateDoc(summaryDocRef, summary);
@@ -128,10 +128,9 @@ export class TravelPlanController {
    * @param action 行動データ
    * @returns Promiseオブジェクト
    */
-  public updateDailyPlanAction(planID: string, date: Date, actionKey: string, action: DBActionData): Promise<void> {
+  public updateDailyPlanAction(planID: string, date: Date, actionKey: string, action: Partial<DBActionData>): Promise<void> {
     const ref = this._getDailyPlanActionDocRef(planID, date, actionKey);
 
-    // 本当は「更新したい項目だけundefined」が適切だが, すべてupdateでも大きな問題はないため省略
     return updateDoc(ref, action);
   }
 
