@@ -8,7 +8,7 @@ import {
 } from "../__tests_utils__/TestDataSources";
 import {
   // assertFails,
-  assertSucceeds,
+  assertSucceeds, RulesTestEnvironment,
 } from "@firebase/rules-unit-testing";
 import { DocumentReference, QuerySnapshot } from "@firebase/firestore";
 import { setUserData } from "./UserController.test";
@@ -42,7 +42,7 @@ testWithTestEnv("Add Action Data", async (testEnv) => {
   });
 });
 
-testWithTestEnv("TravelPlanCtrler Unit Test", async (testEnv) => {
+const TravelPlanCtrlerUnitTest = async (testEnv : RulesTestEnvironment) => {
   // #region Prepare Test Data
   const userID = "userAuthTest1";
   const planSummary = travelPlanSummary_1;
@@ -73,6 +73,7 @@ testWithTestEnv("TravelPlanCtrler Unit Test", async (testEnv) => {
   const travelPlanCtrler: TravelPlanController = new TravelPlanController(userCtrler);
 
   // ユーザ作成はCloud Function経由で行われるため, 一時的にセキュリティルールを無効化してユーザ作成を行う
+  console.log("L76");
   await testEnv.withSecurityRulesDisabled((v) => setUserData(v.firestore(), userAuthTest1_TestUserData, userID));
 
   // ユーザ作成に成功したかを確認する
@@ -80,7 +81,8 @@ testWithTestEnv("TravelPlanCtrler Unit Test", async (testEnv) => {
   expect(getUserDataResult.data()).toStrictEqual(userAuthTest1_TestUserData);
 
   // 旅行プランを作成する
-  const createNewTravelPlanResult = await assertSucceeds(travelPlanCtrler.createNewTravelPlan(userID, planSummary));
+  console.log("L84");
+  const createNewTravelPlanResult = await assertSucceeds(travelPlanCtrler.createNewTravelPlan(userID, userID, planSummary));
   const travelPlanID = createNewTravelPlanResult.id;
 
   // #region 作成した旅行プラン(の概要)を取得する
@@ -93,6 +95,7 @@ testWithTestEnv("TravelPlanCtrler Unit Test", async (testEnv) => {
 
 
   // #region 旅行プランに行動データを追加する
+  console.log("L98");
   const addNewDailyPlanActionResultsArr: DocumentReference<DBActionData>[][] = [];
   await Promise.all(
     actions.map(async (arr, i) =>
@@ -101,6 +104,7 @@ testWithTestEnv("TravelPlanCtrler Unit Test", async (testEnv) => {
       )
     )
   );
+  console.log("L107");
 
   const dailyPlanActionsMap = new Map<Date, Map<string, DBActionData>>();
   planDays.forEach((v) => dailyPlanActionsMap.set(v, new Map<string, DBActionData>()));
@@ -153,7 +157,9 @@ testWithTestEnv("TravelPlanCtrler Unit Test", async (testEnv) => {
   expect(getFixedDailyPlanActionResult.exists()).toBe(true);
   expect(getFixedDailyPlanActionResult.data()).toStrictEqual(actionFixTarget);
   // #endregion
-});
+};
+
+testWithTestEnv("TravelPlanCtrler Unit Test", TravelPlanCtrlerUnitTest);
 
 testWithTestEnv("TravelPlan / Summary Rules Test", (testEnv) => {
   console.log(testEnv.emulators.firestore);

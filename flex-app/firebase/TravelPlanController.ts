@@ -66,11 +66,10 @@ export class TravelPlanController {
    * @param summary 旅行プランの概要
    * @returns 旅行プランの概要データへのリンク
    */
-  public async createNewTravelPlan(userID: string | string[], summary: DBTravelPlanSummary): Promise<DocumentReference<DBTravelPlanSummary>> {
-    const userDocRefArr = (Array.isArray(userID) ? userID : [userID]).map((v) => this.userCtrler._getUserDocRef(v));
+  public async createNewTravelPlan(readableUserID: string | string[], writableUserID: string | string[], summary: DBTravelPlanSummary): Promise<DocumentReference<DBTravelPlanSummary>> {
     const travelPlanData: DBTravelPlan = {
-      readableUsers: userDocRefArr,
-      writableUsers: userDocRefArr,
+      readableUsers: (Array.isArray(readableUserID) ? readableUserID : [readableUserID]).map((v) => this.userCtrler._getUserDocRef(v)),
+      writableUsers: (Array.isArray(writableUserID) ? writableUserID : [writableUserID]).map((v) => this.userCtrler._getUserDocRef(v)),
     };
 
     // TravelPlanを追加
@@ -81,8 +80,9 @@ export class TravelPlanController {
     await setDoc(travelPlanSummaryRef, summary);
 
     // 各ユーザの旅行プラン概要リンク集にリンクを追加する
-    userDocRefArr.forEach((userDoc) => updateDoc(userDoc, { planSummaries: arrayUnion(travelPlanSummaryRef) }));
-
+    // R/Wユーザの重複を削除して設定する
+    Array.from(new Set([...travelPlanData.readableUsers, ...travelPlanData.writableUsers]))
+      .forEach((userDoc) => updateDoc(userDoc, { planSummaries: arrayUnion(travelPlanSummaryRef) }));
     return travelPlanSummaryRef;
   }
 
