@@ -20,6 +20,12 @@
   background: #cde4ff; /*背景色*/
 }
 
+#loadingProgressBar {
+  position: absolute;
+  top: 7em;
+  width: 95%
+}
+
 /*スクロールバー*/
 .timetable {
   overflow: hidden;
@@ -27,6 +33,12 @@
 }
 
 /*ボタンのデザイン*/
+.saveButton #matBtn {
+  position: absolute;
+  right: 0.5em;
+  bottom: 1.5em;
+}
+
 .button button {
   cursor: pointer;
   display: inline-block;

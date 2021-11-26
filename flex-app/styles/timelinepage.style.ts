@@ -1,7 +1,7 @@
 import { CSSProperties } from "react";
 
-const MIN_W_ARR = ["200px", "200px", "200px"];
-const HEIGHT = "90vh";
+const MIN_W_ARR = ["18em", "200px", "25em"];
+const HEIGHT = "95vh";
 
 export const colimnProvider: CSSProperties = {
   display: "flex",
@@ -15,15 +15,8 @@ export const leftColumn: CSSProperties = {
   padding: "1em",
   position: "relative",
 };
-export const centerColumn: CSSProperties = {
-  flex: 1,
-  height: HEIGHT,
-  minWidth: MIN_W_ARR[1],
-  padding: "1em",
-  position: "relative",
-};
 export const rightColumn: CSSProperties = {
-  flex: 4,
+  flex: 5,
   height: HEIGHT,
   minWidth: MIN_W_ARR[2],
   padding: "1em",
