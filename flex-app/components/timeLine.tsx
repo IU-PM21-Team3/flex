@@ -85,11 +85,12 @@ function changeTLShowing(router: NextRouter, planid: string, showingdate: Date) 
 
 function nextPrevClick(setIsBusy: React.Dispatch<React.SetStateAction<VisibilityState>>, router:NextRouter, planID:string, beginDate:Date, currentDate:Date, endDate:Date, direction:number) {
   const newDate = addDate(currentDate, direction);
-  if (beginDate<=newDate && newDate <= endDate) {
+  if (beginDate <= newDate && newDate <= endDate) {
     setIsBusy("visible");
     changeTLShowing(router, planID, newDate);
   }
 }
+
 // #endregion
 
 // #region React (NextJS) Element
