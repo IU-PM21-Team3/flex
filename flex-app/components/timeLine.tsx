@@ -119,7 +119,8 @@ const TimeLine = (props: { travelPlanCtrler: TravelPlanController; }) => {
 
   useEffect(() => {
     getPlanSummaryByID(props.travelPlanCtrler, planID).then((planSummary) => {
-      setCurrentDate(getShowingDate(planSummary, showingdate));
+      const currentDate = getShowingDate(planSummary, showingdate);
+      setCurrentDate(currentDate);
 
       // プランの開始日/終了日のキャッシュ (年月日だけを抽出したものを使用するため)
       setBeginDate(getYYYYMMDD(planSummary.beginDate));
@@ -131,10 +132,9 @@ const TimeLine = (props: { travelPlanCtrler: TravelPlanController; }) => {
         v.forEach((value, key) => placesArr.push({ key: key, value: value }));
 
         setPlacesKVPArr(placesArr);
-        setIsBusy("hidden");
       });
-    });
-  });
+    }).finally(() => setIsBusy("hidden"));
+  }, [showingdate, planid]);
 
   return (
     <div>
