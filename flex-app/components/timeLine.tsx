@@ -191,6 +191,7 @@ const TimeLine = (props: { travelPlanCtrler: TravelPlanController; }) => {
         setPlacesOrigDic(v);
       });
     }).finally(() => setIsBusy("hidden"));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showingdate, planid]);
 
   return (
