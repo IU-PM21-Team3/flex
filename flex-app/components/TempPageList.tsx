@@ -58,33 +58,33 @@ const TempPageList: React.FC = () => {
             <div id={styles.UI}>
               有料サービスに登録することで、以下の機能を使うことができます
               <br />
-              <MyLink href={pages[8].path}>
-                <Button size="large" color="primary" variant="contained">
-                  <big>{pages[8].name}</big>
-                </Button>
-              </MyLink>
-              <p />
-              旅行先でご利用になる施設を予約することができます
-              <br />
-              <MyLink href={pages[6].path}>
-                <Button size="large" color="primary" variant="contained">
-                  <big>{pages[6].name}</big>
-                </Button>
-              </MyLink>
-              <p />
-              旅行プランに写真を添付することができます
-              <br />
               <MyLink href={pages[9].path}>
                 <Button size="large" color="primary" variant="contained">
                   <big>{pages[9].name}</big>
                 </Button>
               </MyLink>
               <p />
-              コミュニティの作成/加入ができます
+              旅行先でご利用になる施設を予約することができます
               <br />
               <MyLink href={pages[7].path}>
                 <Button size="large" color="primary" variant="contained">
                   <big>{pages[7].name}</big>
+                </Button>
+              </MyLink>
+              <p />
+              旅行プランに写真を添付することができます
+              <br />
+              <MyLink href={pages[10].path}>
+                <Button size="large" color="primary" variant="contained">
+                  <big>{pages[10].name}</big>
+                </Button>
+              </MyLink>
+              <p />
+              コミュニティの作成/加入ができます
+              <br />
+              <MyLink href={pages[8].path}>
+                <Button size="large" color="primary" variant="contained">
+                  <big>{pages[8].name}</big>
                 </Button>
               </MyLink>
             </div>
@@ -100,15 +100,15 @@ const TempPageList: React.FC = () => {
             <p />
             <div id={styles.manage}>
               管理者用<br />
-              <MyLink href={pages[4].path}>
-                <Button size="large" color="primary" variant="contained">
-                  <big>{pages[4].name}</big>
-                </Button>
-              </MyLink>
-              <p />
               <MyLink href={pages[5].path}>
                 <Button size="large" color="primary" variant="contained">
                   <big>{pages[5].name}</big>
+                </Button>
+              </MyLink>
+              <p />
+              <MyLink href={pages[6].path}>
+                <Button size="large" color="primary" variant="contained">
+                  <big>{pages[6].name}</big>
                 </Button>
               </MyLink>
               <br />
