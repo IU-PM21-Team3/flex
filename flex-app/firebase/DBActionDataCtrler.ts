@@ -24,6 +24,11 @@ export class DBActionDataCtrler {
     return this._DBActionDataID;
   }
 
+  private _isDeleted = false;
+  public get isDeleted(): boolean {
+    return this._isDeleted;
+  }
+
   private planID: string;
 
   private date: Date;
@@ -42,6 +47,7 @@ export class DBActionDataCtrler {
       // ActionID未設定の場合は「新規追加」
       return this.travelPlanCtrler.addNewDailyPlanAction(this.planID, this.date, this.OriginalDBActionData)
         .then((v) => this._DBActionDataID = v.id)
+        .then(() => this._isDeleted = false)
         .then(() => this._OriginalDBActionData = cloneDeep(this.DBActionData));
     } else if (isEqual(this.DBActionData, this.OriginalDBActionData)) {
       // ActionID設定済みの場合は「データ更新」
@@ -59,6 +65,7 @@ export class DBActionDataCtrler {
     } else {
       // ActionIDがundefinedでなければ, データの削除を実行してIDをundefinedにする
       return this.travelPlanCtrler.deleteDailyPlanAction(this.planID, this.date, this.DBActionDataID)
+        .then(() => this._isDeleted = true)
         .then(() => this._DBActionDataID = undefined);
     }
   }
