@@ -8,3 +8,12 @@ export function formatDate(date: Date, format: string) {
   format = format.replace(/SSS/g, date.getMilliseconds().toString());
   return format;
 }
+
+
+export function fetchTodayDate() {
+  return new Date();
+}
+export function fetchNextDate(date: Date) {
+  date.setDate(date.getDate() + 1);
+  return date;
+}

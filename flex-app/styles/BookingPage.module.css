@@ -49,5 +49,10 @@
 
 .book_button Button {
   width: 300px;
+  text-align: center;
+}
+
+.radio_label {
+  display: inline-block;
   margin: 0 auto;
 }
