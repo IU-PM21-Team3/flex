@@ -10,7 +10,7 @@ type page = {
 const pages: page[] = [
   { name: "トップページ", path: "/" },
   { name: "ログインページ", path: "/login" },
-  { name: "旅程一覧ページ", path: "/user" },
+  { name: "旅程一覧ページ", path: "/tirpList" },
   { name: "旅程作成ページ", path: "/create" },
   { name: "(タイムライン)", path: "/timeLine?planid=TESTPLAN&showingdate=2021-12-31" },
 

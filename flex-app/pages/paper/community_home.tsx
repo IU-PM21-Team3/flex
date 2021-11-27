@@ -9,19 +9,12 @@ import React from "react";
 const Community_Home: NextPage = () => {
   return (
     <PrivatePage>
-<<<<<<< HEAD
-      <h1>Community Page</h1>
-      <br />
-      <div>
-        <MyLink href="/paper/community_talk">
-=======
       <div className={styles.all}>
         <div className={styles.title}>
           <h1>Community Page</h1>
         </div>
         <br />
         <div className={styles.page}>
->>>>>>> origin
           <input type="image" src={image.src} alt="Image" />
           <p>浅草寺</p>
         </div>

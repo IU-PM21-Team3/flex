@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { NextPage } from "next";
+import { useRouter } from "next/router";
+import { DBTravelPlanSummary } from "../firebase/DBTypes";
 import PrivatePage from "../components/PrivatePage";
 import styles from "../styles/CreatePage.module.css";
 import GMap from "../components/Google_Map";
@@ -13,11 +15,13 @@ type Pos = {
   lat: number;
   lng: number;
 };
-type TravelPlanSummary = {
+type TravelPlanSummaryDisplay = {
   planName: string;
   description: string;
   beginDate: Date;
   endDate: Date;
+
+  // 以下は表示の都合
   // 現在地
   initialPlace: Pos;
   // 出発地点
@@ -39,7 +43,7 @@ const initPos: Pos = {
 };
 
 const CreatePlanPage: NextPage = () => {
-  console.log("create plan page");
+  const router = useRouter();
   // formの値
   const [planName, setPlanName] = useState("");
   const [desc, setDesc] = useState("");
@@ -47,10 +51,10 @@ const CreatePlanPage: NextPage = () => {
   const [endDate, setEndDate] = useState("");
   const [origin, setOrigin] = useState<string>("");
   const [destination, setDestination] = useState<string>("");
+
   // 初期位置に関する値
   const [initialPlace, setInitialPlace] = useState<Pos>();
-  // const [center, setCenter] = useState<Pos>(initPos);
-  // これはGoogleMap上で出発地と目的地のマーカーを立てるためのもの
+  // 以下はGoogleMap上で出発地と目的地のマーカーを立てるためのもの
   const [originPos, setOriginPos] = useState<Pos>();
   const [destinationPos, setDestinationPos] = useState<Pos>();
   const [positions, setPositions] = useState<Pos[]>([]);
@@ -158,7 +162,7 @@ const CreatePlanPage: NextPage = () => {
   // データを一つにまとめる
   const createTravelPlanSummayData = () => {
     if (origin && destination && initialPlace) {
-      const travelPlanSummayData: TravelPlanSummary = {
+      const travelPlanSummayData: TravelPlanSummaryDisplay = {
         planName: planName,
         description: desc,
         beginDate: new Date(beginDate),
@@ -172,18 +176,27 @@ const CreatePlanPage: NextPage = () => {
     return;
   };
 
+  const extractDBTravelPlanSummayData = (obj: any) => {
+    const { initialPlace, origin, destination, ...res } = obj;
+    return res;
+  };
+
   // 作成ボタンを押した時の処理
   const submit = (e: any) => {
     e.preventDefault();
     const summayPlan = createTravelPlanSummayData();
-    // [x] DBに作成したSummaryPlanを保存するならここ
-    console.log(summayPlan);
-    // [TODO] 作成ボタンを押した後に編集ページにリダイレクトする
-    // reset
-    setPlanName("");
-    setDesc("");
-    setBeginDate("");
-    setEndDate("");
+    const dbSummayPlan = extractDBTravelPlanSummayData(summayPlan);
+
+    // [x] DBに作成したSummaryPlanを保存するならここで行う
+    // [x] DBに作成したSummaryPlanを保存するならここで行う
+    // [x] DBに作成したSummaryPlanを保存するならここで行う
+    // [x] DBに作成したSummaryPlanを保存するならここで行う
+    // [x] DBに作成したSummaryPlanを保存するならここで行う
+
+    // [TODO] 作成ボタンを押した後に編集ページ(/config)に遷移する
+    console.log(dbSummayPlan);
+    if (dbSummayPlan) router.push("/config");
+    // [TODO] フォーム送信後フォームの値を消す
   };
 
   return (
@@ -260,7 +273,6 @@ const CreatePlanPage: NextPage = () => {
 
               style={{ marginBottom: "20px" }}
             />
-
             <button className={styles.c_btn}>旅程プランを作成する</button>
           </form>
         </Grid>

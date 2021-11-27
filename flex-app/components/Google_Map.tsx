@@ -19,6 +19,7 @@ type GMapProps = {
   oridesMode?: boolean;
   origin?: string,
   destination?: string;
+  travelMode?: string;
 };
 
 const defaultContainerSize = {
@@ -39,8 +40,9 @@ const GMap = (props: GMapProps) => {
   const [center, setCenter] = useState<Pos>();
   const [origin, setOrigin] = useState<string>("");
   const [destination, setDestination] = useState<string>("");
-  const [response, setResponse] = useState();
   const [positions, setPositions] = useState<Pos[]>([]);
+  const [travelMode, setTravelMode] = useState<string>("");
+  const [response, setResponse] = useState();
 
   // 吹き出し（infoWindow）の設定
   // いらなければ消す
@@ -71,7 +73,10 @@ const GMap = (props: GMapProps) => {
       setPositions(props.positions);
       console.log("G pos", positions);
     }
-  }, [props.positions, props.origin, props.destination]);
+    if (props.travelMode) {
+      setTravelMode(props.travelMode);
+    }
+  }, [props.positions, props.origin, props.destination, props.travelMode]);
 
   // 地図をクリックしたときの座標を取得する
   const getLatLngByClick = (event: google.maps.MapMouseEvent) => {
@@ -100,6 +105,22 @@ const GMap = (props: GMapProps) => {
     }
   };
 
+  const convertTravelMode = (mode: string) => {
+    if (mode.toLowerCase() === "driving") {
+      return google.maps.TravelMode.DRIVING;
+    }
+    if (mode.toLowerCase() === "bicycling") {
+      return google.maps.TravelMode.BICYCLING;
+    }
+    if (mode.toLowerCase() === "TRANSIT") {
+      return google.maps.TravelMode.TRANSIT;
+    }
+    if (mode.toLowerCase() === "walking") {
+      return google.maps.TravelMode.WALKING;
+    }
+    return google.maps.TravelMode.DRIVING;
+  };
+
   return (
     <LoadScript googleMapsApiKey="AIzaSyD5hEtmrnaidWTm_VEVo0Qq6lmgV4WyWKQ">
       <GoogleMap
@@ -117,21 +138,6 @@ const GMap = (props: GMapProps) => {
         {
           props.isMarkerShown && center &&
           <Marker position={center} />
-        }
-
-        {/* 吹き出しをなんとなくで実装したがいらなければ消す */}
-        {
-          props.isMarkerShown && center &&
-          <InfoWindow
-            position={center}
-            options={infoWindowOptions}
-          >
-            <div style={{ fontSize: "16px" }}>
-              <h4>現在地</h4>
-              {/* <p>lat: {center.lat}</p>
-              <p>lng: {center.lng}</p> */}
-            </div>
-          </InfoWindow>
         }
         {
           props.isMarkerShown && props.oridesMode &&
@@ -161,13 +167,15 @@ const GMap = (props: GMapProps) => {
         }
 
         {/* 経路表示に関する部分 */}
-        {/* {
+        {
           origin &&
           destination &&
+          travelMode &&
           <DirectionsService
             options={{
               destination: destination,
               origin: origin,
+              travelMode: convertTravelMode(travelMode),
             }}
             callback={directionsCallback}
           />
@@ -180,7 +188,7 @@ const GMap = (props: GMapProps) => {
               }}
             />
           )
-        } */}
+        }
       </GoogleMap>
     </LoadScript>
   );
