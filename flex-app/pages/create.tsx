@@ -4,8 +4,6 @@ import PrivatePage from "../components/PrivatePage";
 import styles from "../styles/CreatePage.module.css";
 import GMap from "../components/Google_Map";
 import { Grid } from "@material-ui/core";
-import { GetAppOutlined } from "@material-ui/icons";
-
 
 // [TODO]
 // ここのPosの型を<google.maps.LatLngLiteral>に変えた方がいいかも
@@ -245,7 +243,7 @@ const CreatePlanPage: NextPage = () => {
               name="origin"
               required
               aria-required="true"
-              placeholder="例）東京駅"
+              placeholder="例）東京駅、茨城県日立市弁天町1-16 等"
 
               style={{ marginBottom: "20px" }}
             />
@@ -258,7 +256,7 @@ const CreatePlanPage: NextPage = () => {
               name="destination"
               required
               aria-required="true"
-              placeholder="例）横浜駅"
+              placeholder="例）横浜駅、東京タワー 等"
 
               style={{ marginBottom: "20px" }}
             />
@@ -277,6 +275,9 @@ const CreatePlanPage: NextPage = () => {
               center={initialPlace}
               // マーカーを表示する配列を渡す
               positions={positions}
+              oridesMode={true}
+              origin={origin}
+              destination={destination}
             />
           }
         </Grid>

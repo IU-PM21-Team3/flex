@@ -16,6 +16,7 @@ type GMapProps = {
   center?: Pos;
   positions?: Pos[] | undefined;
   setLatLng?: React.Dispatch<React.SetStateAction<Pos | undefined>>;
+  oridesMode?: boolean;
   origin?: string,
   destination?: string;
 };
@@ -125,15 +126,42 @@ const GMap = (props: GMapProps) => {
             position={center}
             options={infoWindowOptions}
           >
-            <div style={{ fontSize: "14px" }}>
-              <h5>現在地</h5>
-              <p>lat: {center.lat}</p>
-              <p>lng: {center.lng}</p>
+            <div style={{ fontSize: "16px" }}>
+              <h4>現在地</h4>
+              {/* <p>lat: {center.lat}</p>
+              <p>lng: {center.lng}</p> */}
             </div>
           </InfoWindow>
         }
-
         {
+          props.isMarkerShown && props.oridesMode &&
+          positions[0] &&
+          <InfoWindow
+            position={positions[0]}
+            options={infoWindowOptions}
+          >
+            <div style={{ fontSize: "14px" }}>
+              <h4>出発地: {origin}</h4>
+            </div>
+          </InfoWindow>
+
+        }
+        {
+          props.isMarkerShown && props.oridesMode &&
+          positions[1] &&
+          <InfoWindow
+            position={positions[1]}
+            options={infoWindowOptions}
+          >
+            <div style={{ fontSize: "14px" }}>
+              <h4>目的地: {destination}</h4>
+            </div>
+
+          </InfoWindow>
+        }
+
+        {/* 経路表示に関する部分 */}
+        {/* {
           origin &&
           destination &&
           <DirectionsService
@@ -152,7 +180,7 @@ const GMap = (props: GMapProps) => {
               }}
             />
           )
-        }
+        } */}
       </GoogleMap>
     </LoadScript>
   );
