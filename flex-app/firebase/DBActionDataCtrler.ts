@@ -15,7 +15,7 @@ export class DBActionDataCtrler {
   }
 
   private _OriginalDBActionData: DBActionData;
-  public get OriginalDBActionData(): DBActionData {
+  public get OriginalDBActionData(): Readonly<DBActionData> {
     return this._OriginalDBActionData;
   }
 
@@ -29,9 +29,9 @@ export class DBActionDataCtrler {
     return this._isDeleted;
   }
 
-  private planID: string;
+  private readonly planID: string;
 
-  private date: Date;
+  private readonly date: Date;
 
   constructor(ctrler: TravelPlanController, planID: string, date: Date, dbActionData: DBActionData, dbActionDataID?: string) {
     this._travelPlanCtrler = ctrler;
