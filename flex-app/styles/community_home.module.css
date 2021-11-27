@@ -1,0 +1,50 @@
+.all {
+  /* background-image: url(https://ayaemo.skr.jp/images/material/fantasy/800x600/fantasy01_day%20by%20Karen%20Roe.jpg); */
+  background-image: url(../images/CommunityTop.jpg);
+  /* 画面いっぱいに */
+  background-position: center center;
+  background-repeat: no-repeat;
+  /* height: auto; */
+  background-attachment: fixed;
+  background-size: cover;
+  /* 画像を明るくして透過してる風にする */
+  background-color: rgba(255, 255, 255, 0.8);
+  background-blend-mode: lighten;
+}
+.null {
+  height: 10em;
+}
+
+.title {
+  text-align: center;
+}
+
+.page {
+  text-align: center;
+}
+
+.title h1 {
+  color: #325a8c;
+}
+.title h1::before,
+.title h1::after {
+  content: "□";
+}
+.title h1::before {
+  left: 0;
+  top: -3px;
+}
+.title h1::after {
+  left: 5px;
+  top: 3px;
+  color: #a1b8d1;
+}
+
+.page p {
+  font-size: 20px;
+}
+
+.button Button {
+  margin: 0 auto;
+  display: block;
+}

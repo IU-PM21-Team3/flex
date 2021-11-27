@@ -2,12 +2,14 @@ import React from "react";
 import { Marker } from "@react-google-maps/api";
 import axios from "axios";
 
-let business_status: any = "";
+// const example = "ChIJCewJkL2LGGAR3Qmk0vCTGkg";
 
-export function fetch_all_place_data(/* placeID: string*/) {
-  return axios
+export function fetch_all_place_data(placeID: string): any;
+
+export async function fetch_all_place_data(placeID: string) {
+  return await axios
     .get(
-      "https://maps.googleapis.com/maps/api/place/details/json?place_id=ChIJCewJkL2LGGAR3Qmk0vCTGkg&fields=geometry%2Cformatted_address%2Cname%2Crating%2Cformatted_phone_number%2Cbusiness_status&key=AIzaSyD5hEtmrnaidWTm_VEVo0Qq6lmgV4WyWKQ"
+      `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeID}&fields=geometry%2Cformatted_address%2Cname%2Crating%2Cformatted_phone_number%2Cbusiness_status&key=AIzaSyD5hEtmrnaidWTm_VEVo0Qq6lmgV4WyWKQ`
     )
     .then(function(response: any) {
       const result = response.data;
@@ -19,46 +21,32 @@ export function fetch_all_place_data(/* placeID: string*/) {
     });
 }
 
-export function Fetch_Lat(/* placeID: string*/) {
-  return axios
+export function fetch_position(placeID: string): any;
+
+export async function fetch_position(placeID: string) {
+  return await axios
     .get(
-      "https://maps.googleapis.com/maps/api/place/details/json?place_id=ChIJCewJkL2LGGAR3Qmk0vCTGkg&fields=geometry%2Cformatted_address%2Cname%2Crating%2Cformatted_phone_number%2Cbusiness_status&key=AIzaSyD5hEtmrnaidWTm_VEVo0Qq6lmgV4WyWKQ"
+      `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeID}&fields=geometry%2Cformatted_address%2Cname%2Crating%2Cformatted_phone_number%2Cbusiness_status&key=AIzaSyD5hEtmrnaidWTm_VEVo0Qq6lmgV4WyWKQ`
     )
     .then(function(response: any) {
       const result = response.data;
-      let lat: number;
       if (result == null) return null;
-      else lat = result.result.geometry.location.lat;
-      return lat;
+      else return result.result.geometry.location;
     })
     .catch(function(error: any) {
       console.log(error);
     });
 }
 
-export function Fetch_Lng(/* placeID: string*/) {
-  return axios
-    .get(
-      "https://maps.googleapis.com/maps/api/place/details/json?place_id=ChIJCewJkL2LGGAR3Qmk0vCTGkg&fields=geometry%2Cformatted_address%2Cname%2Crating%2Cformatted_phone_number%2Cbusiness_status&key=AIzaSyD5hEtmrnaidWTm_VEVo0Qq6lmgV4WyWKQ"
-    )
-    .then(function(response: any) {
-      const result = response.data;
-      let lng: number;
-      if (result == null) return null;
-      else lng = result.result.geometry.location.lng;
-      return lng;
-    })
-    .catch(function(error: any) {
-      console.log(error);
-    });
-}
+export function fetch_buisiness_stats(placeID: string): any;
 
-export function Get_buisiness_stats(placeID: string) {
-  return axios
+export async function fetch_buisiness_stats(placeID: string) {
+  return await axios
     .get(
       `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeID}&fields=name%2Crating%2Cformatted_phone_number%2Cbusiness_status&key=AIzaSyD5hEtmrnaidWTm_VEVo0Qq6lmgV4WyWKQ`
     )
     .then(function(response: any) {
+      let business_status: any = "";
       const result = response.data;
       if (result == null) return null;
       else business_status = result.result.business_status;
@@ -70,17 +58,12 @@ export function Get_buisiness_stats(placeID: string) {
     });
 }
 
-
 // ****************************************
 // ***** 開発中 ***************************
 // 地図上にマーカーをつけて表示するためのもの
 
-export function ClosedInfo() {
-  const b = { lat: 35.6585805, lng: 139.7454329 };
+export function ClosedInfo({ placeID }: { placeID: string }) {
+  // const [selected, setSelected] = useState(null);
 
-  return (
-
-    <Marker position={b} />
-
-  );
+  return <Marker position={fetch_position(placeID)} />;
 }

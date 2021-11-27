@@ -1,4 +1,4 @@
-.booking {
+.all {
   background-image: url(https://ayaemo.skr.jp/images/material/fantasy/800x600/fantasy01_day%20by%20Karen%20Roe.jpg);
   /* 画面いっぱいに */
   background-position: center center;
@@ -11,48 +11,46 @@
   background-blend-mode: lighten;
 }
 
-.booking h1 {
+.all h1 {
   color: #325a8c;
 }
-.booking h1::before,
-.booking h1::after {
+.all h1::before,
+.all h1::after {
   content: "□";
 }
-.booking h1::before {
+.all h1::before {
   left: 0;
   top: -3px;
 }
-.booking h1::after {
+.all h1::after {
   left: 5px;
   top: 3px;
   color: #a1b8d1;
 }
 
-.booking {
-  text-align: center;
-  margin: 0 auto;
-}
-
-.calendar_container {
-  width: 300px;
-  margin: 0 auto;
-}
-
-.book_table {
-  width: 300px;
-  margin: 0 auto;
-}
-
-.book_table td {
-  text-align: left;
-}
-
-.book_button Button {
-  width: 300px;
+/* 全体を真ん中に配置 */
+.all {
   text-align: center;
 }
 
-.radio_label {
-  display: inline-block;
-  margin: 0 auto;
+.all input {
+  position: relative;
+  margin: 10px 0 0 30px;
+  font-size: 15px;
+  width: 400px;
+}
+
+/*ファイルの選択ボタンを無理やり隠す*/
+.all input::before {
+  display: block;
+  color: #fff;
+  font-size: 14px;
+  background: #1e29bd;
+  padding: 3px 2px;
+  border-radius: 5px;
+  text-align: center;
+  content: "ファイルの添付";
+  position: absolute;
+  width: 120px;
+  height: 30px;
 }

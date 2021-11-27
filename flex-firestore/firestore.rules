@@ -1,9 +1,146 @@
 rules_version = '2';
+// ref : https://techblog.sgr-ksmt.dev/2018/12/11/194022/
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /{document=**} {
-      allow read, write: if
-          request.time < timestamp.date(2021, 11, 24);
+    function existingData() {
+      return resource.data;
+    }
+    function incomingData() {
+      return request.resource.data;
+    }
+    function isAdminUser(){
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.planType == "admin";
+    }
+    function isAuthNotNull(){
+      return request.auth != null;
+    }
+    function checkIsNotChanged(fieldName){
+      return incomingData()[fieldName] == existingData()[fieldName];
+    }
+    function genUserDataRef(userID) {
+      return /databases/$(database)/documents/users/$(userID);
+    }
+    function checkCanReadOrWriteTravelPlan(canRWUsersArr){
+      // /users/* への参照を持つ場合は, 誰でもアクセス可能として処理する
+      return (genUserDataRef('*') in canRWUsersArr)
+      // 自身のUIDが許可リストに含まれるかどうかを確認する
+       || (isAuthNotNull() && genUserDataRef(request.auth.uid) in canRWUsersArr);
+    }
+    function getTravelPlan(planID){
+      return get(/databases/$(database)/documents/travelPlans/$(planID)).data;
+    }
+
+    match /users/{userID} {
+      function isMyData(){
+        return userID == request.auth.uid;
+      }
+      function isValidUserDataToUpdate(data){
+        return (
+          (!('displayName' in data) || data.displayName is string)
+          && (!('planType' in data) || data.planType is string)
+          && (!('planSummaries' in data) || data.planSummaries is list)
+          && (!('createdDate' in data) || data.createdDate is timestamp)
+        )
+      }
+
+      // 管理者であればすべての操作を許可する
+      allow read, write: if isAuthNotNull() && isAdminUser();
+
+      allow get: if isAuthNotNull() && isMyData();
+
+      // create は deny (cloud functionsから admin-sdk 経由で行う)
+      allow update: if
+        // 認証済みである
+        isAuthNotNull()
+        // 入力データのバリデーション
+        && isValidUserDataToUpdate(incomingData())
+        // 通常ユーザであれば, 自身のデータへの書き込みであり, かつプラン/登録日時の変更が行われていないか
+        && (
+          isMyData() && checkIsNotChanged('planType') && checkIsNotChanged('createdDate')
+        );
+      // delete は deny (cloud functions から admin-sdk 経由で行う)
+    }
+
+    match /travelPlanSummaries/{planID} {
+      function isValidTravelPlanSummaryData(d) {
+        return (
+          'planName' in d && d.planName is string
+          && 'description' in d && d.description is string
+          && 'beginDate' in d && d.beginDate is timestamp
+          && 'endDate' in d && d.endDate is timestamp
+          && 'lastUpdate' in d && d.lastUpdate is timestamp
+        );
+      }
+      function isValidTravelPlanSummaryDataToUpdate(d) {
+        return (
+          (!('planName' in d) || d.planName is string)
+          && (!('description' in d) || d.description is string)
+          && (!('beginDate' in d) || d.beginDate is timestamp)
+          && (!('endDate' in d) || d.endDate is timestamp)
+          && (!('lastUpdate' in d) || d.lastUpdate is timestamp)
+        );
+      }
+
+      // 管理者であればすべての操作を許可する
+      allow read, write: if isAuthNotNull() && isAdminUser();
+
+      allow get: if checkCanReadOrWriteTravelPlan(getTravelPlan(planID).readableUsers);
+      // listは管理者にのみ許可
+
+      allow create: if isValidTravelPlanSummaryData(debug(request.resource.data)) && checkCanReadOrWriteTravelPlan(getTravelPlan(planID).writableUsers);
+      allow update: if isValidTravelPlanSummaryDataToUpdate(request.resource.data) && checkCanReadOrWriteTravelPlan(getTravelPlan(planID).writableUsers);
+    }
+
+    match /travelPlans/{planID} {
+      function isValidTravelPlanData(d) {
+        return (
+          'writableUsers' in d && d.writableUsers is list
+          && 'readableUsers' in d && d.readableUsers is list
+        );
+      }
+
+      // 管理者であればすべての操作を許可する
+      allow read, write: if isAuthNotNull() && isAdminUser();
+
+      allow get: if checkCanReadOrWriteTravelPlan(resource.data.readableUsers);
+      // listは管理者にのみ許可
+
+      // サインイン済みであれば誰でもプランを作成できる
+      allow create: if isAuthNotNull() && isValidTravelPlanData(request.resource.data);
+      allow write: if checkCanReadOrWriteTravelPlan(resource.data.writableUsers) && isValidTravelPlanData(resource.data.writableUsers);
+
+      match /dailyPlans/{date}/actions/{actionID} {
+        function isValidDailyAction(d) {
+          return (
+            'actionType' in d && d.actionType is string
+            && 'placeName' in d && d.placeName is string
+            && (!('placeID' in d) || d.placeID is string)
+            && 'arriveDate' in d && d.arriveDate is timestamp
+            && 'leaveDate' in d && d.leaveDate is timestamp
+            && 'businessState' in d && d.businessState is string
+            && 'memo' in d && d.memo is string
+          );
+        }
+        function isValidDailyActionToUpdate(d) {
+          return (
+            (!('actionType' in d) || d.actionType is string)
+            && 'placeName' in d || d.placeName is string
+            && (!('placeID' in d) || d.placeID is string)
+            && (!('arriveDate' in d) && d.arriveDate is timestamp)
+            && (!('leaveDate' in d) && d.leaveDate is timestamp)
+            && (!('businessState' in d) && d.businessState is string)
+            && (!('memo' in d) && d.memo is string)
+          );
+        }
+
+        // 管理者であればすべての操作を許可する
+        allow read, write: if isAuthNotNull() && isAdminUser();
+
+        allow read: if checkCanReadOrWriteTravelPlan(getTravelPlan(planID).readableUsers);
+        allow create: if isValidDailyAction(request.resource.data) && checkCanReadOrWriteTravelPlan(debug(getTravelPlan(planID).writableUsers));
+        allow update: if isValidDailyActionToUpdate(request.resource.data) && checkCanReadOrWriteTravelPlan(getTravelPlan(planID).writableUsers);
+        allow delete: if checkCanReadOrWriteTravelPlan(getTravelPlan(planID).writableUsers);
+      }
     }
   }
 }
