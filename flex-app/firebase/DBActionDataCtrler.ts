@@ -49,7 +49,7 @@ export class DBActionDataCtrler {
         .then((v) => this._DBActionDataID = v.id)
         .then(() => this._isDeleted = false)
         .then(() => this._OriginalDBActionData = cloneDeep(this.DBActionData));
-    } else if (isEqual(this.DBActionData, this.OriginalDBActionData)) {
+    } else if (!isEqual(this.DBActionData, this.OriginalDBActionData)) {
       // ActionID設定済みの場合は「データ更新」
       return this.travelPlanCtrler.updateDailyPlanAction(this.planID, this.date, this.DBActionDataID, updatedDiff(this.OriginalDBActionData, this.DBActionData))
         .then(() => this._OriginalDBActionData = cloneDeep(this.DBActionData));
