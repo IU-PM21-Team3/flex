@@ -42,10 +42,14 @@ export class DBActionDataCtrler {
     this._DBActionDataID = dbActionDataID;
   }
 
-  public addOrUpdateDailyPlanAction(): Promise<DBActionData> {
+  public addOrUpdateDailyPlanAction(newData?: DBActionData): Promise<DBActionData> {
+    if (newData != null) {
+      this._DBActionData = newData;
+    }
+
     if (this.DBActionDataID == undefined) {
       // ActionID未設定の場合は「新規追加」
-      return this.travelPlanCtrler.addNewDailyPlanAction(this.planID, this.date, this.OriginalDBActionData)
+      return this.travelPlanCtrler.addNewDailyPlanAction(this.planID, this.date, this.DBActionData)
         .then((v) => this._DBActionDataID = v.id)
         .then(() => this._isDeleted = false)
         .then(() => this._OriginalDBActionData = cloneDeep(this.DBActionData));
