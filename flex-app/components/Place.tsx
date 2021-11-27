@@ -172,7 +172,7 @@ const PLACE = (props: { ctrler: DBActionDataCtrler; }) => {
 
       <Dialog open={isEditDialogOpen} onClose={() => setIsEditDialogOpen(false)} fullWidth maxWidth={"sm"}>
         <DialogContent>
-          <DailyActionModifier ctrler={props.ctrler}/>
+          <DailyActionModifier ctrler={props.ctrler} closeDialogAction={setIsEditDialogOpen}/>
         </DialogContent>
       </Dialog>
     </div>
