@@ -24,7 +24,7 @@ export class DBActionDataCtrler {
     return this._DBActionDataID;
   }
 
-  private _isDeleted = false;
+  private _isDeleted = true;
   public get isDeleted(): boolean {
     return this._isDeleted;
   }
@@ -40,6 +40,10 @@ export class DBActionDataCtrler {
     this._DBActionData = dbActionData;
     this._OriginalDBActionData = cloneDeep(dbActionData);
     this._DBActionDataID = dbActionDataID;
+
+    if (dbActionDataID != undefined) {
+      this._isDeleted = false;
+    }
   }
 
   public addOrUpdateDailyPlanAction(newData?: DBActionData): Promise<DBActionData> {
