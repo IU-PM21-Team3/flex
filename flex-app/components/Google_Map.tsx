@@ -76,6 +76,7 @@ const GMap = (props: GMapProps) => {
     if (props.travelMode) {
       setTravelMode(props.travelMode);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.positions, props.origin, props.destination, props.travelMode]);
 
   // 地図をクリックしたときの座標を取得する
