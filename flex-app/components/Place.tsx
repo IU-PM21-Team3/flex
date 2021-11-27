@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState, CSSProperties, } from "react";
 import interact from "interactjs";
-import { DBActionData } from "../firebase/DBTypes";
+import { DBActionDataCtrler } from "../firebase/DBActionDataCtrler";
 
 type Partial<T> = {
   [ P in keyof T ]?: T[ P ]
@@ -97,15 +97,15 @@ export function useInteractJS( position: Partial<typeof initPosition> = initPosi
   };
 }
 
-const PLACE = ( props: {key: string, actionData : DBActionData } ) => {
+const PLACE = ( props: { ctrler : DBActionDataCtrler } ) => {
   // スケジュールの初期値開始時間からy座標を求める
-  const tmp_y = props.actionData.arriveDate;
+  const tmp_y = props.ctrler.DBActionData.arriveDate;
   // const hhmm_y = tmp_y.split( ":" );
   const hh_y = tmp_y.getHours() * ONEHOUR_H;
   const mm_y = tmp_y.getMinutes() * ONEMINUTE_H;
 
   // スケジュールの初期値終了時間からheightを求める
-  const tmp_height = props.actionData.leaveDate;
+  const tmp_height = props.ctrler.DBActionData.leaveDate;
   const tmp_height_isSameDate = tmp_height.toDateString() == tmp_y.toDateString();
   const hh_height_num = tmp_height_isSameDate ? tmp_height.getHours() : 24;
   const mm_height_num = tmp_height_isSameDate ? tmp_height.getMinutes() : 0;
@@ -136,8 +136,8 @@ const PLACE = ( props: {key: string, actionData : DBActionData } ) => {
   const run_mm_height = Math.floor( ( run_hh_mm_height % ONEHOUR_H ) / ONEMINUTE_H );
   const run_hhmm_height = getHHMM(run_hh_height, run_mm_height);// 表示される開始時刻
 
-  props.actionData.arriveDate.setHours(run_hh_y, run_mm_y);
-  props.actionData.leaveDate.setHours(run_hh_height, run_mm_height);
+  props.ctrler.DBActionData.arriveDate.setHours(run_hh_y, run_mm_y);
+  props.ctrler.DBActionData.leaveDate.setHours(run_hh_height, run_mm_height);
 
   return (
     <div
@@ -147,7 +147,7 @@ const PLACE = ( props: {key: string, actionData : DBActionData } ) => {
         border: "2px solid #0489B1",
         backgroundColor: "#A9D0F5"
       }}>
-      {props.actionData.placeName}
+      {props.ctrler.DBActionData.placeName}
       <br />{run_hhmm_y}-{run_hhmm_height}
       {/* 以下のボタンはAutoでドラッグアンドドロップの有効化、blockで無効化 */}
       {/* <button onClick={() => interact.enable()}>Auto</button> */}

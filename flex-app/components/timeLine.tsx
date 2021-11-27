@@ -7,8 +7,7 @@ import { useRouter, NextRouter } from "next/router";
 import moment from "moment";
 import { TravelPlanController } from "../firebase/TravelPlanController";
 import { Button, LinearProgress } from "@material-ui/core";
-import { cloneDeep, isEqual } from "lodash";
-import { updatedDiff } from "deep-object-diff";
+import { DBActionDataCtrler } from "../firebase/DBActionDataCtrler";
 
 // #region Prepare
 const time: Array<string> = [];
@@ -16,11 +15,6 @@ for (let i = 0; i <= 24; i++) {
   time.push(`${i}:00`.padStart(5, "0"));
 }
 // #endregion
-
-interface KeyValuePair<TKey, TValue>{
-  key: TKey;
-  value: TValue;
-}
 
 // #region Functions
 /**
@@ -98,8 +92,7 @@ const TimeLine = (props: { travelPlanCtrler: TravelPlanController; }) => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [beginDate, setBeginDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
-  const [placesKVPArr, setPlacesKVPArr] = useState<KeyValuePair<string, DBActionData | null>[]>([]);
-  const [placesOrigDic, setPlacesOrigDic] = useState<Map<string, DBActionData>>(new Map<string, DBActionData>());
+  const [dbActionDataCtrlerArr, setDBActionDataCtrlerArr] = useState<DBActionDataCtrler[]>([]);
   const [isBusy, setIsBusy] = useState<VisibilityState>("visible");
 
   // ref : https://maku.blog/p/r7fou3a/
@@ -120,57 +113,15 @@ const TimeLine = (props: { travelPlanCtrler: TravelPlanController; }) => {
   const onSaveClicked = () => {
     setIsBusy("visible");
 
-    const addTasks: Promise<Map<string, DBActionData>>[] = [];
-    const updateTasks: Promise<void>[] = [];
-    const deleteTasks: Promise<void>[] = [];
-    const deletedKeys: string[] = [];
+    // 削除済み要素を配列から削除する
+    console.log(dbActionDataCtrlerArr);
+    const tmpDBActionDataCtrlerArr = dbActionDataCtrlerArr.filter((v) => !v.isDeleted);
+    setDBActionDataCtrlerArr(tmpDBActionDataCtrlerArr);
+    console.log(tmpDBActionDataCtrlerArr);
 
-    placesKVPArr.forEach((v) => {
-      const key = v.key;
-      const orig = placesOrigDic.get(v.key);
-      const changed = v.value;
-
-      // keyがFirestore側に存在するかどうかチェック
-      if (orig != undefined) {
-        // 要素が手元で削除されたかどうか確認
-        if (changed == null) {
-          // 受信したActions内にKeyが存在し, かつ現在TLに表示していない場合は, Firestore側のデータを削除する
-          deleteTasks.push(props.travelPlanCtrler.deleteDailyPlanAction(planID, currentDate, key));
-          // 表示中要素から削除するために, keyを記憶しておく
-          deletedKeys.push(key);
-
-          // 削除に成功したものとして, 手元のキャッシュから削除する
-          placesOrigDic.delete(key);
-        } else if (!isEqual(changed, orig)) {
-          // Firestore側に存在し, かつ「Valueが存在する = 削除されていない」場合はupdateを行う
-          updateTasks.push(props.travelPlanCtrler.updateDailyPlanAction(planID, currentDate, key, updatedDiff(orig, changed)));
-
-          // 手元のキャッシュを更新する
-          placesOrigDic.set(key, cloneDeep(changed));
-        }
-      } else if (changed != null) {
-        // keyが存在せず, かつvalueがnullでないなら新規追加要素
-        addTasks.push(props.travelPlanCtrler.addNewDailyPlanAction(planID, currentDate, changed)
-          .then((v) => placesOrigDic.set(v.id, cloneDeep(changed)))
-        );
-      } else {
-        // Firestore側に存在せず, かつ手元でも削除済みのもとは「placesKVPArr」から削除する
-        deletedKeys.push(key);
-      }
-    });
-
-    // タスクをまとめて実行 -> 終了したらProgressBarを非表示にする
-    Promise.all([
-      Promise.all(addTasks),
-      Promise.all(updateTasks),
-      Promise.all(deleteTasks)
-    ]).then(() => {
-      if (deletedKeys.length > 0) {
-        setPlacesKVPArr(placesKVPArr.filter((v) => !deletedKeys.includes(v.key)));
-      }
-
-      setIsBusy("hidden");
-    });
+    // データ更新を実行する
+    Promise.all(tmpDBActionDataCtrlerArr.map((v) => v.addOrUpdateDailyPlanAction()))
+      .then(() => setIsBusy("hidden"));
   };
 
   useEffect(() => {
@@ -183,12 +134,10 @@ const TimeLine = (props: { travelPlanCtrler: TravelPlanController; }) => {
       setEndDate(getYYYYMMDD(planSummary.endDate));
 
       getPlanActionsByIDAndDate(props.travelPlanCtrler, planID, currentDate).then((v) => {
-        const placesArr: KeyValuePair<string, DBActionData>[] = [];
+        const ctrlerArr: DBActionDataCtrler[] = [];
+        v.forEach((value, key) => ctrlerArr.push(new DBActionDataCtrler(props.travelPlanCtrler, planID, currentDate, value, key)));
 
-        v.forEach((value, key) => placesArr.push({ key: key, value: cloneDeep(value) }));
-
-        setPlacesKVPArr(placesArr);
-        setPlacesOrigDic(v);
+        setDBActionDataCtrlerArr(ctrlerArr);
       });
     }).finally(() => setIsBusy("hidden"));
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -218,7 +167,7 @@ const TimeLine = (props: { travelPlanCtrler: TravelPlanController; }) => {
         </div>
         <div className={styles.area}>
           <div style={{ visibility: "visible", position: "relative" }}>
-            {placesKVPArr.map((v) => v.value == null ? (<></>) : (<PLACE key={v.key} actionData={v.value}/>))}
+            {dbActionDataCtrlerArr.map((v) => v.isDeleted ? (<></>) : (<PLACE ctrler={v}/>))}
           </div>
         </div>
       </div>
