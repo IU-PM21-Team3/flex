@@ -87,12 +87,15 @@ function nextPrevClick(setIsBusy: React.Dispatch<React.SetStateAction<Visibility
 
 // #endregion
 
+type TNewPlacesArrElem = [DBActionDataCtrler, JSX.Element];
+
 // #region React (NextJS) Element
 const TimeLine = (props: { travelPlanCtrler: TravelPlanController; }) => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [beginDate, setBeginDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [dbActionDataCtrlerArr, setDBActionDataCtrlerArr] = useState<DBActionDataCtrler[]>([]);
+  const [newPlacesArr, setNewPlacesArr] = useState<TNewPlacesArrElem[]>([]);
   const [isBusy, setIsBusy] = useState<VisibilityState>("visible");
 
   // ref : https://maku.blog/p/r7fou3a/
@@ -119,11 +122,38 @@ const TimeLine = (props: { travelPlanCtrler: TravelPlanController; }) => {
     setDBActionDataCtrlerArr(tmpDBActionDataCtrlerArr);
     console.log(tmpDBActionDataCtrlerArr);
 
+    const tmpNewPlacesArr = newPlacesArr.filter(([v]) => !v.isDeleted);
+    setNewPlacesArr(tmpNewPlacesArr);
+
     // データ更新を実行する
-    Promise.all(tmpDBActionDataCtrlerArr.map((v) => v.addOrUpdateDailyPlanAction()))
+    Promise.all(
+      [
+        Promise.all(tmpDBActionDataCtrlerArr.map((v) => v.addOrUpdateDailyPlanAction())),
+        Promise.all(tmpNewPlacesArr.map(([v]) => v.addOrUpdateDailyPlanAction())),
+      ]
+    )
       .then(() => setIsBusy("hidden"));
   };
 
+  // 追加ボタンが押下された際の処理
+  const onAddClicked = () => {
+    const newActionData: DBActionData = {
+      actionType: "unknown",
+      arriveDate: new Date(currentDate),
+      leaveDate: new Date(currentDate),
+      businessState: "unknown",
+      memo: "",
+      placeName: "",
+      placeID: ""
+    };
+    console.log("created:", newActionData);
+
+    const newCtrler = new DBActionDataCtrler(props.travelPlanCtrler, planID, currentDate, newActionData);
+
+    const newTuple: TNewPlacesArrElem = [newCtrler, <PLACE key={Math.random().toString()} ctrler={newCtrler} isStartWithDialogOpen />];
+
+    setNewPlacesArr([...newPlacesArr.filter(([v]) => !v.isDeleted), newTuple]);
+  };
   useEffect(() => {
     getPlanSummaryByID(props.travelPlanCtrler, planID).then((planSummary) => {
       const currentDate = getShowingDate(planSummary, showingdate);
@@ -154,6 +184,9 @@ const TimeLine = (props: { travelPlanCtrler: TravelPlanController; }) => {
           <button id={styles.next} onClick={nextclick}>＞</button>
         </div>
         <big id={styles.dayN}>Day{new Date(currentDate.getTime() - beginDate.getTime()).getDate()}</big>
+        <div className={styles.addButton}>
+          <Button id={styles.matBtn} onClick={onAddClicked} variant="contained">追加</Button>
+        </div>
         <div className={styles.saveButton}>
           <Button id={styles.matBtn} onClick={onSaveClicked} variant="contained">保存</Button>
         </div>
@@ -167,7 +200,8 @@ const TimeLine = (props: { travelPlanCtrler: TravelPlanController; }) => {
         </div>
         <div className={styles.area}>
           <div style={{ visibility: "visible", position: "relative" }}>
-            {dbActionDataCtrlerArr.map((v) => v.isDeleted ? (<></>) : (<PLACE ctrler={v}/>))}
+            {dbActionDataCtrlerArr.map((v) => v.isDeleted ? (<></>) : (<PLACE key={v.DBActionDataID ?? Math.random().toString()} ctrler={v} />))}
+            {newPlacesArr.map(([, v])=>v)}
           </div>
         </div>
       </div>
