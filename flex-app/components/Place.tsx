@@ -103,8 +103,8 @@ export function useInteractJS( position: Partial<typeof initPosition> = initPosi
   };
 }
 
-const PLACE = (props: { ctrler: DBActionDataCtrler; }) => {
-  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+const PLACE = (props: { ctrler: DBActionDataCtrler; isStartWithDialogOpen?: boolean; }) => {
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(props.isStartWithDialogOpen ?? false);
 
   // Dialogで更新が行われた場合用
   const [isEditDialogAttemptingToTerminate, setIsEditDialogAttemptingToTerminate] = useState(false);
