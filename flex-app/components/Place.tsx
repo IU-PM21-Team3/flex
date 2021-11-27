@@ -39,10 +39,14 @@ const initPosition = {
    * refとstyleに指定することで、そのHTML要素のリサイズと移動が可能になる
    * @param position HTML要素の初期座標と大きさ、指定されない場合はinitPositionで指定された値になる
    */
-export function useInteractJS( position: Partial<typeof initPosition> = initPosition ) {
+export function useInteractJS( position: Partial<typeof initPosition> = initPosition, updateCache = false ) {
   const [_position, setPosition] = useState({ ...initPosition, ...position });
   const [isEnabled, setEnable] = useState(true);
   const interactRef = useRef<HTMLDivElement | null>(null);
+
+  if (updateCache) {
+    setPosition({ ..._position, ...position });
+  }
 
   let { x, y, width, height } = _position;
 
@@ -102,6 +106,9 @@ export function useInteractJS( position: Partial<typeof initPosition> = initPosi
 const PLACE = (props: { ctrler: DBActionDataCtrler; }) => {
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
 
+  // Dialogで更新が行われた場合用
+  const [isEditDialogAttemptingToTerminate, setIsEditDialogAttemptingToTerminate] = useState(false);
+
   // スケジュールの初期値開始時間からy座標を求める
   const tmp_y = props.ctrler.DBActionData.arriveDate;
   // const hhmm_y = tmp_y.split( ":" );
@@ -125,7 +132,7 @@ const PLACE = (props: { ctrler: DBActionDataCtrler; }) => {
     y: hh_y + mm_y + TOPPOS_Y
   };
 
-  const interact = useInteractJS( Position );
+  const interact = useInteractJS( Position, isEditDialogAttemptingToTerminate );
 
   // ドラッグアンドドロップ、リサイズで時刻表示かえる
   // y座標
@@ -142,6 +149,10 @@ const PLACE = (props: { ctrler: DBActionDataCtrler; }) => {
 
   props.ctrler.DBActionData.arriveDate.setHours(run_hh_y, run_mm_y);
   props.ctrler.DBActionData.leaveDate.setHours(run_hh_height, run_mm_height);
+
+  if (isEditDialogAttemptingToTerminate) {
+    setIsEditDialogAttemptingToTerminate(false);
+  }
 
   return (
     <div
@@ -172,7 +183,10 @@ const PLACE = (props: { ctrler: DBActionDataCtrler; }) => {
 
       <Dialog open={isEditDialogOpen} onClose={() => setIsEditDialogOpen(false)} fullWidth maxWidth={"sm"}>
         <DialogContent>
-          <DailyActionModifier ctrler={props.ctrler} closeDialogAction={setIsEditDialogOpen}/>
+          <DailyActionModifier ctrler={props.ctrler} closeDialogAction={() => {
+            setIsEditDialogAttemptingToTerminate(true);
+            setIsEditDialogOpen(false);
+          }}/>
         </DialogContent>
       </Dialog>
     </div>
