@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
-import { DBTravelPlanSummary } from "../firebase/DBTypes";
+// import { DBTravelPlanSummary } from "../firebase/DBTypes";
 import PrivatePage from "../components/PrivatePage";
 import styles from "../styles/CreatePage.module.css";
 import GMap from "../components/Google_Map";
@@ -37,10 +37,10 @@ const defaultPos: Pos = {
   lng: 139.7649361,
 };
 
-const initPos: Pos = {
-  lat: 0,
-  lng: 0
-};
+// const initPos: Pos = {
+//   lat: 0,
+//   lng: 0
+// };
 
 const CreatePlanPage: NextPage = () => {
   const router = useRouter();
@@ -55,8 +55,10 @@ const CreatePlanPage: NextPage = () => {
   // 初期位置に関する値
   const [initialPlace, setInitialPlace] = useState<Pos>();
   // 以下はGoogleMap上で出発地と目的地のマーカーを立てるためのもの
-  const [originPos, setOriginPos] = useState<Pos>();
-  const [destinationPos, setDestinationPos] = useState<Pos>();
+  const [, setOriginPos] = useState<Pos>();
+  // const [originPos, setOriginPos] = useState<Pos>();
+  const [, setDestinationPos] = useState<Pos>();
+  // const [destinationPos, setDestinationPos] = useState<Pos>();
   const [positions, setPositions] = useState<Pos[]>([]);
   // 地図更新フラグ
   const [isFetchedCurrentPos, setIsFetchedCurrentPos] = useState<boolean>(false);

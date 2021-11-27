@@ -2,7 +2,7 @@ import { NextPage } from "next";
 import React from "react";
 import PrivatePage from "../components/PrivatePage";
 import { Grid } from "@material-ui/core";
-import TimeLine from "../components/timeLine";
+// import TimeLine from "../components/timeLine";
 
 
 const Config: NextPage = () => {

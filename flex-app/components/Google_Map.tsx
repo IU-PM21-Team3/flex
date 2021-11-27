@@ -28,10 +28,10 @@ const defaultContainerSize = {
 };
 
 // 東京駅
-const defaultCenter = {
-  lat: 35.6812362,
-  lng: 139.7649361,
-};
+// const defaultCenter = {
+//   lat: 35.6812362,
+//   lng: 139.7649361,
+// };
 
 
 const GMap = (props: GMapProps) => {
