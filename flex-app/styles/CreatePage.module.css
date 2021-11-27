@@ -1,0 +1,18 @@
+.c_btn {
+  background-color: #ccc;
+  width: 100%;
+  max-width: 300px;
+
+  margin: 0 auto;
+  padding: 15px 10px;
+
+  font-size: 1.1rem;
+
+  border: 1px solid #aaa;
+  border-radius: 5px;
+  display: block;
+}
+
+.c_btn:hover {
+  background-color: #ddd;
+}

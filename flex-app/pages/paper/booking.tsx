@@ -58,8 +58,9 @@ const BookingPage: NextPage = () => {
           />
           {
             times.radio.map((v, i) => (
-              <label key={i}>
+              <label className={styles.radio_label} key={i}>
                 <input
+                  className={styles.radio_input}
                   type="radio"
                   checked={v.checked}
                   value={v.rangeStr}
