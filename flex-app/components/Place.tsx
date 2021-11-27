@@ -1,6 +1,8 @@
 import React, { useRef, useEffect, useState, CSSProperties, } from "react";
 import interact from "interactjs";
 import { DBActionDataCtrler } from "../firebase/DBActionDataCtrler";
+import { Dialog, DialogContent, Button } from "@material-ui/core";
+import DailyActionModifier from "./dailyActionModifier";
 
 type Partial<T> = {
   [ P in keyof T ]?: T[ P ]
@@ -97,7 +99,9 @@ export function useInteractJS( position: Partial<typeof initPosition> = initPosi
   };
 }
 
-const PLACE = ( props: { ctrler : DBActionDataCtrler } ) => {
+const PLACE = (props: { ctrler: DBActionDataCtrler; }) => {
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+
   // スケジュールの初期値開始時間からy座標を求める
   const tmp_y = props.ctrler.DBActionData.arriveDate;
   // const hhmm_y = tmp_y.split( ":" );
@@ -147,11 +151,30 @@ const PLACE = ( props: { ctrler : DBActionDataCtrler } ) => {
         border: "2px solid #0489B1",
         backgroundColor: "#A9D0F5"
       }}>
+      <Button
+        style={
+          {
+            position: "absolute",
+            right: "0.5em",
+            top: "0.5em"
+          }
+        }
+        onClick={() => setIsEditDialogOpen(!isEditDialogOpen)}
+        variant="outlined">
+        編集
+      </Button>
+
       {props.ctrler.DBActionData.placeName}
       <br />{run_hhmm_y}-{run_hhmm_height}
       {/* 以下のボタンはAutoでドラッグアンドドロップの有効化、blockで無効化 */}
       {/* <button onClick={() => interact.enable()}>Auto</button> */}
       {/* <button onClick={() => interact.disable()}>block</button> */}
+
+      <Dialog open={isEditDialogOpen} onClose={() => setIsEditDialogOpen(false)} fullWidth maxWidth={"sm"}>
+        <DialogContent>
+          <DailyActionModifier ctrler={props.ctrler}/>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
