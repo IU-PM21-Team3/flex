@@ -31,12 +31,15 @@ export class DBActionDataCtrler {
 
   private readonly planID: string;
 
-  private readonly date: Date;
+  public get date(): Date {
+    return new Date(this._date);
+  }
+  private readonly _date: Date;
 
   constructor(ctrler: TravelPlanController, planID: string, date: Date, dbActionData: DBActionData, dbActionDataID?: string) {
     this._travelPlanCtrler = ctrler;
     this.planID = planID;
-    this.date = date;
+    this._date = date;
     this._DBActionData = dbActionData;
     this._OriginalDBActionData = cloneDeep(dbActionData);
     this._DBActionDataID = dbActionDataID;
