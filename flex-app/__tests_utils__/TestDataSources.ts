@@ -38,7 +38,7 @@ export const actionData_1: DBActionData = {
   actionType: "visit",
   arriveDate: new Date(2021, 11, 30, 11, 30),
   leaveDate: new Date(2021, 11, 30, 15, 0),
-  buzinessState: "normal",
+  businessState: "normal",
   memo: "SAMPLE MEMO",
   placeName: "サンプル観光地 1",
   placeID: "N/A"
@@ -47,7 +47,7 @@ export const actionData_2: DBActionData = {
   actionType: "visit",
   arriveDate: new Date(2021, 11, 30, 18, 30),
   leaveDate: new Date(2021, 11, 30, 24, 0),
-  buzinessState: "normal",
+  businessState: "normal",
   memo: "SAMPLE MEMO",
   placeName: "サンプル観光地 2",
   placeID: "N/A"
