@@ -64,7 +64,7 @@ export interface DBActionData {
   leaveDate: Date;
 
   /** 営業情報 */
-  buzinessState: DBBusinessStates;
+  businessState: DBBusinessStates;
 
   /** メモ */
   memo: string;
