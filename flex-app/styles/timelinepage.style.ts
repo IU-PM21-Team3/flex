@@ -1,12 +1,13 @@
 import { CSSProperties } from "react";
 
 const MIN_W_ARR = ["18em", "200px", "25em"];
-const HEIGHT = "95vh";
+const HEIGHT = "80vh";
 
 export const colimnProvider: CSSProperties = {
+  position: "absolute",
   display: "flex",
   flexWrap: "wrap",
-  padding: "1em",
+  top: "0%"
 };
 export const leftColumn: CSSProperties = {
   flex: 1,
