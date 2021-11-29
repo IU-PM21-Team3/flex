@@ -102,6 +102,7 @@ const DailyActionModifier = (props: { ctrler: DBActionDataCtrler; closeDialogAct
 
             <div style={{ marginTop: "1em" }}>
               <TimePicker
+                label="到着時刻"
                 value={arriveDate}
                 onChange={(v) => setArriveDate(v ?? props.ctrler.DBActionData.arriveDate)}
                 renderInput={(params) => <LabTextField {...params} />}
@@ -110,6 +111,7 @@ const DailyActionModifier = (props: { ctrler: DBActionDataCtrler; closeDialogAct
 
             <div style={{ marginTop: "1em" }}>
               <TimePicker
+                label="出発時刻"
                 value={leaveDate}
                 onChange={(v) => setLeaveDate(v ?? props.ctrler.DBActionData.leaveDate)}
                 renderInput={(params) => <LabTextField {...params} />}
