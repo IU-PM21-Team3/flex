@@ -1,10 +1,8 @@
 import { EventContext } from "firebase-functions";
 import { UserRecord, user } from "firebase-functions/v1/auth";
 import { firestore } from "firebase-admin";
-import * as admin from "firebase-admin";
-
-const firebase = admin.initializeApp();
 import { DBUser } from "../firebase/DBTypes";
+import { firebase } from "./firebaseApp";
 
 /** 新規加入ユーザの情報をFirestoreに書き込む */
 export const CreateNewFirestoreDocumentForNewUser = user().onCreate((user: UserRecord, context: EventContext): Promise<firestore.WriteResult | null> => {
