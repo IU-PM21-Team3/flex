@@ -12,6 +12,7 @@ import {
   CollectionReference,
   Firestore,
   arrayUnion,
+  arrayRemove,
   doc
 } from "firebase/firestore";
 import { DBActionData, DBTravelPlan, DBTravelPlanSummary } from "./DBTypes";
@@ -23,7 +24,7 @@ const PATH_TRAVEL_PLANS = "travelPlans";
 const PATH_DAILY_PLANS = "dailyPlans";
 const PATH_PLAN_SUMARY = "travelPlanSummaries";
 const PATH_ACTIONS = "actions";
-const DATE_FORMAT = "YYYY-MM-DD";
+export const DATE_FORMAT = "YYYY-MM-DD";
 
 export class TravelPlanController {
   public _db: Firestore;
@@ -80,10 +81,66 @@ export class TravelPlanController {
     const travelPlanSummaryRef = this._getTravelPlanSummaryDocRef(addTravelPlanDocResult.id);
     await setDoc(travelPlanSummaryRef, summary);
 
-    // 各ユーザの旅行プラン概要リンク集にリンクを追加する
-    userDocRefArr.forEach((userDoc) => updateDoc(userDoc, { planSummaries: arrayUnion(travelPlanSummaryRef) }));
+    // UserDataに参照を追加する処理はCloud Function側で行う
 
     return travelPlanSummaryRef;
+  }
+
+  public getTravelPlan(travelPlanID: string) {
+    const docRef = this._getTravelPlanDocRef(travelPlanID);
+
+    return getDoc(docRef);
+  }
+
+  /**
+   * 旅行プランの読み書きが可能なユーザを追加する
+   * @param travelPlanID
+   * @param readableUsers
+   * @param writableUsers
+   */
+  public addTravelPlanRWableUser(travelPlanID: string, readableUsers?: string | string[], writableUsers?: string | string[]) {
+    // 既に追加されているユーザの情報は追加されない
+    // ref : https://ta-watanabe.hatenablog.com/entry/2021/08/24/182317
+
+    // R/Wユーザともに更新内容が存在しない場合は処理を実行しない
+    if (readableUsers == undefined && writableUsers == undefined) {
+      return Promise.resolve();
+    }
+
+
+    const readableUsersArr = readableUsers == undefined ? [] : (Array.isArray(readableUsers) ? readableUsers : [readableUsers]);
+    const writableUsersArr = writableUsers == undefined ? [] : (Array.isArray(writableUsers) ? writableUsers : [writableUsers]);
+
+    const planDocRef = this._getTravelPlanDocRef(travelPlanID);
+
+    const readableUserDocRefArr = readableUsersArr.map((v) => this.userCtrler._getUserDocRef(v));
+    const writableUserDocRefArr = writableUsersArr.map((v) => this.userCtrler._getUserDocRef(v));
+
+    return updateDoc(planDocRef, { readableUsers: arrayUnion(readableUserDocRefArr), writableUsers: arrayUnion(writableUserDocRefArr) });
+  }
+
+  /**
+ * 旅行プランの読み書きが可能なユーザを削除する
+ * @param travelPlanID
+ * @param readableUsers
+ * @param writableUsers
+ */
+  public async removeTravelPlanRWableUser(travelPlanID: string, readableUsers?: string | string[], writableUsers?: string | string[]) {
+    // R/Wユーザともに更新内容が存在しない場合は処理を実行しない
+    if (readableUsers == undefined && writableUsers == undefined) {
+      return Promise.resolve();
+    }
+
+
+    const readableUsersArr = readableUsers == undefined ? [] : (Array.isArray(readableUsers) ? readableUsers : [readableUsers]);
+    const writableUsersArr = writableUsers == undefined ? [] : (Array.isArray(writableUsers) ? writableUsers : [writableUsers]);
+
+    const planDocRef = this._getTravelPlanDocRef(travelPlanID);
+
+    const readableUserDocRefArr = readableUsersArr.map((v) => this.userCtrler._getUserDocRef(v));
+    const writableUserDocRefArr = writableUsersArr.map((v) => this.userCtrler._getUserDocRef(v));
+
+    return updateDoc(planDocRef, { readableUsers: arrayRemove(readableUserDocRefArr), writableUsers: arrayRemove(writableUserDocRefArr) });
   }
 
   /**

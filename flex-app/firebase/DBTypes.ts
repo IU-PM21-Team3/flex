@@ -19,6 +19,14 @@ export interface DBTravelPlanSummary {
   lastUpdate: Date;
 }
 
+export const EMPTY_DBTravelPlanSummary : DBTravelPlanSummary = {
+  planName: "",
+  description: "",
+  beginDate: new Date(),
+  endDate: new Date(),
+  lastUpdate: new Date()
+};
+
 // #region UserData
 /** ユーザのプラン種類 (無料プラン / 有料プラン 等々) */
 export type DBUserPlanTypes = "free" | "pro" | "biz" | "admin";

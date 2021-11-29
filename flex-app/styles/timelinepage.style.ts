@@ -1,12 +1,14 @@
 import { CSSProperties } from "react";
 
 const MIN_W_ARR = ["18em", "200px", "25em"];
-const HEIGHT = "95vh";
+const HEIGHT = "85vh";
+const TOP = "5vh";
 
 export const colimnProvider: CSSProperties = {
+  position: "absolute",
   display: "flex",
   flexWrap: "wrap",
-  padding: "1em",
+  top: "0%"
 };
 export const leftColumn: CSSProperties = {
   flex: 1,
@@ -14,6 +16,7 @@ export const leftColumn: CSSProperties = {
   minWidth: MIN_W_ARR[0],
   padding: "1em",
   position: "relative",
+  top: TOP,
 };
 export const rightColumn: CSSProperties = {
   flex: 5,
@@ -21,4 +24,5 @@ export const rightColumn: CSSProperties = {
   minWidth: MIN_W_ARR[2],
   padding: "1em",
   position: "relative",
+  top: TOP,
 };

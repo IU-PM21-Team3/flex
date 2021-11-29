@@ -1,6 +1,4 @@
-// const { https } = require("firebase-functions");
-import { https } from "firebase-functions";
-// const next = require("next");
+import { runWith, RuntimeOptions } from "firebase-functions";
 import next from "next";
 import nextConfig from "../next.config";
 
@@ -15,7 +13,11 @@ const nextjsServer = next({
 
 const nextjsHandle = nextjsServer.getRequestHandler();
 
-export const nextjsFunc = https.onRequest((req, res) => nextjsServer.prepare().then(() => nextjsHandle(req, res)));
+const runtimeOpts: RuntimeOptions = {
+  minInstances: 1,
+  memory: "1GB"
+};
 
-// module.exports = nextjsFunc;
+export const nextjsFunc = runWith(runtimeOpts).https.onRequest((req, res) => nextjsServer.prepare().then(() => nextjsHandle(req, res)));
+
 export default nextjsFunc;
