@@ -86,6 +86,12 @@ export class TravelPlanController {
     return travelPlanSummaryRef;
   }
 
+  public getTravelPlan(travelPlanID: string) {
+    const docRef = this._getTravelPlanDocRef(travelPlanID);
+
+    return getDoc(docRef);
+  }
+
   /**
    * 旅行プランの読み書きが可能なユーザを追加する
    * @param travelPlanID
