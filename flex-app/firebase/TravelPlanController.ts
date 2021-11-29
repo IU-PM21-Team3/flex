@@ -23,7 +23,7 @@ const PATH_TRAVEL_PLANS = "travelPlans";
 const PATH_DAILY_PLANS = "dailyPlans";
 const PATH_PLAN_SUMARY = "travelPlanSummaries";
 const PATH_ACTIONS = "actions";
-const DATE_FORMAT = "YYYY-MM-DD";
+export const DATE_FORMAT = "YYYY-MM-DD";
 
 export class TravelPlanController {
   public _db: Firestore;
