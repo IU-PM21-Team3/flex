@@ -1,4 +1,4 @@
-import { region, RuntimeOptions } from "firebase-functions";
+import { runWith, RuntimeOptions } from "firebase-functions";
 import next from "next";
 import nextConfig from "../next.config";
 
@@ -18,6 +18,6 @@ const runtimeOpts: RuntimeOptions = {
   memory: "1GB"
 };
 
-export const nextjsFunc = region("asia-northeast1").runWith(runtimeOpts).https.onRequest((req, res) => nextjsServer.prepare().then(() => nextjsHandle(req, res)));
+export const nextjsFunc = runWith(runtimeOpts).https.onRequest((req, res) => nextjsServer.prepare().then(() => nextjsHandle(req, res)));
 
 export default nextjsFunc;
