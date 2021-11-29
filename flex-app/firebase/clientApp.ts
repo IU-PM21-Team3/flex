@@ -3,6 +3,14 @@ import { FirebaseApp, initializeApp, FirebaseOptions, deleteApp } from "firebase
 import { getAuth, Auth } from "firebase/auth";
 import { getFirestore, Firestore } from "firebase/firestore";
 
+// eslint-disable-next-line import/no-duplicates
+// import { connectAuthEmulator } from "firebase/auth";
+// // eslint-disable-next-line import/no-duplicates
+// import { connectFirestoreEmulator } from "firebase/firestore";
+// // eslint-disable-next-line import/no-duplicates
+// import { connectFunctionsEmulator } from "firebase/functions";
+
+
 const clientCredentials: FirebaseOptions = {
   apiKey: "AIzaSyBG-xl2BWKRWFm88QxrtIK4SqRowbKB054",
   authDomain: "tr-flex-dev.firebaseapp.com",
@@ -37,6 +45,11 @@ export class flexFirebase {
     this._auth = getAuth(this.app);
     this._store = getFirestore(this.app);
     this._functions = getFunctions(this.app);
+
+    // エミュレータに接続する
+    // connectAuthEmulator(this.auth, "http://localhost:9099");
+    // connectFirestoreEmulator(this.store, "localhost", 8080);
+    // connectFunctionsEmulator(this.functions, "localhost", 5001);
   }
 
   public Dispose(): Promise<void> {
