@@ -92,7 +92,7 @@ export class TravelPlanController {
    * @param readableUsers
    * @param writableUsers
    */
-  public async addTravelPlanRWableUser(travelPlanID: string, readableUsers?: string | string[], writableUsers?: string | string[]) {
+  public addTravelPlanRWableUser(travelPlanID: string, readableUsers?: string | string[], writableUsers?: string | string[]) {
     // 既に追加されているユーザの情報は追加されない
     // ref : https://ta-watanabe.hatenablog.com/entry/2021/08/24/182317
 
