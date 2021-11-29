@@ -15,7 +15,6 @@ const nextjsHandle = nextjsServer.getRequestHandler();
 
 const runtimeOpts: RuntimeOptions = {
   minInstances: 1,
-  memory: "1GB"
 };
 
 export const nextjsFunc = runWith(runtimeOpts).https.onRequest((req, res) => nextjsServer.prepare().then(() => nextjsHandle(req, res)));

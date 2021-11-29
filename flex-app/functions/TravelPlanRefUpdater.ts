@@ -3,7 +3,7 @@ import { FieldValue } from "firebase-admin/firestore";
 import { DBTravelPlan, DBUser } from "../firebase/DBTypes";
 import { DocumentReference } from "@firebase/firestore";
 import { document } from "firebase-functions/v1/firestore";
-import { firebase } from "./firebaseApp";
+import firebase from "./firebaseApp";
 
 function getReadableUsersRefArr(d:DBTravelPlan):Array<DocumentReference<DBUser>> {
   return "readableUsers" in d ? d.readableUsers : [];
@@ -40,7 +40,7 @@ export const OnTravelPlanWritten = document("travelPlans/{planID}").onWrite((cha
 
 
     // ユーザデータにTravelPlanのRefを追加する
-    return firestore(firebase).doc("/users/" + userID).update({
+    return firestore(firebase()).doc("/users/" + userID).update({
       planSummaries: FieldValue.arrayUnion(change.after.ref)
     });
   });
@@ -53,7 +53,7 @@ export const OnTravelPlanWritten = document("travelPlans/{planID}").onWrite((cha
     }
 
     // ユーザデータからTravelPlanのRefを削除する
-    return firestore(firebase).doc("/users/" + userID).update({
+    return firestore(firebase()).doc("/users/" + userID).update({
       planSummaries: FieldValue.arrayRemove(change.after.ref)
     });
   });
