@@ -104,7 +104,7 @@ export class TravelPlanController {
 
     // R/Wユーザともに更新内容が存在しない場合は処理を実行しない
     if (readableUsers == undefined && writableUsers == undefined) {
-      return;
+      return Promise.resolve();
     }
 
 
@@ -128,7 +128,7 @@ export class TravelPlanController {
   public async removeTravelPlanRWableUser(travelPlanID: string, readableUsers?: string | string[], writableUsers?: string | string[]) {
     // R/Wユーザともに更新内容が存在しない場合は処理を実行しない
     if (readableUsers == undefined && writableUsers == undefined) {
-      return;
+      return Promise.resolve();
     }
 
 
