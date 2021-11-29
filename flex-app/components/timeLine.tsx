@@ -2,7 +2,6 @@ import styles from "../styles/timeline.module.css";
 import React, { useEffect, useState } from "react";
 import PLACE from "./Place";
 import { DBTravelPlanSummary, DBActionData } from "../firebase/DBTypes";
-import { travelPlanSampleID } from "../pages/timeLine";
 import { useRouter, NextRouter } from "next/router";
 import moment from "moment";
 import { TravelPlanController } from "../firebase/TravelPlanController";
@@ -52,17 +51,6 @@ function getYYYYMMDD(date: Date): Date {
   return new Date(date.getFullYear(), date.getMonth(), date.getDate());
 }
 
-function getPlanSummaryByID(ctrler: TravelPlanController, id: string): Promise<DBTravelPlanSummary> {
-  return ctrler.getPlanSummary(id).then((v) => {
-    const ret = v.data();
-    if (ret == null) {
-      throw new Error("TravelPlanSummary is NULL");
-    } else {
-      return ret;
-    }
-  });
-}
-
 function getPlanActionsByIDAndDate(ctrler: TravelPlanController, id: string, date: Date): Promise<Map<string, DBActionData>> {
   return ctrler.getDailyPlanActionCollection(id, date).then((v) => {
     const retVal:Map<string, DBActionData> = new Map();
@@ -90,7 +78,7 @@ function nextPrevClick(setIsBusy: React.Dispatch<React.SetStateAction<Visibility
 type TNewPlacesArrElem = [DBActionDataCtrler, JSX.Element];
 
 // #region React (NextJS) Element
-const TimeLine = (props: { travelPlanCtrler: TravelPlanController; }) => {
+const TimeLine = (props: { travelPlanCtrler: TravelPlanController; planSummary: DBTravelPlanSummary }) => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [beginDate, setBeginDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
@@ -104,7 +92,7 @@ const TimeLine = (props: { travelPlanCtrler: TravelPlanController; }) => {
   const { planid, showingdate } = router.query;
 
   // クエリ入力が配列であればその最初の要素を採用し, そうでなければ(undefinedでない限り)入力値を使用する
-  const planID = Array.isArray(planid) ? planid[0] : planid == null || planid.length <= 0 ? travelPlanSampleID : planid;
+  const planID = Array.isArray(planid) ? planid[0] : planid == null || planid.length <= 0 ? "" : planid;
 
   // ボタン「>」をクリックしたら日付進める
   const nextclick = () => nextPrevClick(setIsBusy, router, planID, beginDate, currentDate, endDate, 1);
@@ -154,24 +142,23 @@ const TimeLine = (props: { travelPlanCtrler: TravelPlanController; }) => {
 
     setNewPlacesArr([...newPlacesArr.filter(([v]) => !v.isDeleted), newTuple]);
   };
+
   useEffect(() => {
-    getPlanSummaryByID(props.travelPlanCtrler, planID).then((planSummary) => {
-      const currentDate = getShowingDate(planSummary, showingdate);
-      setCurrentDate(currentDate);
+    const currentDate = getShowingDate(props.planSummary, showingdate);
+    setCurrentDate(currentDate);
 
-      // プランの開始日/終了日のキャッシュ (年月日だけを抽出したものを使用するため)
-      setBeginDate(getYYYYMMDD(planSummary.beginDate));
-      setEndDate(getYYYYMMDD(planSummary.endDate));
+    // プランの開始日/終了日のキャッシュ (年月日だけを抽出したものを使用するため)
+    setBeginDate(getYYYYMMDD(props.planSummary.beginDate));
+    setEndDate(getYYYYMMDD(props.planSummary.endDate));
 
-      getPlanActionsByIDAndDate(props.travelPlanCtrler, planID, currentDate).then((v) => {
-        const ctrlerArr: DBActionDataCtrler[] = [];
-        v.forEach((value, key) => ctrlerArr.push(new DBActionDataCtrler(props.travelPlanCtrler, planID, currentDate, value, key)));
+    getPlanActionsByIDAndDate(props.travelPlanCtrler, planID, currentDate).then((v) => {
+      const ctrlerArr: DBActionDataCtrler[] = [];
+      v.forEach((value, key) => ctrlerArr.push(new DBActionDataCtrler(props.travelPlanCtrler, planID, currentDate, value, key)));
 
-        setDBActionDataCtrlerArr(ctrlerArr);
-      });
+      setDBActionDataCtrlerArr(ctrlerArr);
     }).finally(() => setIsBusy("hidden"));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [showingdate, planid]);
+  }, [props.planSummary, showingdate, planid]);
 
   return (
     <div>
