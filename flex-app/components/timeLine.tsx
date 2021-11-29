@@ -144,6 +144,10 @@ const TimeLine = (props: { travelPlanCtrler: TravelPlanController; planSummary: 
   };
 
   useEffect(() => {
+    if (planid == undefined || planid == "") {
+      return;
+    }
+
     const currentDate = getShowingDate(props.planSummary, showingdate);
     setCurrentDate(currentDate);
 
