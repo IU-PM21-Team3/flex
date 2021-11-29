@@ -26,15 +26,9 @@ export class DBTravelPlanDataCtrler {
 
   private readonly planID: string;
 
-  public get date(): Date {
-    return new Date(this._date);
-  }
-  private readonly _date: Date;
-
-  constructor(ctrler: TravelPlanController, planID: string, date: Date, dbTravelPlanSummary: DBTravelPlanSummary) {
+  constructor(ctrler: TravelPlanController, planID: string, dbTravelPlanSummary: DBTravelPlanSummary) {
     this._travelPlanCtrler = ctrler;
     this.planID = planID;
-    this._date = date;
     this._DBTravelPlanSummary = dbTravelPlanSummary;
     this._OriginalDBTravelPlanSummary = cloneDeep(dbTravelPlanSummary);
   }
