@@ -80,8 +80,7 @@ export class TravelPlanController {
     const travelPlanSummaryRef = this._getTravelPlanSummaryDocRef(addTravelPlanDocResult.id);
     await setDoc(travelPlanSummaryRef, summary);
 
-    // 各ユーザの旅行プラン概要リンク集にリンクを追加する
-    userDocRefArr.forEach((userDoc) => updateDoc(userDoc, { planSummaries: arrayUnion(travelPlanSummaryRef) }));
+    // UserDataに参照を追加する処理はCloud Function側で行う
 
     return travelPlanSummaryRef;
   }
