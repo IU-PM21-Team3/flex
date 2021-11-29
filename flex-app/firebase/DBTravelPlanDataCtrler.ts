@@ -46,6 +46,9 @@ export class DBTravelPlanDataCtrler {
   public addReadableWritableUsers(readableUserID?: string | string[], writableUserID?: string | string[]) {
     return this.travelPlanCtrler.addTravelPlanRWableUser(this.planID, readableUserID, writableUserID);
   }
+  public removeReadableWritableUsers(readableUserID?: string | string[], writableUserID?: string | string[]) {
+    return this.travelPlanCtrler.removeTravelPlanRWableUser(this.planID, readableUserID, writableUserID);
+  }
 
   public getTravelPlan() {
     return this.travelPlanCtrler.getTravelPlan(this.planID);
