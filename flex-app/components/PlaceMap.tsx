@@ -12,6 +12,8 @@ import {
   ImageListItem,
 } from "@material-ui/core";
 import PlaceImage from "./PlaceImage";
+const API_KEY = "AIzaSyD5hEtmrnaidWTm_VEVo0Qq6lmgV4WyWKQ";
+// import `https://maps.googleapis.com/maps/api/js?key=${API_KEY}&libraries=places&callback=initMap`;
 
 type Pos = {
   lat: number;
@@ -142,6 +144,30 @@ class PlaceMap extends Component<any, LocateState> {
       }
     );
   }
+
+  onMapLoad(map: google.maps.Map) {
+    const request = {
+      query: "Museum of Contemporary Art Australia",
+      fields: ["name", "geometry"]
+    };
+
+    const service = new window.google.maps.places.PlacesService(map);
+
+    const nearByReq: google.maps.places.PlaceSearchRequest = {
+      location: {
+        lat: 35.69575,
+        lng: 139.77521,
+      },
+      radius: 1500
+    };
+
+    service.nearbySearch(nearByReq, (results, status) => {
+      console.log("TESTETST");
+      if (status === google.maps.places.PlacesServiceStatus.OK) {
+        results?.forEach(console.log);
+      }
+    });
+  }
   render() {
     const labelStyle = {
       margin: "20px",
@@ -217,11 +243,15 @@ class PlaceMap extends Component<any, LocateState> {
             </Grid>
           </Grid>
           <Grid item xs={8} style={H100Percent}>
-            <LoadScript googleMapsApiKey="AIzaSyD5hEtmrnaidWTm_VEVo0Qq6lmgV4WyWKQ">
+            <LoadScript
+              googleMapsApiKey="AIzaSyD5hEtmrnaidWTm_VEVo0Qq6lmgV4WyWKQ"
+              libraries={["places"]}
+            >
               <GoogleMap
                 mapContainerStyle={containerStyle}
                 center={this.state.center}
                 zoom={12}
+                onLoad={this.onMapLoad}
               >
                 {this.state.isShowMarker && (
                   <Marker key={"center"} position={this.state.center} />
