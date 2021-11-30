@@ -36,13 +36,13 @@ export async function nearbysearch(center: any, type: string) {
     .get(
       `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${center.lat}%2C${center.lng}&radius=1500&type=${type}&key=AIzaSyD5hEtmrnaidWTm_VEVo0Qq6lmgV4WyWKQ`
     )
-    .then(function (response: any) {
+    .then(function(response: any) {
       const result = response.data;
       console.log(result);
       if (result == null) return null;
       else return result;
     })
-    .catch(function (error: any) {
+    .catch(function(error: any) {
       console.log(error);
     });
 }
@@ -62,7 +62,7 @@ class PlaceMap extends Component<{}, LocateState> {
       results: {},
       positions: Array<Pos>(),
       isShowMarkers: false,
-      placeIDs: Array(),
+      placeIDs: [],
       isShowImage: false,
     };
   }
@@ -76,8 +76,8 @@ class PlaceMap extends Component<{}, LocateState> {
         isShowImage: true,
       });
       nearbysearch(this.state.center, this.state.searchType).then((res) => {
-        let positions: any = [];
-        let placeIDs: any = [];
+        const positions: any = [];
+        const placeIDs: any = [];
         for (const element of res.results) {
           positions.push(element.geometry.location);
           placeIDs.push(element.place_id);
@@ -101,8 +101,8 @@ class PlaceMap extends Component<{}, LocateState> {
       isShowImage: true,
     });
     nearbysearch(this.state.center, this.state.searchType).then((res) => {
-      let positions: any = [];
-      let placeIDs: any = [];
+      const positions: any = [];
+      const placeIDs: any = [];
       for (const element of res.results) {
         positions.push(element.geometry.location);
         placeIDs.push(element.place_id);

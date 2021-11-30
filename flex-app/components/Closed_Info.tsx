@@ -12,13 +12,13 @@ export async function fetch_all_place_data(placeID: string) {
       `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeID}&fields=geometry%2Cformatted_address%2Cname%2Copening_hours%2Cformatted_phone_number%2Cbusiness_status%2Cphotos&key=AIzaSyD5hEtmrnaidWTm_VEVo0Qq6lmgV4WyWKQ`,
       { withCredentials: true }
     )
-    .then(function (response: any) {
+    .then(function(response: any) {
       const result = response.data;
       // console.log(result)
       if (result == null) return null;
       else return result;
     })
-    .catch(function (error: any) {
+    .catch(function(error: any) {
       console.log(error);
     });
 }
