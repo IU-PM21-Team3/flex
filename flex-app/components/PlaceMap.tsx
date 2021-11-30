@@ -144,7 +144,7 @@ class PlaceMap extends Component<any, LocateState> {
     };
     const containerStyle = {
       width: "100%",
-      height: "93vh",
+      height: "100%",
     };
     const box = {
       width: "280px",
@@ -152,11 +152,14 @@ class PlaceMap extends Component<any, LocateState> {
       border: "1px solid #000",
       overflowY: "scroll",
     };
+    const H100Percent = {
+      height: "100%"
+    };
 
     return (
-      <div>
-        <Grid container>
-          <Grid item xs={4}>
+      <div style={H100Percent}>
+        <Grid container style={H100Percent}>
+          <Grid item xs={4} style={H100Percent}>
             <Grid container direction="row">
               <Grid item xs={12}>
                 <label style={labelStyle}>

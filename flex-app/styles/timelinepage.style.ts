@@ -3,9 +3,10 @@ import { CSSProperties } from "react";
 const MIN_W_ARR = ["22em", "25em"];
 const HEIGHT = "85vh";
 const HEAD_HEIGHT = "3em";
-const TOP_Head = "0";
-const TOP = "6em";
+const TOP_Head = "3em";
+const TOP = "9em";
 const FLEX_ARR = [1, 4];
+const WIDTH = "calc(100vw - 1em)";
 
 export const colimnProvider: CSSProperties = {
   position: "absolute",
@@ -17,7 +18,7 @@ export const leftHeadColumn: CSSProperties = {
   flex: FLEX_ARR[0],
   minWidth: MIN_W_ARR[0],
   height: HEAD_HEIGHT,
-  width: "100vw",
+  width: WIDTH,
   position: "relative",
   top: TOP_Head,
   left: "1em",
@@ -26,7 +27,7 @@ export const rightHeadColumn: CSSProperties = {
   flex: FLEX_ARR[1],
   minWidth: MIN_W_ARR[1],
   height: HEAD_HEIGHT,
-  width: "100vw",
+  width: WIDTH,
   position: "relative",
   top: TOP_Head,
 };
@@ -34,8 +35,8 @@ export const rightHeadColumn: CSSProperties = {
 export const leftColumn: CSSProperties = {
   flex: FLEX_ARR[0],
   height: HEIGHT,
+  width: WIDTH,
   minWidth: MIN_W_ARR[0],
-  width: "100vw",
   padding: "1em",
   position: "relative",
   top: TOP,
@@ -43,8 +44,8 @@ export const leftColumn: CSSProperties = {
 export const rightColumn: CSSProperties = {
   flex: FLEX_ARR[1],
   height: HEIGHT,
+  width: WIDTH,
   minWidth: MIN_W_ARR[1],
-  width: "100vw",
   padding: "1em",
   position: "relative",
   top: TOP,
