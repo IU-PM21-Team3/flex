@@ -9,7 +9,7 @@ import {
 } from "@material-ui/core";
 import { fetch_all_place_data } from "./Closed_Info";
 
-function PlaceImage({ placeID }: { placeID: string }) {
+function PlaceImage({ placeID }: { placeID: string; }) {
   const CheckOpen = (open: boolean) => {
     if (open) return "営業中";
     else return "営業時間外";
@@ -22,7 +22,7 @@ function PlaceImage({ placeID }: { placeID: string }) {
   const GMAP_API_KEY = "AIzaSyD5hEtmrnaidWTm_VEVo0Qq6lmgV4WyWKQ";
 
   useEffect(() => {
-    const result: any = fetch_all_place_data(placeID).then((res: any) => {
+    fetch_all_place_data(placeID).then((res: any) => {
       setResult(res.result);
       console.log(res);
       if (Array.isArray(res.result?.photos) && res.result.photos.length > 0) {
@@ -31,7 +31,6 @@ function PlaceImage({ placeID }: { placeID: string }) {
         );
       }
     });
-    console.log(result)
   }, []);
 
   return (
