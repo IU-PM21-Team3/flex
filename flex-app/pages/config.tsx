@@ -60,27 +60,29 @@ const Config: NextPage = () => {
   return (
     <div style={{ position: "relative", width: "100vw" }}>
       <div style={styles.colimnProvider}>
-        <div style={{ position: "absolute" }}>
+        <div style={styles.leftHeadColumn}>
           <h1>旅程表示/編集ページ</h1>
         </div>
 
-        <div style={{ position: "absolute", right: "1em", top: "1em" }}>
-          <Button
-            style={{ margin: "0.5em" }}
-            variant="contained"
-            onClick={() => setIsAccessableUsersDialogOpen(true)}>
-            アクセス権を編集
-          </Button>
+        <div style={styles.rightHeadColumn}>
+          <div style={{ position: "absolute", right: "1em", top: "1em" }}>
+            <Button
+              style={{ margin: "0.5em" }}
+              variant="contained"
+              onClick={() => setIsAccessableUsersDialogOpen(true)}>
+              アクセス権を編集
+            </Button>
 
-          <Button
-            style={{ margin: "0.5em" }}
-            variant="contained"
-            onClick={() => setIsSummaryEditDialogOpen(true)}>
-            プランの概要を表示/編集
-          </Button>
-
+            <Button
+              style={{ margin: "0.5em" }}
+              variant="contained"
+              onClick={() => setIsSummaryEditDialogOpen(true)}>
+              プランの概要を表示/編集
+            </Button>
+          </div>
         </div>
-
+      </div>
+      <div style={styles.colimnProvider}>
         <div style={styles.leftColumn}>
           <Schedule planName={travelPlanProps.planName} beginDate={travelPlanProps.beginDate} endDate={travelPlanProps.endDate} />
           <TimeLine travelPlanCtrler={travelCtrler} planSummary={travelPlanProps} />
