@@ -47,7 +47,7 @@ export async function nearbysearch(center: any, type: string) {
     });
 }
 
-class PlaceMap extends Component<{}, LocateState> {
+class PlaceMap extends Component<any, LocateState> {
   googleGeocoder: any = null;
   constructor(props: any) {
     super(props);
