@@ -47,7 +47,7 @@ export async function nearbysearch(center: any, type: string) {
     )
     .then(function (response: any) {
       const result = response.data;
-      // console.log(result);
+      console.log(result);
       if (result == null) return null;
       else return result;
     })
@@ -115,6 +115,7 @@ class PlaceMap extends Component<{}, LocateState> {
     this.setState({
       // positions: Array<Pos>(),
       // placeIDs: Array(),
+      searchType: e.target.value,
       isShowMarkers: true,
       isShowImage: true,
     });
@@ -254,7 +255,7 @@ class PlaceMap extends Component<{}, LocateState> {
                 <Box sx={box}>
                   <ImageList cols={2} rowHeight={170} spacing={1}>
                     {this.state.isShowImage &&
-                      this.state.placeIDs.map((ID: any, i: any) => (
+                      this.state.placeIDs.map((ID: any) => (
                         <ImageListItem>
                           <PlaceImage placeID={ID} />
                         </ImageListItem>

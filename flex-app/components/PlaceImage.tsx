@@ -32,9 +32,9 @@ function PlaceImage({ placeID }: { placeID: string }) {
     const result: any = fetch_all_place_data(placeID).then((res: any) => {
       setResult(res.result);
       console.log(res);
-      console.log("a:" + res.result);
+      // console.log("a:" + res.result);
       if (Array.isArray(res.result?.photos) && res.result.photos.length > 0) {
-        console.log("res-result-photos", res.result.photos);
+        // console.log("res-result-photos", res.result.photos);
         setImgUrl(
           `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=${res.result?.photos[0]?.photo_reference}&key=${GMAP_API_KEY}`
         );
