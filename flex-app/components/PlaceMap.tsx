@@ -76,6 +76,11 @@ class PlaceMap extends Component<any, LocateState> {
         isShowImage: true,
       });
       nearbysearch(this.state.center, this.state.searchType).then((res) => {
+        if (res?.result == undefined) {
+          console.log("res.results not found");
+          return;
+        }
+
         const positions: any = [];
         const placeIDs: any = [];
         for (const element of res.results) {
