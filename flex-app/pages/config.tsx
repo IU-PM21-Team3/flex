@@ -59,7 +59,7 @@ const Config: NextPage = () => {
 
   return (
     <div style={{ position: "relative", width: "100vw" }}>
-      <div style={styles.colimnProvider}>
+      <div style={styles.headColimnProvider}>
         <div style={styles.leftHeadColumn}>
           <h1>旅程表示/編集ページ</h1>
         </div>
