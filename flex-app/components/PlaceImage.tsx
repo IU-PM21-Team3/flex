@@ -31,6 +31,7 @@ function PlaceImage({ placeID }: { placeID: string }) {
         );
       }
     });
+    console.log(result)
   }, []);
 
   return (
