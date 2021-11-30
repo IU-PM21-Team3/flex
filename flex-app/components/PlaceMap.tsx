@@ -13,15 +13,6 @@ import {
 } from "@material-ui/core";
 import PlaceImage from "./PlaceImage";
 
-// interface GMapWindow extends Window {
-//   google: any;
-// }
-// declare const window: GMapWindow;
-// interface GMapWindow extends Window {
-//   google: any;
-// }
-// declare const google: GMapWindow;
-
 type Pos = {
   lat: number;
   lng: number;
@@ -81,21 +72,13 @@ class PlaceMap extends Component<{}, LocateState> {
     if (e.key === "Enter") {
       this.geocode();
       this.setState({
-        // positions: Array<Pos>(),
-        // placeIDs: Array(),
         isShowMarkers: true,
         isShowImage: true,
       });
       nearbysearch(this.state.center, this.state.searchType).then((res) => {
-        // this.setState({
-        //   positions: res.results.geometry.location,
-        //   placeIDs: res.results.place_id,
-        // });
         let positions: any = [];
         let placeIDs: any = [];
         for (const element of res.results) {
-          // this.state.positions.push(element.geometry.location);
-          // this.state.placeIDs.push(element.place_id);
           positions.push(element.geometry.location);
           placeIDs.push(element.place_id);
         }
@@ -113,22 +96,14 @@ class PlaceMap extends Component<{}, LocateState> {
 
   changeSearchType(e: any) {
     this.setState({
-      // positions: Array<Pos>(),
-      // placeIDs: Array(),
       searchType: e.target.value,
       isShowMarkers: true,
       isShowImage: true,
     });
     nearbysearch(this.state.center, this.state.searchType).then((res) => {
-      // this.setState({
-      //   positions: res.results.geometry.location,
-      //   placeIDs: res.results.place_id,
-      // });
       let positions: any = [];
       let placeIDs: any = [];
       for (const element of res.results) {
-        // this.state.positions.push(element.geometry.location);
-        // this.state.placeIDs.push(element.place_id);
         positions.push(element.geometry.location);
         placeIDs.push(element.place_id);
       }
@@ -162,24 +137,6 @@ class PlaceMap extends Component<{}, LocateState> {
       }
     );
   }
-  // nearbysearch() {
-  //   let map
-  //   const service = new window.google.maps.places.PlacesService(map);
-  //   let request = {
-  //     location: this.state.center,
-  //     radius: '500',
-  //     type: ['restaurant']
-  //   };
-  //   service.nearbySearch(request,
-  //     (places: any, status: any) => {
-  //       if (status === "OK") {
-  //         for (var i = 0; i < places.length; i++) {
-  //           console.log(places[i]);
-  //         }
-  //       }
-  //     }
-  //   );
-  // }
   render() {
     const labelStyle = {
       margin: "20px",
@@ -195,8 +152,6 @@ class PlaceMap extends Component<{}, LocateState> {
       border: "1px solid #000",
       overflowY: "scroll",
     };
-
-    // console.log(nearbysearch(this.state.center, "restaurant"));
 
     return (
       <div>
@@ -239,18 +194,6 @@ class PlaceMap extends Component<{}, LocateState> {
                   </Select>
                 </FormControl>
               </Grid>
-              {/* {this.state.isShowImage &&
-              this.state.placeIDs.map((ID: any, i: any) => (
-                <A placeID={ ID }/>
-              ))} */}
-              {/* <GridList cellHeight={200} cors={2}>
-              {this.state.isShowImage &&
-                this.state.placeIDs.map((ID: any, i: any) => (
-                  <GridListTile key={i} cors="1">
-                    <A placeID={ ID }/>
-                  </GridListTile>
-                ))}
-            </GridList> */}
               <Grid item>
                 <Box sx={box}>
                   <ImageList cols={2} rowHeight={170} spacing={1}>
