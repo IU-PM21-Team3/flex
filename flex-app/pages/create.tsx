@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
-// import { DBTravelPlanSummary } from "../firebase/DBTypes";
+import { DBTravelPlanSummary } from "../firebase/DBTypes";
+import { TravelPlanController, DATE_FORMAT } from "../firebase/TravelPlanController";
+import { UserController } from "../firebase/UsersController";
+import app from "../firebase/clientApp";
+import { GetAuthContext } from "../contexts/authContext";
 import PrivatePage from "../components/PrivatePage";
 import styles from "../styles/CreatePage.module.css";
 import GMap from "../components/Google_Map";
 import { Grid } from "@material-ui/core";
+import moment from "moment";
 
 // [TODO]
 // ここのPosの型を<google.maps.LatLngLiteral>に変えた方がいいかも
@@ -20,6 +25,7 @@ type TravelPlanSummaryDisplay = {
   description: string;
   beginDate: Date;
   endDate: Date;
+  lastUpdate: Date;
 
   // 以下は表示の都合
   // 現在地
@@ -62,6 +68,9 @@ const CreatePlanPage: NextPage = () => {
   const [positions, setPositions] = useState<Pos[]>([]);
   // 地図更新フラグ
   const [isFetchedCurrentPos, setIsFetchedCurrentPos] = useState<boolean>(false);
+
+  const [travelCtrler] = useState(new TravelPlanController(new UserController(app.store)));
+  const authContext = GetAuthContext();
 
   // 現在位置の取得
   useEffect(() => {
@@ -173,14 +182,15 @@ const CreatePlanPage: NextPage = () => {
         endDate: new Date(endDate),
         initialPlace: initialPlace,
         origin: origin,
-        destination: destination
+        destination: destination,
+        lastUpdate: new Date()
       };
       return travelPlanSummayData;
     }
     return;
   };
 
-  const extractDBTravelPlanSummayData = (obj: any) => {
+  const extractDBTravelPlanSummayData = (obj: TravelPlanSummaryDisplay) : DBTravelPlanSummary => {
     const { initialPlace, origin, destination, ...res } = obj;
     return res;
   };
@@ -189,18 +199,29 @@ const CreatePlanPage: NextPage = () => {
   const submit = (e: any) => {
     e.preventDefault();
     const summayPlan = createTravelPlanSummayData();
+    if (summayPlan == undefined) {
+      console.error("PlanSummary IS UNDEFINED");
+      return;
+    }
+
     const dbSummayPlan = extractDBTravelPlanSummayData(summayPlan);
 
-    // [x] DBに作成したSummaryPlanを保存するならここで行う
-    // [x] DBに作成したSummaryPlanを保存するならここで行う
-    // [x] DBに作成したSummaryPlanを保存するならここで行う
-    // [x] DBに作成したSummaryPlanを保存するならここで行う
-    // [x] DBに作成したSummaryPlanを保存するならここで行う
+    // サインイン済みじゃないと保存できない
+    if (authContext.user == undefined) {
+      console.error("NOT AUTHORIZED", authContext.user);
+      return;
+    }
 
-    // [TODO] 作成ボタンを押した後に編集ページ(/config)に遷移する
-    console.log(dbSummayPlan);
-    if (dbSummayPlan) router.push("/config");
-    // [TODO] フォーム送信後フォームの値を消す
+    // DBにデータを保存する
+    travelCtrler.createNewTravelPlan(authContext.user.uid, dbSummayPlan).then((v) => {
+      // [TODO] 作成ボタンを押した後に編集ページ(/config)に遷移する
+      console.log("create successed", dbSummayPlan, v.id);
+
+      if (dbSummayPlan) {
+        router.push(`/config?planid=${v.id}&showingdate=${moment(dbSummayPlan.beginDate).format(DATE_FORMAT)}`);
+      }
+      // [TODO] フォーム送信後フォームの値を消す
+    });
   };
 
   return (

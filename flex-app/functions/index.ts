@@ -1,10 +1,8 @@
 import * as NextJSFunctions from "./firebaseFunctions";
-// import { getTrafficInfo } from "./GetTrafficInfo.server";
-import * as AuthOnCreateDelete from "./AuthOnCreateDelete";
+import * as _AuthOnCreateDelete from "./AuthOnCreateDelete";
+import * as _TravelPlanRefUpdater from "./TravelPlanRefUpdater";
 
 export const nextjsFunc = NextJSFunctions.nextjsFunc;
 
-// export const gettrafficinfo = getTrafficInfo;
-
-export const CreateNewFirestoreDocumentForNewUser = AuthOnCreateDelete.CreateNewFirestoreDocumentForNewUser;
-export const DeleteFirestoreDocumentForWithdrawUser = AuthOnCreateDelete.DeleteFirestoreDocumentForWithdrawUser;
+export const AuthOnCreateDelete = _AuthOnCreateDelete;
+export const TravelPlanRefUpdater = _TravelPlanRefUpdater;
