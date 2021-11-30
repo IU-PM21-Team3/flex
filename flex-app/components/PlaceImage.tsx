@@ -104,7 +104,7 @@ function PlaceImage({ placeID }: { placeID: string }) {
             </Typography>
             {result?.opening_hours?.weekday_text?.map((v: any) => {
               return (
-                <Typography component="p" variant="h6">
+                <Typography key={v} component="p" variant="h6">
                   {v}
                 </Typography>
               );

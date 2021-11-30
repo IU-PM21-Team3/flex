@@ -199,7 +199,7 @@ class PlaceMap extends Component<{}, LocateState> {
                   <ImageList cols={2} rowHeight={170} spacing={1}>
                     {this.state.isShowImage &&
                       this.state.placeIDs.map((ID: any) => (
-                        <ImageListItem>
+                        <ImageListItem key={ID}>
                           <PlaceImage placeID={ID} />
                         </ImageListItem>
                       ))}
@@ -208,7 +208,7 @@ class PlaceMap extends Component<{}, LocateState> {
               </Grid>
             </Grid>
           </Grid>
-          <Grid item xs={8}>
+          <Grid item xs={8} style={H100Percent}>
             <LoadScript googleMapsApiKey="AIzaSyD5hEtmrnaidWTm_VEVo0Qq6lmgV4WyWKQ">
               <GoogleMap
                 mapContainerStyle={containerStyle}
