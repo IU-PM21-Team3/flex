@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import Image from "next/image";
 import {
   Box,
   CardMedia,
@@ -7,50 +8,61 @@ import {
   Typography,
   Popover,
 } from "@material-ui/core";
-import { fetch_all_place_data } from "./Closed_Info";
 
-function PlaceImage({ placeID }: { placeID: string; }) {
-  const CheckOpen = (open: boolean) => {
-    if (open) return "営業中";
-    else return "営業時間外";
+function PlaceImage({ placesService, _placeInfo }: { placesService?: google.maps.places.PlacesService, _placeInfo: google.maps.places.PlaceResult; }) {
+  const CheckOpen = (open?: boolean) => {
+    return open == undefined ? "不明" :
+      (open ? "営業中" : "営業時間外");
   };
 
-  const [result, setResult] = useState<any>({});
-  const [open, setOpen] = useState(false);
-  const [imgUrl, setImgUrl] = useState("");
-  const divRef = useRef(null);
-  const GMAP_API_KEY = "AIzaSyD5hEtmrnaidWTm_VEVo0Qq6lmgV4WyWKQ";
+  const MAX_HEIGHT = 130;
+  const MAX_WIDTH = 165;
+  const imageOpts: google.maps.places.PhotoOptions = {
+    maxHeight: MAX_HEIGHT,
+    maxWidth: MAX_WIDTH
+  };
+
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [imgUrl, setImgUrl] = useState(_placeInfo?.photos?.at(0)?.getUrl(imageOpts) ?? "");
+  const [placeInfo, setPlaceInfo] = useState<google.maps.places.PlaceResult>();
+  const imgRef = useRef(null);
 
   useEffect(() => {
-    fetch_all_place_data(placeID).then((res: any) => {
-      setResult(res.result);
-      console.log(res);
-      if (Array.isArray(res.result?.photos) && res.result.photos.length > 0) {
-        setImgUrl(
-          `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=${res.result?.photos[0]?.photo_reference}&key=${GMAP_API_KEY}`
-        );
-      }
-    });
-  }, []);
+    // その場所の詳細な情報は「getDetails」で取得しないといけないため
+    // 必要なインスタンス等がそろっている場合のみ取得をする
+    if (placesService != undefined && _placeInfo?.place_id != undefined) {
+      placesService.getDetails({ placeId: _placeInfo?.place_id }, (placeResult: google.maps.places.PlaceResult | null) => {
+        if (placeResult != null) {
+          console.log("getDetails:", placeResult);
+          setPlaceInfo(placeResult);
+
+          const tmpImgUrl = placeResult.photos?.at(0)?.getUrl(imageOpts);
+          if (tmpImgUrl != null && tmpImgUrl != "") {
+            setImgUrl(tmpImgUrl);
+          }
+        }
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [placesService, _placeInfo]);
 
   return (
     <div>
       <Box>
-        <img
-          src={imgUrl}
-          ref={divRef}
-          onClick={() => setOpen(!open)}
-          style={{
-            borderRadius: 20,
-            width: 130,
-            height: 165,
-          }}
-        />
+        <div ref={imgRef}>
+          <Image
+            alt={placeInfo?.name ?? "Unknown Name Place Image"}
+            src={imgUrl}
+            onClick={() => setIsPopupOpen(true)}
+            layout="fill"
+          />
+        </div>
+
       </Box>
       <Popover
-        open={open}
-        anchorEl={divRef.current}
-        onClose={() => setOpen(!open)}
+        open={isPopupOpen}
+        anchorEl={imgRef.current}
+        onClose={() => setIsPopupOpen(false)}
         anchorOrigin={{
           vertical: "bottom",
           horizontal: "left",
@@ -68,41 +80,42 @@ function PlaceImage({ placeID }: { placeID: string; }) {
           />
           <CardContent>
             <Typography component="p" variant="h4">
-              {result?.name}
+              {placeInfo?.name}
             </Typography>
             <Typography component="p" variant="h6">
-              {CheckOpen(result?.opening_hours?.open_now)}
+              {"営業状態："}
+              {CheckOpen(placeInfo?.opening_hours?.isOpen(new Date()))}
             </Typography>
             <Typography component="p" variant="h6">
               {"住所："}
-              {result?.formatted_address}
+              {placeInfo?.formatted_address ?? placeInfo?.vicinity ?? "未登録"}
             </Typography>
             <Typography component="p" variant="h6">
               {"電話番号："}
-              {result?.formatted_phone_number}
+              {placeInfo?.formatted_phone_number ?? "未登録"}
             </Typography>
             <Typography component="p" variant="h6">
               {"営業時間："}
               {String(
-                result?.opening_hours?.periods[0]?.open?.time ?? 0
+                placeInfo?.opening_hours?.periods?.at(0)?.open?.time ?? 0
               ).substr(0, 2)}
               {":"}
               {String(
-                result?.opening_hours?.periods[0]?.open?.time ?? 0
+                placeInfo?.opening_hours?.periods?.at(0)?.open?.time ?? 0
               ).substr(2)}
               {"~"}
               {String(
-                result?.opening_hours?.periods[0]?.close?.time ?? 0
+                placeInfo?.opening_hours?.periods?.at(0)?.close?.time ?? 0
               ).substr(0, 2)}
               {":"}
               {String(
-                result?.opening_hours?.periods[0]?.close?.time ?? 0
+                placeInfo?.opening_hours?.periods?.at(0)?.close?.time ?? 0
               ).substr(2)}
             </Typography>
             <Typography component="p" variant="h6">
               {"営業日"}
             </Typography>
-            {result?.opening_hours?.weekday_text?.map((v: any) => {
+            {placeInfo?.opening_hours?.weekday_text?.map((v: any) => {
               return (
                 <Typography key={v} component="p" variant="h6">
                   {v}

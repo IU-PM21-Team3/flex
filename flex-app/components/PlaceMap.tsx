@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
-import axios from "axios";
 import {
   FormControl,
   InputLabel,
@@ -12,45 +11,26 @@ import {
   ImageListItem,
 } from "@material-ui/core";
 import PlaceImage from "./PlaceImage";
-
-type Pos = {
-  lat: number;
-  lng: number;
-};
+import { cloneDeep } from "lodash";
+const API_KEY = "AIzaSyD5hEtmrnaidWTm_VEVo0Qq6lmgV4WyWKQ";
 
 interface LocateState {
   locationName: string;
   center: google.maps.LatLngLiteral;
-  // center: Pos;
   isShowMarker: boolean;
   searchType: string;
-  results: any;
-  positions: Pos[] | undefined;
-  placeIDs: any;
+  results: google.maps.places.PlaceResult[];
   isShowMarkers: boolean;
   isShowImage: boolean;
-}
 
-export async function nearbysearch(center: any, type: string) {
-  return await axios
-    .get(
-      `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${center.lat}%2C${center.lng}&radius=1500&type=${type}&key=AIzaSyD5hEtmrnaidWTm_VEVo0Qq6lmgV4WyWKQ`
-    )
-    .then(function(response: any) {
-      const result = response.data;
-      console.log(result);
-      if (result == null) return null;
-      else return result;
-    })
-    .catch(function(error: any) {
-      console.log(error);
-    });
+  placesService?: google.maps.places.PlacesService;
 }
+type NearbySearchResponseTuple = [google.maps.places.PlaceResult[] | null, google.maps.places.PlacesServiceStatus, google.maps.places.PlaceSearchPagination | null];
 
 class PlaceMap extends Component<any, LocateState> {
-  googleGeocoder: any = null;
   constructor(props: any) {
     super(props);
+
     this.state = {
       locationName: "",
       center: {
@@ -59,63 +39,49 @@ class PlaceMap extends Component<any, LocateState> {
       },
       isShowMarker: false,
       searchType: "restaurant",
-      results: {},
-      positions: Array<Pos>(),
+      results: [],
       isShowMarkers: false,
-      placeIDs: [],
       isShowImage: false,
+      placesService: undefined,
     };
+
+    // this.setState is not a functionと怒られるのを防ぐため
+    // ref : https://shikiyura.com/2018/06/js-react_setstate-undefined-issue/
+    this.onMapLoad = this.onMapLoad.bind(this);
   }
 
-  changeLocationName(e: any) {
-    console.log("this called");
+  onKeyPressedToSearchPlaces(e: React.KeyboardEvent<HTMLInputElement>) {
     if (e.key === "Enter") {
       this.geocode();
+
       this.setState({
         isShowMarkers: true,
         isShowImage: true,
       });
-      nearbysearch(this.state.center, this.state.searchType).then((res) => {
-        if (res?.result == undefined) {
-          console.log("res.results not found");
-          return;
-        }
 
-        const positions: any = [];
-        const placeIDs: any = [];
-        for (const element of res.results) {
-          positions.push(element.geometry.location);
-          placeIDs.push(element.place_id);
-        }
-        this.setState({
-          positions: positions,
-          placeIDs: placeIDs,
-        });
+      this.nearbySearchAndUpdatePositionsAndPlaceIDs({
+        location: this.state.center,
+        type: this.state.searchType,
       });
-      // return;
     }
+  }
+
+  onLocationNameChanged(e: React.ChangeEvent<HTMLInputElement>) {
     this.setState({
       locationName: e.target.value,
     });
   }
 
-  changeSearchType(e: any) {
+  changeSearchType(e: React.ChangeEvent<{ name?: string, value: unknown; }>) {
     this.setState({
-      searchType: e.target.value,
+      searchType: e.target.value as string,
       isShowMarkers: true,
       isShowImage: true,
     });
-    nearbysearch(this.state.center, this.state.searchType).then((res) => {
-      const positions: any = [];
-      const placeIDs: any = [];
-      for (const element of res.results) {
-        positions.push(element.geometry.location);
-        placeIDs.push(element.place_id);
-      }
-      this.setState({
-        positions: positions,
-        placeIDs: placeIDs,
-      });
+
+    this.nearbySearchAndUpdatePositionsAndPlaceIDs({
+      location: this.state.center,
+      type: this.state.searchType,
     });
 
     this.setState({
@@ -123,25 +89,72 @@ class PlaceMap extends Component<any, LocateState> {
     });
   }
 
+  nearbysearch(_request: Readonly<google.maps.places.PlaceSearchRequest>): Promise<NearbySearchResponseTuple> {
+    return new Promise((resolve, reject) => {
+      // 使用するサービスが初期化されていないのであれば, この関数の機能も提供できないため, rejectする
+      if (this.state.placesService == undefined) {
+        reject(new Error("GoogleMap Places Service is not initialized"));
+        return;
+      }
+
+      // 呼び出し元のデータを編集してしまわないように, ここで複製体を生成しておく
+      const request: google.maps.places.PlaceSearchRequest = cloneDeep(_request);
+
+      // Radiusは必須プロパティのため, 引数で設定されていなかったのであればここで指定しておく
+      request.radius ??= 1500;
+
+      this.state.placesService.nearbySearch(request, (resultArr: google.maps.places.PlaceResult[] | null, statusResponse: google.maps.places.PlacesServiceStatus, searchPagination: google.maps.places.PlaceSearchPagination | null) => {
+        resolve([resultArr, statusResponse, searchPagination]);
+      });
+    });
+  }
+
+  nearbySearchAndUpdatePositionsAndPlaceIDs(_request: Readonly<google.maps.places.PlaceSearchRequest>) {
+    return new Promise<NearbySearchResponseTuple>((resolve, reject) => {
+      this.nearbysearch(_request)
+        .then((nearbySearchResult) => {
+          const [resultArr, statusResponse, searchPagination] = nearbySearchResult;
+
+          // resultArrがnullであれば検索に失敗しているため, rejectする
+          if (resultArr == null) {
+            reject(new Error(`nearbySearch function: resultArr is NULL!  statusResponse: ${statusResponse}, searchPagination: ${searchPagination}`));
+            return;
+          }
+
+          // コンポーネント内で使用できるように, stateに記録する
+          // 参照のコピーであるため, (ないとは思うけど)この先での変更には要注意
+          this.setState({ results: resultArr });
+
+          resolve(nearbySearchResult);
+        });
+    });
+  }
+
+
   geocode() {
     const geocoder = new window.google.maps.Geocoder();
+
+    const request: google.maps.GeocoderRequest = {
+      address: this.state.locationName,
+    };
+
     geocoder.geocode(
-      { address: this.state.locationName },
-      (results: any, status: any) => {
-        if (status === "OK") {
-          let cent = Object.assign({}, this.state.center);
-          cent = {
-            lat: results[0].geometry.location.lat(),
-            lng: results[0].geometry.location.lng(),
-          };
+      request,
+      (results: google.maps.GeocoderResult[] | null, status: google.maps.GeocoderStatus) => {
+        if (status === "OK" && results != null) {
           this.setState({
-            center: cent,
+            center: results[0].geometry.location.toJSON(),
             isShowMarker: true,
           });
         }
       }
     );
   }
+
+  onMapLoad(map: google.maps.Map) {
+    this.setState({ placesService: new window.google.maps.places.PlacesService(map) });
+  }
+
   render() {
     const labelStyle = {
       margin: "20px",
@@ -171,9 +184,9 @@ class PlaceMap extends Component<any, LocateState> {
                   <input
                     type="text"
                     value={this.state.locationName}
-                    onChange={(e) => this.changeLocationName(e)}
+                    onChange={(e) => this.onLocationNameChanged(e)}
                     placeholder={"検索する"}
-                    onKeyPress={(e) => this.changeLocationName(e)}
+                    onKeyPress={(e) => this.onKeyPressedToSearchPlaces(e)}
                   />
                 </label>
               </Grid>
@@ -204,11 +217,11 @@ class PlaceMap extends Component<any, LocateState> {
               </Grid>
               <Grid item>
                 <Box sx={box}>
-                  <ImageList cols={2} rowHeight={170} spacing={1}>
+                  <ImageList cols={2} rowHeight={170} gap={1}>
                     {this.state.isShowImage &&
-                      this.state.placeIDs.map((ID: any) => (
-                        <ImageListItem key={ID}>
-                          <PlaceImage placeID={ID} />
+                      this.state.results.map((placeResult: google.maps.places.PlaceResult) => (
+                        <ImageListItem key={placeResult.place_id}>
+                          <PlaceImage placesService={this.state.placesService} _placeInfo={placeResult} />
                         </ImageListItem>
                       ))}
                   </ImageList>
@@ -217,20 +230,31 @@ class PlaceMap extends Component<any, LocateState> {
             </Grid>
           </Grid>
           <Grid item xs={8} style={H100Percent}>
-            <LoadScript googleMapsApiKey="AIzaSyD5hEtmrnaidWTm_VEVo0Qq6lmgV4WyWKQ">
+            <LoadScript
+              googleMapsApiKey={API_KEY}
+              libraries={["places"]}
+            >
               <GoogleMap
                 mapContainerStyle={containerStyle}
                 center={this.state.center}
                 zoom={12}
+                onLoad={this.onMapLoad}
               >
                 {this.state.isShowMarker && (
                   <Marker key={"center"} position={this.state.center} />
                 )}
+
                 {this.state.isShowMarkers &&
-                  this.state.positions &&
-                  this.state.positions.map((pos: Pos, i: any) => (
-                    <Marker key={i} position={pos} />
-                  ))}
+                  this.state.results?.map((placeResult: google.maps.places.PlaceResult) => {
+                    if (placeResult.geometry?.location == undefined) {
+                      return <></>;
+                    }
+                    return (
+                      <Marker key={placeResult.geometry?.location?.toString()} position={placeResult.geometry?.location} />
+                    );
+                  }
+                  )
+                }
               </GoogleMap>
             </LoadScript>
           </Grid>
