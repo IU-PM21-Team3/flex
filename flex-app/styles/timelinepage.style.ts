@@ -8,11 +8,17 @@ const TOP = "9em";
 const FLEX_ARR = [1, 4];
 const WIDTH = "calc(100vw - 1em)";
 
+export const headColimnProvider: CSSProperties = {
+  position: "absolute",
+  display: "flex",
+  flexWrap: "wrap",
+  top: TOP_Head
+};
 export const colimnProvider: CSSProperties = {
   position: "absolute",
   display: "flex",
   flexWrap: "wrap",
-  top: "0%"
+  top: TOP
 };
 export const leftHeadColumn: CSSProperties = {
   flex: FLEX_ARR[0],
@@ -20,7 +26,7 @@ export const leftHeadColumn: CSSProperties = {
   height: HEAD_HEIGHT,
   width: WIDTH,
   position: "relative",
-  top: TOP_Head,
+  top: 0,
   left: "1em",
 };
 export const rightHeadColumn: CSSProperties = {
@@ -29,7 +35,7 @@ export const rightHeadColumn: CSSProperties = {
   height: HEAD_HEIGHT,
   width: WIDTH,
   position: "relative",
-  top: TOP_Head,
+  top: 0,
 };
 
 export const leftColumn: CSSProperties = {
@@ -39,7 +45,7 @@ export const leftColumn: CSSProperties = {
   minWidth: MIN_W_ARR[0],
   padding: "1em",
   position: "relative",
-  top: TOP,
+  top: 0,
 };
 export const rightColumn: CSSProperties = {
   flex: FLEX_ARR[1],
@@ -48,5 +54,5 @@ export const rightColumn: CSSProperties = {
   minWidth: MIN_W_ARR[1],
   padding: "1em",
   position: "relative",
-  top: TOP,
+  top: 0,
 };
