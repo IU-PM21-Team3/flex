@@ -2,13 +2,9 @@ import { runWith, RuntimeOptions } from "firebase-functions";
 import next from "next";
 import nextConfig from "../next.config";
 
-const nextjsDistDir = nextConfig.distDir;
-
 const nextjsServer = next({
   dev: false,
-  conf: {
-    distDir: nextjsDistDir,
-  },
+  conf: nextConfig,
 });
 
 const nextjsHandle = nextjsServer.getRequestHandler();
