@@ -10,7 +10,7 @@ const nextjsServer = next({
 const nextjsHandle = nextjsServer.getRequestHandler();
 
 const runtimeOpts: RuntimeOptions = {
-  minInstances: 1,
+  minInstances: 0,
 };
 
 export const nextjsFunc = runWith(runtimeOpts).https.onRequest((req, res) => nextjsServer.prepare().then(() => nextjsHandle(req, res)));
